@@ -16,6 +16,11 @@
       "name_en": "Real Estate"
     },
     {
+      "id": "reels",
+      "name_ar": "ريلز وفيديو",
+      "name_en": "Reels & Video"
+    },
+    {
       "id": "fashion",
       "name_ar": "أزياء وموديلز",
       "name_en": "Fashion & Models"
@@ -34,11 +39,6 @@
       "id": "events",
       "name_ar": "حفلات ومناسبات",
       "name_en": "Parties & Events"
-    },
-    {
-      "id": "reels",
-      "name_ar": "ريلز وفيديو",
-      "name_en": "Reels & Video"
     }
   ]
 }
