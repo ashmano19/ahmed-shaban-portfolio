@@ -2,22 +2,22 @@
 a{color:inherit;text-decoration:none}
 .nav{position:fixed;top:0;inset-inline:0;display:flex;justify-content:space-between;align-items:center;padding:18px 5%;background:rgba(15,15,15,.75);backdrop-filter:blur(8px);z-index:10}
 .logo img{height:64px;display:block}
-.nav nav{display:flex;gap:22px;align-items:center}.nav nav a{opacity:.8}.nav nav a:hover{opacity:1;color:#FF7A00}
-#lang{background:none;border:1px solid #FF7A00;color:#FF7A00;padding:3px 12px;border-radius:20px;cursor:pointer;font-family:inherit}
+.nav nav{display:flex;gap:22px;align-items:center}.nav nav a{opacity:.8}.nav nav a:hover{opacity:1;color:#CEA111}
+#lang{background:none;border:1px solid #CEA111;color:#CEA111;padding:3px 12px;border-radius:20px;cursor:pointer;font-family:inherit}
 .hero{height:100vh;max-height:820px;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;text-align:center;position:relative}
 .hero:before{content:"";position:absolute;inset:0;background:linear-gradient(#0005,#0f0f0f)}
 .hero-in{position:relative}.hero h1{font-size:clamp(2rem,6vw,4.5rem);font-weight:700}.hero p{font-size:1.2rem;opacity:.85;margin:8px 0 28px}
-.btn{border:1px solid #FF7A00;color:#FF7A00;padding:10px 30px;border-radius:30px}.btn:hover{background:#FF7A00;color:#111}
+.btn{border:1px solid #CEA111;color:#CEA111;padding:10px 30px;border-radius:30px}.btn:hover{background:#CEA111;color:#111}
 .sec{padding:90px 5% 60px;max-width:1300px;margin:auto}h2{text-align:center;font-size:2rem;margin-bottom:30px}
 .filters{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:30px}
 .filters button{background:#1c1c1c;border:1px solid #333;color:#ccc;padding:6px 20px;border-radius:20px;cursor:pointer;font-family:inherit}
-.filters button.on{background:#FF7A00;color:#111;border-color:#FF7A00}
+.filters button.on{background:#CEA111;color:#111;border-color:#CEA111}
 .grid{columns:3 280px;column-gap:14px}.grid figure{break-inside:avoid;margin-bottom:14px;position:relative;overflow:hidden;border-radius:6px;cursor:zoom-in}
 .grid img{width:100%;display:block;transition:transform .5s}.grid figure:hover img{transform:scale(1.05)}
 .grid figcaption{position:absolute;bottom:0;inset-inline:0;padding:10px 14px;background:linear-gradient(transparent,#000c);opacity:0;transition:.3s}.grid figure:hover figcaption{opacity:1}
 .about{display:grid;grid-template-columns:1fr 1.4fr;gap:50px;align-items:center}.about img{width:100%;border-radius:8px}.about h2{text-align:start}.about p{font-size:1.1rem;opacity:.9}
-.contact{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}.contact a{background:#1c1c1c;border:1px solid #333;padding:14px 24px;border-radius:10px;min-width:200px;text-align:center}.contact a:hover{border-color:#FF7A00}
-.contact small{display:block;color:#FF7A00}
+.contact{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}.contact a{background:#1c1c1c;border:1px solid #333;padding:14px 24px;border-radius:10px;min-width:200px;text-align:center}.contact a:hover{border-color:#CEA111}
+.contact small{display:block;color:#CEA111}
 footer{text-align:center;padding:30px;opacity:.5;border-top:1px solid #222}
 .lb{position:fixed;inset:0;background:#000e;display:none;align-items:center;justify-content:center;flex-direction:column;z-index:20}.lb.show{display:flex}
 .lb img{max-width:90vw;max-height:82vh}.lb p{margin-top:10px}.lb button{position:absolute;background:none;border:0;color:#fff;font-size:3rem;cursor:pointer}
@@ -28,6 +28,6 @@ footer{text-align:center;padding:30px;opacity:.5;border-top:1px solid #222}
 .card{position:relative;border-radius:10px;overflow:hidden;cursor:pointer;aspect-ratio:4/3;background:#1c1c1c}
 .card img{width:100%;height:100%;object-fit:cover;transition:transform .5s}.card:hover img{transform:scale(1.06)}
 .card div{position:absolute;inset:auto 0 0 0;padding:14px 18px;background:linear-gradient(transparent,#000d)}
-.card b{display:block;font-size:1.15rem}.card span{color:#FF7A00;font-size:.9rem}
-.back{background:none;border:1px solid #FF7A00;color:#FF7A00;padding:6px 18px;border-radius:20px;cursor:pointer;font-family:inherit;margin-bottom:20px}
+.card b{display:block;font-size:1.15rem}.card span{color:#CEA111;font-size:.9rem}
+.back{background:none;border:1px solid #CEA111;color:#CEA111;padding:6px 18px;border-radius:20px;cursor:pointer;font-family:inherit;margin-bottom:20px}
 @media(max-width:700px){.logo img{height:48px}.cards{grid-template-columns:1fr 1fr;gap:10px}.card b{font-size:.95rem}}
