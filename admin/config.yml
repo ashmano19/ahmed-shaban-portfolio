@@ -1,6 +1,8 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: ashmano19/ahmed-shaban-portfolio
   branch: main
+  base_url: https://api.netlify.com
 locale: ar
 media_folder: images/uploads
 public_folder: /images/uploads
