@@ -42,20 +42,13 @@ collections:
           - {name: tagline_ar, label: الشعار بالعربي, widget: string}
           - {name: tagline_en, label: الشعار بالإنجليزي, widget: string}
           - {name: hero_image, label: صورة الغلاف, widget: image}
-      - name: about
-        label: من أنا
-        file: content/about.json
-        fields:
-          - {name: image, label: صورتك, widget: image}
-          - {name: text_ar, label: النص بالعربي, widget: text}
-          - {name: text_en, label: النص بالإنجليزي, widget: text}
       - name: contact
         label: بيانات التواصل
         file: content/contact.json
         fields:
           - {name: email, label: البريد, widget: string, required: false}
           - {name: phone, label: الهاتف, widget: string, required: false}
-          - {name: whatsapp, label: "واتساب (أرقام فقط مع كود الدولة)", widget: string, required: false}
+          - {name: whatsapp, label: واتساب (أرقام فقط مع كود الدولة)", widget: string, required: false}
           - {name: instagram, label: رابط إنستجرام, widget: string, required: false}
           - {name: facebook, label: رابط فيسبوك, widget: string, required: false}
           - {name: behance, label: رابط بيهانس, widget: string, required: false}
