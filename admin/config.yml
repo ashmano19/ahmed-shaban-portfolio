@@ -21,6 +21,19 @@ collections:
               - {name: title_ar, label: العنوان بالعربي, widget: string, required: false}
               - {name: title_en, label: العنوان بالإنجليزي, widget: string, required: false}
               - {name: category, label: التصنيف, widget: relation, collection: content, file: categories, value_field: "categories.*.id", search_fields: ["categories.*.name_ar"], display_fields: ["categories.*.name_ar"]}
+      - name: featured
+        label: "صور مميزة (تظهر في الرئيسية)"
+        file: content/featured.json
+        fields:
+          - name: items
+            label: الصور المميزة
+            widget: list
+            summary: "{{fields.title_ar}}"
+            fields:
+              - {name: image, label: الصورة, widget: image}
+              - {name: title_ar, label: العنوان بالعربي, widget: string, required: false}
+              - {name: title_en, label: العنوان بالإنجليزي, widget: string, required: false}
+              - {name: category, label: التصنيف, widget: relation, collection: content, file: categories, value_field: "categories.*.id", search_fields: ["categories.*.name_ar"], display_fields: ["categories.*.name_ar"], required: false}
       - name: categories
         label: التصنيفات
         file: content/categories.json
