@@ -59,6 +59,21 @@
       "id": "summer",
       "name_ar": "صيف",
       "name_en": "Summer"
+    },
+    {
+      "id": "cars",
+      "name_ar": "سيارات",
+      "name_en": "Cars"
+    },
+    {
+      "id": "emirates-cup",
+      "name_ar": "فيديو كأس الإمارات",
+      "name_en": "Emirates Cup Video"
+    },
+    {
+      "id": "tamer-hosny",
+      "name_ar": "تامر حسني",
+      "name_en": "Tamer Hosny"
     }
   ]
 }
