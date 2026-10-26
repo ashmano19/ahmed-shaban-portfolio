@@ -22,13 +22,13 @@
       "image": "/images/uploads/be-4-reels.jpg",
       "title_ar": "ريلز مكياج",
       "title_en": "Makeup Reels",
-      "category": "reels"
+      "category": "makeup-reels"
     },
     {
       "image": "/images/uploads/be-5-fashion.jpg",
       "title_ar": "ريل موديل",
       "title_en": "Model Reel",
-      "category": "fashion"
+      "category": "model-reel"
     },
     {
       "image": "/images/uploads/be-6-fashion.jpg",
@@ -40,7 +40,7 @@
       "image": "/images/uploads/be-7-reels.jpg",
       "title_ar": "ريلز جيم",
       "title_en": "Gym Reels",
-      "category": "reels"
+      "category": "gym-reels"
     },
     {
       "image": "/images/uploads/be-8-products.jpg",
@@ -64,13 +64,13 @@
       "image": "/images/uploads/be-11-reels.jpg",
       "title_ar": "ريلز كافيهات ومطاعم",
       "title_en": "Cafes & Restaurants Reels",
-      "category": "reels"
+      "category": "cafes-reels"
     },
     {
       "image": "/images/uploads/be-12-events.png",
       "title_ar": "صيف",
       "title_en": "Summer",
-      "category": "events"
+      "category": "summer"
     }
   ]
 }
