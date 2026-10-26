@@ -1,0 +1,61 @@
+backend:
+  name: git-gateway
+  branch: main
+locale: ar
+media_folder: images/uploads
+public_folder: /images/uploads
+collections:
+  - name: content
+    label: محتوى الموقع
+    files:
+      - name: gallery
+        label: "الصور (المعرض)"
+        file: content/gallery.json
+        fields:
+          - name: photos
+            label: الصور
+            widget: list
+            summary: "{{fields.title_ar}}"
+            fields:
+              - {name: image, label: الصورة, widget: image}
+              - {name: title_ar, label: العنوان بالعربي, widget: string, required: false}
+              - {name: title_en, label: العنوان بالإنجليزي, widget: string, required: false}
+              - {name: category, label: التصنيف, widget: relation, collection: content, file: categories, value_field: "categories.*.id", search_fields: ["categories.*.name_ar"], display_fields: ["categories.*.name_ar"]}
+      - name: categories
+        label: التصنيفات
+        file: content/categories.json
+        fields:
+          - name: categories
+            label: التصنيفات
+            widget: list
+            summary: "{{fields.name_ar}}"
+            fields:
+              - {name: id, label: "معرّف (بالإنجليزي بدون مسافات)", widget: string}
+              - {name: name_ar, label: الاسم بالعربي, widget: string}
+              - {name: name_en, label: الاسم بالإنجليزي, widget: string}
+      - name: settings
+        label: الإعدادات العامة
+        file: content/settings.json
+        fields:
+          - {name: name_ar, label: الاسم بالعربي, widget: string}
+          - {name: name_en, label: الاسم بالإنجليزي, widget: string}
+          - {name: tagline_ar, label: الشعار بالعربي, widget: string}
+          - {name: tagline_en, label: الشعار بالإنجليزي, widget: string}
+          - {name: hero_image, label: صورة الغلاف, widget: image}
+      - name: about
+        label: من أنا
+        file: content/about.json
+        fields:
+          - {name: image, label: صورتك, widget: image}
+          - {name: text_ar, label: النص بالعربي, widget: text}
+          - {name: text_en, label: النص بالإنجليزي, widget: text}
+      - name: contact
+        label: بيانات التواصل
+        file: content/contact.json
+        fields:
+          - {name: email, label: البريد, widget: string, required: false}
+          - {name: phone, label: الهاتف, widget: string, required: false}
+          - {name: whatsapp, label: "واتساب (أرقام فقط مع كود الدولة)", widget: string, required: false}
+          - {name: instagram, label: رابط إنستجرام, widget: string, required: false}
+          - {name: facebook, label: رابط فيسبوك, widget: string, required: false}
+          - {name: behance, label: رابط بيهانس, widget: string, required: false}

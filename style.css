@@ -1,0 +1,25 @@
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Cairo,sans-serif;background:#0f0f0f;color:#eee;line-height:1.8}
+a{color:inherit;text-decoration:none}
+.nav{position:fixed;top:0;inset-inline:0;display:flex;justify-content:space-between;align-items:center;padding:18px 5%;background:rgba(15,15,15,.75);backdrop-filter:blur(8px);z-index:10}
+.logo{font-family:'Playfair Display',Cairo,serif;font-size:1.3rem;letter-spacing:1px}
+.nav nav{display:flex;gap:22px;align-items:center}.nav nav a{opacity:.8}.nav nav a:hover{opacity:1;color:#d4af6a}
+#lang{background:none;border:1px solid #d4af6a;color:#d4af6a;padding:3px 12px;border-radius:20px;cursor:pointer;font-family:inherit}
+.hero{height:100vh;max-height:820px;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;text-align:center;position:relative}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(#0005,#0f0f0f)}
+.hero-in{position:relative}.hero h1{font-size:clamp(2rem,6vw,4.5rem);font-weight:700}.hero p{font-size:1.2rem;opacity:.85;margin:8px 0 28px}
+.btn{border:1px solid #d4af6a;color:#d4af6a;padding:10px 30px;border-radius:30px}.btn:hover{background:#d4af6a;color:#111}
+.sec{padding:90px 5% 60px;max-width:1300px;margin:auto}h2{text-align:center;font-size:2rem;margin-bottom:30px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:30px}
+.filters button{background:#1c1c1c;border:1px solid #333;color:#ccc;padding:6px 20px;border-radius:20px;cursor:pointer;font-family:inherit}
+.filters button.on{background:#d4af6a;color:#111;border-color:#d4af6a}
+.grid{columns:3 280px;column-gap:14px}.grid figure{break-inside:avoid;margin-bottom:14px;position:relative;overflow:hidden;border-radius:6px;cursor:zoom-in}
+.grid img{width:100%;display:block;transition:transform .5s}.grid figure:hover img{transform:scale(1.05)}
+.grid figcaption{position:absolute;bottom:0;inset-inline:0;padding:10px 14px;background:linear-gradient(transparent,#000c);opacity:0;transition:.3s}.grid figure:hover figcaption{opacity:1}
+.about{display:grid;grid-template-columns:1fr 1.4fr;gap:50px;align-items:center}.about img{width:100%;border-radius:8px}.about h2{text-align:start}.about p{font-size:1.1rem;opacity:.9}
+.contact{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}.contact a{background:#1c1c1c;border:1px solid #333;padding:14px 24px;border-radius:10px;min-width:200px;text-align:center}.contact a:hover{border-color:#d4af6a}
+.contact small{display:block;color:#d4af6a}
+footer{text-align:center;padding:30px;opacity:.5;border-top:1px solid #222}
+.lb{position:fixed;inset:0;background:#000e;display:none;align-items:center;justify-content:center;flex-direction:column;z-index:20}.lb.show{display:flex}
+.lb img{max-width:90vw;max-height:82vh}.lb p{margin-top:10px}.lb button{position:absolute;background:none;border:0;color:#fff;font-size:3rem;cursor:pointer}
+.x{top:10px;inset-inline-end:24px}.ar.p{left:20px}.ar.n{right:20px}
+@media(max-width:700px){.hero{max-height:640px}.about{grid-template-columns:1fr}.nav nav{gap:12px;font-size:.9rem}.logo{font-size:1rem}}

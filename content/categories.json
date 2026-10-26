@@ -1,0 +1,44 @@
+{
+  "categories": [
+    {
+      "id": "beauty",
+      "name_ar": "عيادات التجميل",
+      "name_en": "Beauty Clinics"
+    },
+    {
+      "id": "dental",
+      "name_ar": "تصوير الأسنان",
+      "name_en": "Dental Imaging"
+    },
+    {
+      "id": "realestate",
+      "name_ar": "عقارات",
+      "name_en": "Real Estate"
+    },
+    {
+      "id": "fashion",
+      "name_ar": "أزياء وموديلز",
+      "name_en": "Fashion & Models"
+    },
+    {
+      "id": "products",
+      "name_ar": "منتجات",
+      "name_en": "Products"
+    },
+    {
+      "id": "food",
+      "name_ar": "تصوير الطعام",
+      "name_en": "Food Photography"
+    },
+    {
+      "id": "events",
+      "name_ar": "حفلات ومناسبات",
+      "name_en": "Parties & Events"
+    },
+    {
+      "id": "reels",
+      "name_ar": "ريلز وفيديو",
+      "name_en": "Reels & Video"
+    }
+  ]
+}
