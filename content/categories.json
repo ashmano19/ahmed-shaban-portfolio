@@ -16,14 +16,24 @@
       "name_en": "Real Estate"
     },
     {
-      "id": "reels",
-      "name_ar": "ريلز وفيديو",
-      "name_en": "Reels & Video"
+      "id": "makeup-reels",
+      "name_ar": "ريلز مكياج",
+      "name_en": "Makeup Reels"
+    },
+    {
+      "id": "model-reel",
+      "name_ar": "ريل موديل",
+      "name_en": "Model Reel"
     },
     {
       "id": "fashion",
       "name_ar": "أزياء وموديلز",
       "name_en": "Fashion & Models"
+    },
+    {
+      "id": "gym-reels",
+      "name_ar": "ريلز جيم",
+      "name_en": "Gym Reels"
     },
     {
       "id": "products",
@@ -37,8 +47,18 @@
     },
     {
       "id": "events",
-      "name_ar": "حفلات ومناسبات",
-      "name_en": "Parties & Events"
+      "name_ar": "حفلات",
+      "name_en": "Parties"
+    },
+    {
+      "id": "cafes-reels",
+      "name_ar": "ريلز كافيهات ومطاعم",
+      "name_en": "Cafes & Restaurants Reels"
+    },
+    {
+      "id": "summer",
+      "name_ar": "صيف",
+      "name_en": "Summer"
     }
   ]
 }
