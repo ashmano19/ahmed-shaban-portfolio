@@ -71,6 +71,24 @@
       "title_ar": "صيف",
       "title_en": "Summer",
       "category": "summer"
+    },
+    {
+      "image": "/images/uploads/be-13.webp",
+      "title_ar": "سيارات",
+      "title_en": "Cars",
+      "category": "cars"
+    },
+    {
+      "image": "/images/uploads/be-14.webp",
+      "title_ar": "فيديو كأس الإمارات",
+      "title_en": "Emirates Cup Video",
+      "category": "emirates-cup"
+    },
+    {
+      "image": "/images/uploads/be-15.webp",
+      "title_ar": "تامر حسني",
+      "title_en": "Tamer Hosny",
+      "category": "tamer-hosny"
     }
   ]
 }
