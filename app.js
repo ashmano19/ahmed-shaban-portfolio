@@ -7,7 +7,8 @@ function render(){const t=T[L],s=D.s;document.documentElement.lang=L;document.do
 $("lang").textContent=L=="ar"?"EN":"عربي";document.querySelectorAll("[data-i]").forEach(e=>e.textContent=t[e.dataset.i]);
 $("fname").textContent=s["name_"+L];$("tagline").textContent=s["tagline_"+L];document.title=s["name_"+L];
 $("hero").style.backgroundImage=`url(${s.hero_image})`;$("yr").textContent=new Date().getFullYear();
-$("ddm").innerHTML=D.d.map(x=>`<a href="${x.url}" target="_blank" rel="noopener">${x.title}</a>`).join("");$("dd").hidden=!D.d.length;
+$("ddm").innerHTML=D.d.map(x=>x.slug?`<a href="#/download/${x.slug}">${x.title}</a>`:`<a href="${x.url}" target="_blank" rel="noopener">${x.title}</a>`).join("");$("dd").hidden=!D.d.length;
+if(renderDl())return;
 const m=location.hash.match(/^#\/category\/(.+)/);cat=m?decodeURIComponent(m[1]):null;const cc=D.c.find(c=>c.id==cat);
 if(!cc)cat=null;$("back").hidden=!cat;$("back").textContent=t.back;$("gTitle").textContent=cat?cc["name_"+L]:t.gallery;
 $("cards").innerHTML=cat?"":D.c.map(c=>{const ps=D.g.filter(p=>p.category==c.id);if(!ps.length)return"";return `<a class="card" href="#/category/${c.id}"><img loading="lazy" src="${ps[0].image}" alt=""><div><b>${c["name_"+L]}</b><span>${ps.length} ${t.photos}</span></div></a>`}).join("");
@@ -23,3 +24,13 @@ $("lang").onclick=()=>{L=L=="ar"?"en":"ar";localStorage.lang=L;render()};
 
 $("back").onclick=()=>{location.hash="#gallery"};window.onhashchange=()=>{render();if(location.hash.startsWith("#/category"))document.getElementById("gallery").scrollIntoView()};
 $("ddb").onclick=e=>{e.stopPropagation();const o=$("dd").classList.toggle("open");$("ddb").setAttribute("aria-expanded",o)};document.addEventListener("click",e=>{if(!$("dd").contains(e.target))$("dd").classList.remove("open")});
+
+function md(s){const esc=x=>x.replace(/&/g,"&amp;").replace(/</g,"&lt;");const inl=x=>esc(x).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+let h="",ul=false;for(const l of (s||"").split("\n")){const t=l.trim();if(!t.startsWith("- ")&&ul){h+="</ul>";ul=false}
+let m;if(m=t.match(/^!\[(.*?)\]\((.+?)\)$/))h+=`<img src="${m[2]}" alt="${esc(m[1])}" loading="lazy">`;else if(m=t.match(/^(#{1,4}) (.*)/))h+=`<h${m[1].length+1}>${inl(m[2])}</h${m[1].length+1}>`;
+else if(t.startsWith("- ")){if(!ul){h+="<ul>";ul=true}h+=`<li>${inl(t.slice(2))}</li>`}else if(t)h+=`<p>${inl(t)}</p>`}return h+(ul?"</ul>":"")}
+function renderDl(){const m=location.hash.match(/^#\/download\/(.+)/),pg=$("dlpage");if(!m){pg.hidden=true;document.body.classList.remove("dlmode");return false}
+const x=D.d.find(i=>i.slug==decodeURIComponent(m[1]));if(!x){pg.hidden=true;document.body.classList.remove("dlmode");return false}
+document.body.classList.add("dlmode");pg.hidden=false;const ar=L=="ar";
+pg.innerHTML=`<button class="back" onclick="location.hash='#gallery'">${T[L].back}</button><h1>${x.title}</h1>${x.cover?`<img class="dlcover" src="${x.cover}" alt="">`:""}${x.video?`<div class="vid"><iframe src="${x.video}" allowfullscreen loading="lazy"></iframe></div>`:""}<div class="dlbody">${md(x.body)}</div>${x.download_url?`<a class="dlbtn" href="${x.download_url}" target="_blank" rel="noopener">⬇ ${ar?"رابط التحميل":"Download"}</a>`:""}`;
+window.scrollTo(0,0);return true}

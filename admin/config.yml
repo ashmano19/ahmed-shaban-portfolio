@@ -62,12 +62,18 @@ collections:
         file: content/downloads.json
         fields:
           - name: items
-            label: الروابط
+            label: الصفحات / الروابط
             widget: list
             summary: "{{fields.title}}"
             fields:
               - {name: title, label: العنوان, widget: string}
-              - {name: url, label: الرابط, widget: string}
+              - {name: slug, label: "اسم الصفحة في الرابط (إنجليزي بدون مسافات)", widget: string, required: false, hint: "لو تركته فاضي، يتم فتح الرابط الخارجي بدلاً من صفحة داخلية"}
+              - {name: cover, label: صورة الغلاف, widget: image, required: false}
+              - {name: video, label: "رابط فيديو للتضمين (YouTube embed)", widget: string, required: false}
+              - {name: body, label: المحتوى, widget: markdown, required: false}
+              - {name: images, label: صور إضافية, widget: list, required: false, field: {name: image, label: صورة, widget: image}}
+              - {name: download_url, label: رابط التحميل, widget: string, required: false}
+              - {name: url, label: "رابط خارجي (اختياري)", widget: string, required: false}
       - name: contact
         label: بيانات التواصل
         file: content/contact.json
