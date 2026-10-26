@@ -1,28 +1,3 @@
 {
-  "items": [
-    {
-      "image": "/images/featured/abaya.webp",
-      "title_ar": "أزياء عبايات",
-      "title_en": "Abaya Fashion",
-      "category": "fashion"
-    },
-    {
-      "image": "/images/featured/gym.webp",
-      "title_ar": "جيم",
-      "title_en": "Gym",
-      "category": "reels"
-    },
-    {
-      "image": "/images/featured/food-doodle.webp",
-      "title_ar": "تصميم مطعم",
-      "title_en": "Restaurant Doodle",
-      "category": "food"
-    },
-    {
-      "image": "/images/featured/jetski.webp",
-      "title_ar": "جلسة جت سكي",
-      "title_en": "Jetski Session",
-      "category": "events"
-    }
-  ]
+  "items": []
 }
