@@ -90,3 +90,45 @@ collections:
           - {name: instagram, label: رابط إنستجرام, widget: string, required: false}
           - {name: facebook, label: رابط فيسبوك, widget: string, required: false}
           - {name: behance, label: رابط بيهانس, widget: string, required: false}
+      - name: mano
+        label: "MANO (صفحة الأداة)"
+        file: content/mano.json
+        fields:
+          - {name: show, label: إظهار الصفحة, widget: boolean, default: true}
+          - {name: version, label: الإصدار, widget: string, required: false}
+          - {name: download_url, label: "رابط تحميل الـ ZIP", widget: string, required: false, hint: "الملف ~1.7GB: ارفعه على Google Drive أو GitHub Release وحط الرابط هنا. لو فاضي يظهر «رابط التحميل قريبًا»"}
+          - {name: file_size, label: "حجم الملف (مثال 1.7 GB)", widget: string, required: false}
+          - {name: tagline_ar, label: الوصف بالعربي, widget: text}
+          - {name: tagline_en, label: الوصف بالإنجليزي, widget: text}
+          - {name: plan_ar, label: اسم الباقة بالعربي, widget: string}
+          - {name: plan_en, label: اسم الباقة بالإنجليزي, widget: string}
+          - {name: price_ar, label: السعر بالعربي, widget: string}
+          - {name: price_en, label: السعر بالإنجليزي, widget: string}
+          - {name: period_ar, label: المدة بالعربي, widget: string}
+          - {name: period_en, label: المدة بالإنجليزي, widget: string}
+          - {name: trial_days, label: أيام التجربة المجانية, widget: number, value_type: int, required: false}
+          - {name: subscribe_url, label: "رابط الدفع (Stripe Payment Link)", widget: string, required: false, hint: "الرابط الحالي test mode — بدّله برابط Live"}
+          - {name: whatsapp_msg_ar, label: رسالة واتساب بالعربي, widget: string, required: false}
+          - {name: whatsapp_msg_en, label: رسالة واتساب بالإنجليزي, widget: string, required: false}
+          - name: features
+            label: المميزات
+            widget: list
+            summary: "{{fields.title_ar}}"
+            fields:
+              - {name: icon, label: "أيقونة (رمز قصير)", widget: string, required: false}
+              - {name: title_ar, label: العنوان بالعربي, widget: string}
+              - {name: title_en, label: العنوان بالإنجليزي, widget: string}
+              - {name: desc_ar, label: الوصف بالعربي, widget: text}
+              - {name: desc_en, label: الوصف بالإنجليزي, widget: text}
+          - name: shots
+            label: صور الأداة
+            widget: list
+            summary: "{{fields.caption_ar}}"
+            fields:
+              - {name: image, label: الصورة, widget: image}
+              - {name: caption_ar, label: التعليق بالعربي, widget: string, required: false}
+              - {name: caption_en, label: التعليق بالإنجليزي, widget: string, required: false}
+          - {name: flow_ar, label: "خطوات الاشتراك بالعربي", widget: list, required: false}
+          - {name: flow_en, label: "خطوات الاشتراك بالإنجليزي", widget: list, required: false}
+          - {name: steps_ar, label: خطوات التثبيت بالعربي, widget: list, required: false}
+          - {name: steps_en, label: خطوات التثبيت بالإنجليزي, widget: list, required: false}
