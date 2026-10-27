@@ -169,7 +169,7 @@ function navView(){
 function dlList(){
   app.innerHTML=`<div class="head"><h2>مشاركات الداونلود</h2><button class="ghost" id="addP">+ مشاركة جديدة</button></div>
   <p class="hint">دي المشاركات اللي بتظهر في قائمة Download فوق. اسحب عشان تغيّر الترتيب · دوس على أي مشاركة عشان تعدّلها</p>
-  ${dlItems.length?`<div class="cards" id="dcards">${dlItems.map(x=>`<div class="card dcard" data-id="${x._k}" role="link" tabindex="0">${x.cover?`<img src="${esc(dsrc(x.cover))}" alt="" draggable="false">`:`<span class="nocov">بدون غلاف</span>`}<div><b>${esc(x.title||"بدون عنوان")}</b><span>${x.slug?"صفحة تحميل":x.url?"رابط خارجي":"—"}${x.download_url?" · ⬇ فيه تحميل":""}</span></div></div>`).join("")}</div>`:`<p class="empty">لسه مفيش مشاركات. دوس «مشاركة جديدة».</p>`}`;
+  ${dlItems.length?`<div class="cards" id="dcards">${dlItems.map(x=>`<div class="card dcard" data-id="${x._k}" role="link" tabindex="0">${x.cover?`<img src="${esc(dsrc(x.cover))}" alt="" draggable="false">`:`<span class="nocov">بدون غلاف</span>`}<div><b>${esc(x.title||"بدون عنوان")}</b><span>${x.page_url?"صفحة مستقلة "+esc(x.page_url):x.slug?"صفحة تحميل":x.url?"رابط خارجي":"—"}${x.download_url?" · ⬇ فيه تحميل":""}</span></div></div>`).join("")}</div>`:`<p class="empty">لسه مفيش مشاركات. دوس «مشاركة جديدة».</p>`}`;
   $("addP").onclick=()=>{const o={_k:key(),_ed:1,title:"",slug:"",cover:"",body:"",download_url:""};dlItems.unshift(o);touch();location.hash="#dl/"+o._k};
   const g=$("dcards");if(!g)return;
   g.querySelectorAll("img").forEach(im=>im.onerror=()=>im.remove());
@@ -183,6 +183,7 @@ function dlEdit(k){const x=dlItems.find(i=>i._k==k);if(!x){location.hash="#dl";r
    <label>العنوان<input id="f_title" value="${esc(x.title)}" placeholder="مثلاً: حزمة تأثيرات نصوص عربية"></label>
    <div class="two"><label>الرابط المختصر للصفحة (إنجليزي)<input id="f_slug" dir="ltr" value="${esc(x.slug)}" placeholder="my-pack"><small>العنوان في المتصفح هيبقى ‎/#/download/<b id="sl">${esc(x.slug||"…")}</b>‎</small></label>
    <label>أو رابط خارجي بدل الصفحة (اختياري)<input id="f_url" dir="ltr" value="${esc(x.url)}" placeholder="https://…"><small>لو حطيت رابط هنا وسبت الرابط المختصر فاضي، الزرار هيفتح الرابط ده على طول</small></label></div>
+   <label>صفحة مستقلة للبوست (اختياري)<input id="f_page" dir="ltr" value="${esc(x.page_url)}" placeholder="/arabic-text-effects/"><small>لو مليان، زرار البوست في قائمة Download هيفتح الصفحة المستقلة دي (زي MANO)، والرابط القديم ‎/#/download/…‎ هيحوّل عليها</small></label>
    <div class="fl">صورة الغلاف<div class="covbox">${x.cover?`<img src="${esc(dsrc(x.cover))}" alt="">`:`<span class="nocov">مفيش غلاف</span>`}<div><button class="ghost" id="cov">${x.cover?"غيّر الغلاف":"ارفع غلاف"}</button>${x.cover?` <button class="ghost red" id="covx">شيل الغلاف</button>`:""}</div></div></div>
    <div class="fl">النص<div class="tb"><button data-i="img">🖼 صورة</button><button data-i="h">عنوان</button><button data-i="li">• نقطة</button><button data-i="b">عريض</button><button data-i="lnk">🔗 لينك</button><span></span><button id="pv" class="pvb">👁 معاينة</button></div>
     <textarea id="f_body" rows="16" placeholder="اكتب شرح المشاركة هنا…">${esc(x.body)}</textarea><div class="pv dlbody" id="pvb" hidden></div>
@@ -192,7 +193,7 @@ function dlEdit(k){const x=dlItems.find(i=>i._k==k);if(!x){location.hash="#dl";r
    <label>فيديو يوتيوب (اختياري — لينك embed)<input id="f_video" dir="ltr" value="${esc(x.video)}" placeholder="https://www.youtube.com/embed/…"></label>
   </div>`;
   const bind=(id,f,after)=>{$(id).oninput=e=>{x[f]=e.target.value;x._ed=1;touch();if(after)after()}};
-  bind("f_title","title");bind("f_url","url");bind("f_dl","download_url",()=>$("fn").textContent="");bind("f_video","video");bind("f_body","body");
+  bind("f_title","title");bind("f_url","url");bind("f_page","page_url");bind("f_dl","download_url",()=>$("fn").textContent="");bind("f_video","video");bind("f_body","body");
   $("f_slug").oninput=e=>{const v=e.target.value.toLowerCase().replace(/[^a-z0-9-]+/g,"-");if(v!==e.target.value)e.target.value=v;x.slug=v;x._ed=1;$("sl").textContent=v||"…";touch()};
   $("f_title").onblur=()=>{if(!x.slug&&!x.url){const s=C.slugify(x.title)||"post-"+Date.now().toString(36);x.slug=uniq(s,x);$("f_slug").value=x.slug;$("sl").textContent=x.slug;touch()}};
   $("delP").onclick=()=>{if(!confirm("تمسح المشاركة دي نهائي؟ (هتتمسح من الموقع لما تدوس نشر)"))return;dlItems.splice(dlItems.indexOf(x),1);touch();location.hash="#dl"};
