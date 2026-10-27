@@ -3,6 +3,7 @@ backend:
   repo: ashmano19/ahmed-shaban-portfolio
   branch: main
   base_url: https://api.netlify.com
+  site_domain: ahmed-sh-ph.netlify.app
 locale: ar
 media_folder: images/uploads
 public_folder: /images/uploads
@@ -24,6 +25,7 @@ collections:
               - {name: video, label: رابط فيديو (embed), widget: string, required: false}
               - {name: preview, label: "معاينة الفيديو (mp4 قصير يشتغل لوحده)", widget: string, required: false}
               - {name: cover, label: "صورة غلاف القسم (تظهر برا بس)", widget: boolean, required: false, default: false}
+              - {name: group, label: "رقم المجموعة (خط فاصل ذهبي لما الرقم يتغير)", widget: number, value_type: int, required: false}
               - {name: title_ar, label: العنوان بالعربي, widget: string, required: false}
               - {name: title_en, label: العنوان بالإنجليزي, widget: string, required: false}
               - {name: category, label: التصنيف, widget: relation, collection: content, file: categories, value_field: "categories.*.id", search_fields: ["categories.*.name_ar"], display_fields: ["categories.*.name_ar"]}
