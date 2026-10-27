@@ -39,3 +39,5 @@ footer{text-align:center;padding:30px;opacity:.5;border-top:1px solid #222}
 .hero-in>*{transform-style:preserve-3d}.hero-logo{transform:translateZ(70px)}#tagline{transform:translateZ(35px)}.hero-in .btn{display:inline-block;transform:translateZ(50px)}
 .hero-logo img{filter:drop-shadow(calc(var(--mx)*-10px) calc(var(--my)*-8px + 10px) 18px #000a)}
 @media(prefers-reduced-motion:reduce){.hero-bg,.hero-in,.hero-in>*{transform:none!important}}
+
+.gsub{grid-column:1/-1;margin:18px 0 4px;font-size:15px;letter-spacing:4px;color:#CEA111;font-weight:600;border-bottom:1px solid #CEA11155;padding-bottom:8px}.gsub:first-child{margin-top:0}.grid figure.vid{aspect-ratio:9/16}.grid.reels figure:not(.vid){aspect-ratio:4/5}
