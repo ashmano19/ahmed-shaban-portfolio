@@ -1,0 +1,52 @@
+{
+  "slug": "davinci-arabic-text-effects",
+  "site_url": "https://ahmedshaban-ph.com/arabic-text-effects/",
+  "portfolio_url": "/",
+  "downloads_json": "/content/downloads.json",
+  "download_url": "https://drive.google.com/drive/folders/1_bXZN6pZP64Fe2PG_ibTC3peDaJqRRzN?usp=drive_link",
+  "whatsapp": "971504046867",
+  "instagram": "https://www.instagram.com/ahmed_sh_ph/",
+  "author_ar": "أحمد شعبان",
+  "author_en": "Ahmed Shaban",
+  "title_ar": "حزمة تأثيرات النصوص العربية لـ DaVinci Resolve",
+  "title_en": "Arabic Text Effects for DaVinci Resolve",
+  "badge_ar": "حزمة Presets لـ DaVinci Resolve",
+  "badge_en": "Presets pack for DaVinci Resolve",
+  "hero_title_ar": "تأثيرات نصوص عربية ",
+  "hero_title_en": "Arabic text effects ",
+  "hero_accent_ar": "جوه DaVinci Resolve.",
+  "hero_accent_en": "inside DaVinci Resolve.",
+  "tagline_ar": "حزمة Text Effects / Presets حصرية لبرنامج DaVinci Resolve، مصممة خصيصًا للنصوص والخطوط العربية بأعلى جودة وأسلوب بصري حديث.",
+  "tagline_en": "An exclusive Text Effects / Presets pack for DaVinci Resolve, designed for Arabic text and fonts, with top quality and a modern look.",
+  "chips_ar": ["نيون Neon", "ذهبي Gold", "مستقبلي Futuristic", "Aesthetic", "أنميشن Smooth", "دعم كامل للعربي"],
+  "chips_en": ["Neon", "Gold", "Futuristic", "Aesthetic", "Smooth animation", "Full Arabic support"],
+  "shots": [
+    {"image": "/images/downloads/cover.webp", "caption_ar": "أنماط التأثيرات", "caption_en": "Effect styles", "desc_ar": "عرض متكامل لأنماط وتأثيرات النصوص الموجودة في الحزمة.", "desc_en": "A full overview of the text styles and effects in the pack."},
+    {"image": "/images/downloads/menu.webp", "caption_ar": "القائمة جوه دافينشي", "caption_en": "Menu inside Resolve", "desc_ar": "التأثيرات متنظمة بأسماء واضحة ومباشرة جوه DaVinci Resolve.", "desc_en": "Effects organized with clear, direct names inside DaVinci Resolve."},
+    {"image": "/images/downloads/fonts.webp", "caption_ar": "تثبيت الخطوط", "caption_en": "Installing the fonts", "desc_ar": "Install for all users على ملفات الخطوط المرفقة.", "desc_en": "Install for all users on the included font files."},
+    {"image": "/images/downloads/install.webp", "caption_ar": "نافذة التثبيت", "caption_en": "Install window", "desc_ar": "اضغط Install والحزمة تتضاف لمكتبة التأثيرات تلقائيًا.", "desc_en": "Press Install and the pack is added to the Effects Library automatically."}
+  ],
+  "features": [
+    {"icon": "✦", "title_ar": "تنوع كبير في الأنماط", "title_en": "Lots of styles", "desc_ar": "عشرات الأنماط المبتكرة: نيون، ذهبي، مستقبلي، Aesthetic، وأنميشن انسيابي.", "desc_en": "Dozens of creative presets: neon, gold, futuristic, aesthetic and smooth animation."},
+    {"icon": "⚡", "title_ar": "سهولة التخصيص", "title_en": "Easy to customize", "desc_ar": "طبّق التأثير بنقرة وعدّل الألوان والظلال وحجم الخط بسهولة جوه دافينشي.", "desc_en": "Apply an effect in one click, then tweak colors, shadows and font size inside Resolve."},
+    {"icon": "ع", "title_ar": "دعم كامل للعربي", "title_en": "Full Arabic support", "desc_ar": "كل المؤثرات والحركات مظبوطة على اتجاه الخط العربي وجماليات الحروف.", "desc_en": "Every effect and motion is tuned for right-to-left Arabic and its letterforms."},
+    {"icon": "▤", "title_ar": "تنظيم واحترافية", "title_en": "Neatly organized", "desc_ar": "كل المؤثرات مصنفة ومسمّاة بوضوح عشان توصل للي محتاجه بسرعة.", "desc_en": "Every effect is categorized and clearly named so you find what you need fast."},
+    {"icon": "▶", "title_ar": "لكل أنواع الفيديو", "title_en": "For every kind of video", "desc_ar": "إعلانات، فلوجات، Reels، أفلام وثائقية وغيرها.", "desc_en": "Ads, vlogs, Reels, documentaries and more."}
+  ],
+  "flow_ar": ["حمّل الحزمة من زرار التحميل.", "ثبّت الخطوط المرفقة الأول.", "دوس دبل كليك على ملف الحزمة واختار Install.", "طبّق أي تأثير على النص بنقرة."],
+  "flow_en": ["Download the pack with the download button.", "Install the included fonts first.", "Double-click the pack file and choose Install.", "Apply any effect to your text in one click."],
+  "steps_ar": ["افتح مجلد «الخط المستخدم» المرفق مع الحزمة.", "حدد ملفات الخطوط، كليك يمين واختار Install for all users.", "حمّل ملف الحزمة الخاص بـ DaVinci Resolve.", "دبل كليك على ملف الحزمة (AHMED SHABAN -insta: ahmed_sh_ph).", "هتظهر نافذة تأكيد جوه DaVinci Resolve، اضغط Install والحزمة تتضاف لمكتبة التأثيرات (Effects Library)."],
+  "steps_en": ["Open the included “fonts” folder.", "Select the font files, right-click and choose Install for all users.", "Download the DaVinci Resolve pack file.", "Double-click the pack file (AHMED SHABAN -insta: ahmed_sh_ph).", "A confirmation window opens in DaVinci Resolve. Press Install and the pack is added to the Effects Library."],
+  "faq": [
+    {"q_ar": "ليه لازم أثبّت الخطوط الأول؟", "q_en": "Why install the fonts first?", "a_ar": "عشان النصوص تظهر بالشكل الصحيح ومن غير مشاكل في التنسيق.", "a_en": "So the text renders correctly, without formatting issues."},
+    {"q_ar": "الحزمة بتتثبت فين؟", "q_en": "Where does the pack install?", "a_ar": "بتتضاف تلقائيًا لمكتبة التأثيرات (Effects Library) جوه DaVinci Resolve بعد ما تضغط Install.", "a_en": "It's added automatically to the Effects Library in DaVinci Resolve after you press Install."},
+    {"q_ar": "أقدر أعدّل على التأثير؟", "q_en": "Can I customize the effects?", "a_ar": "أيوه، الألوان والظلال وحجم الخط كلها قابلة للتعديل.", "a_en": "Yes, colors, shadows and font size are all editable."},
+    {"q_ar": "محتاج مساعدة؟", "q_en": "Need help?", "a_ar": "كلّمني على واتساب أو إنستجرام من اللينكات تحت.", "a_en": "Message me on WhatsApp or Instagram using the links below."}
+  ],
+  "cta_title_ar": "نصوصك العربية،",
+  "cta_title_en": "Your Arabic titles,",
+  "cta_accent_ar": "بشكل أفخم.",
+  "cta_accent_en": "looking premium.",
+  "cta_text_ar": "نيون، ذهبي، مستقبلي وأنميشن انسيابي — كله جاهز جوه DaVinci Resolve.",
+  "cta_text_en": "Neon, gold, futuristic and smooth animation — all ready inside DaVinci Resolve."
+}
