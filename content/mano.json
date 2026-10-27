@@ -1,0 +1,118 @@
+{
+  "show": true,
+  "version": "1.2",
+  "download_url": "",
+  "file_size": "",
+  "tagline_ar": "إضافة لـ DaVinci Resolve بتجمع قوالب النصوص والـ Glass ومكتبة ملحقات كاملة وأدوات ذكاء اصطناعي، في مكان واحد.",
+  "tagline_en": "A DaVinci Resolve plugin that brings text templates, Glass titles, a full add-ons library and AI tools together in one place.",
+  "features": [
+    {
+      "icon": "Aa",
+      "title_ar": "قوالب نصوص وكابشن",
+      "title_en": "Text & caption templates",
+      "desc_ar": "قوالب نصوص وكابشن جاهزة بحركة، تضيفها للتايملاين بضغطة.",
+      "desc_en": "Ready-made animated text and caption templates, added to the timeline in one click."
+    },
+    {
+      "icon": "◇",
+      "title_ar": "قوالب Glass بكتابة مباشرة",
+      "title_en": "Glass templates with live text",
+      "desc_ar": "اكتب كلمتك وشوف معاينتها على طول قبل ما تضيفها، وتقدر تعدّل بعدها في Fusion.",
+      "desc_en": "Type your word, preview it live, then insert it — still fully editable in Fusion."
+    },
+    {
+      "icon": "✦",
+      "title_ar": "مكتبة الملحقات",
+      "title_en": "Add-ons library",
+      "desc_ar": "أيقونات، إيموجي، نيون، أرقام، شرايط تحميل، عناصر 3D، خلفيات ومؤثرات.",
+      "desc_en": "Icons, emoji, neon, numbers, loading bars, 3D elements, backgrounds and effects."
+    },
+    {
+      "icon": "AI",
+      "title_ar": "Motion AI",
+      "title_en": "Motion AI",
+      "desc_ar": "اكتب طلبك وهو يفهمه وينفّذه، بمفاتيحك أنت لـ: OpenAI، Gemini، Claude، Grok، ElevenLabs، Kling، Luma، Higgsfield.",
+      "desc_en": "Describe what you want and it handles it, using your own keys for OpenAI, Gemini, Claude, Grok, ElevenLabs, Kling, Luma and Higgsfield."
+    },
+    {
+      "icon": "◐",
+      "title_ar": "إزالة الخلفية",
+      "title_en": "Background removal",
+      "desc_ar": "ارفع أي صورة وخد نسخة PNG بخلفية شفافة.",
+      "desc_en": "Upload any image and get a transparent-background PNG."
+    },
+    {
+      "icon": "ع/E",
+      "title_ar": "عربي وإنجليزي",
+      "title_en": "Arabic & English",
+      "desc_ar": "الواجهة كلها بالعربي والإنجليزي وتبدّل بينهم بضغطة.",
+      "desc_en": "The whole interface in Arabic and English, switchable in one tap."
+    },
+    {
+      "icon": "⚡",
+      "title_ar": "تثبيت بضغطة واحدة",
+      "title_en": "One-click installer",
+      "desc_ar": "مثبّت سريع لـ DaVinci Resolve على Windows.",
+      "desc_en": "A fast installer for DaVinci Resolve on Windows."
+    }
+  ],
+  "shots": [
+    {
+      "image": "/images/mano/launcher.webp",
+      "caption_ar": "الشاشة الرئيسية",
+      "caption_en": "Launcher"
+    },
+    {
+      "image": "/images/mano/text.webp",
+      "caption_ar": "قوالب النصوص",
+      "caption_en": "Text templates"
+    },
+    {
+      "image": "/images/mano/addons.webp",
+      "caption_ar": "مكتبة الملحقات",
+      "caption_en": "Add-ons library"
+    },
+    {
+      "image": "/images/mano/motion-ai.webp",
+      "caption_ar": "Motion AI",
+      "caption_en": "Motion AI"
+    },
+    {
+      "image": "/images/mano/bg-removal.webp",
+      "caption_ar": "إزالة الخلفية",
+      "caption_en": "Background removal"
+    }
+  ],
+  "steps_ar": [
+    "حمّل ملف MANO وفك الضغط عنه كله.",
+    "شغّل ملف التثبيت Install_MANO.",
+    "أعد تشغيل DaVinci Resolve مرة واحدة، وبعدين افتح Workspace ← Scripts ← MANO."
+  ],
+  "steps_en": [
+    "Download the MANO file and extract the whole ZIP.",
+    "Run the Install_MANO installer.",
+    "Restart DaVinci Resolve once, then open Workspace → Scripts → MANO."
+  ],
+  "price_ar": "٣٠ درهم",
+  "price_en": "AED 30",
+  "period_ar": "شهريًا",
+  "period_en": "/ month",
+  "plan_ar": "اشتراك شهري",
+  "plan_en": "Monthly subscription",
+  "subscribe_url": "https://buy.stripe.com/test_cNidR9gvSafE9L3g4BfrW00",
+  "trial_days": 2,
+  "flow_ar": [
+    "حمّل MANO وثبّته.",
+    "سجّل دخولك بإيميلك، وهيوصلك كود من 6 أرقام.",
+    "استمتع بتجربة مجانية يومين من غير كارت.",
+    "اشترك من زرار «اشترك الآن»، وبعد الدفع ارجع للأداة ودوس «دفعت - تحقّق»."
+  ],
+  "flow_en": [
+    "Download and install MANO.",
+    "Sign in with your email and enter the 6-digit code you receive.",
+    "Enjoy a 2-day free trial, no card needed.",
+    "Subscribe with “Subscribe now”, then go back to the tool and press “I paid — verify”."
+  ],
+  "whatsapp_msg_ar": "أهلًا، عندي سؤال عن اشتراك MANO",
+  "whatsapp_msg_en": "Hi, I have a question about the MANO subscription"
+}

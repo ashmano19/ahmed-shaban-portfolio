@@ -15,6 +15,13 @@
       "show": true
     },
     {
+      "type": "link",
+      "label_ar": "MANO",
+      "label_en": "MANO",
+      "href": "#/mano",
+      "show": true
+    },
+    {
       "type": "downloads",
       "label_ar": "Download",
       "label_en": "Download",
