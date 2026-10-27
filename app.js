@@ -1,5 +1,5 @@
-const T={ar:{gallery:"أعمالي",about:"من أنا",contact:"تواصل معي",view:"شاهد الأعمال",all:"الكل",back:"→ رجوع",photos:"صورة",videos:"فيديو",email:"البريد",phone:"الهاتف",whatsapp:"واتساب",instagram:"إنستجرام",facebook:"فيسبوك",behance:"بيهانس",mnFeat:"المميزات",mnShots:"من جوه الأداة",mnInstall:"خطوات التثبيت",mnDl:"تحميل MANO",mnSoon:"رابط التحميل قريبًا",mnShare:"مشاركة",mnCopied:"اتنسخ الرابط",mnPlan:"الاشتراك",mnInc:"كل المميزات دي متضمنة:",mnSub:"اشترك الآن",mnAsk:"اسأل على واتساب",mnFlow:"إزاي تبدأ",mnTrial:"تجربة مجانية %d يوم من غير كارت",mnTrial2:"تجربة مجانية يومين من غير كارت",mnFor:"لـ DaVinci Resolve على Windows",mnVer:"الإصدار",book:"احجز الآن",bookMsg:"مرحبا، حابب أحجز جلسة تصوير"},
-en:{gallery:"Portfolio",about:"About",contact:"Contact",view:"View Work",all:"All",back:"← Back",photos:"photos",videos:"videos",email:"Email",phone:"Phone",whatsapp:"WhatsApp",instagram:"Instagram",facebook:"Facebook",behance:"Behance",mnFeat:"Features",mnShots:"Inside the tool",mnInstall:"Install steps",mnDl:"Download MANO",mnSoon:"Download link coming soon",mnShare:"Share",mnCopied:"Link copied",mnPlan:"Subscription",mnInc:"Everything included:",mnSub:"Subscribe now",mnAsk:"Ask on WhatsApp",mnFlow:"How to start",mnTrial:"%d-day free trial, no card needed",mnFor:"For DaVinci Resolve on Windows",mnVer:"Version",book:"Book Now",bookMsg:"Hi, I'd like to book a photo session"}};
+const T={ar:{gallery:"أعمالي",about:"من أنا",contact:"تواصل معي",view:"شاهد الأعمال",all:"الكل",back:"→ رجوع",photos:"صورة",videos:"فيديو",email:"البريد",phone:"الهاتف",whatsapp:"واتساب",instagram:"إنستجرام",facebook:"فيسبوك",behance:"بيهانس",book:"احجز الآن",bookMsg:"مرحبا، حابب أحجز جلسة تصوير"},
+en:{gallery:"Portfolio",about:"About",contact:"Contact",view:"View Work",all:"All",back:"← Back",photos:"photos",videos:"videos",email:"Email",phone:"Phone",whatsapp:"WhatsApp",instagram:"Instagram",facebook:"Facebook",behance:"Behance",book:"Book Now",bookMsg:"Hi, I'd like to book a photo session"}};
 let L=localStorage.lang||"ar",D={},cat="all",list=[],idx=0;const $=id=>document.getElementById(id);
 const get=f=>fetch("/content/"+f+".json?"+Date.now()).then(r=>r.ok?r.json():{}).catch(()=>({}));
 const esc=x=>String(x==null?"":x).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -33,7 +33,7 @@ $("lang").onclick=()=>{L=L=="ar"?"en":"ar";localStorage.lang=L;render()};
 
 $("back").onclick=()=>{location.hash="#gallery"};window.onhashchange=()=>{render();const h=location.hash;if(h.startsWith("#/category"))$("gallery").scrollIntoView();else if(h=="#gallery"||h=="#contact")$(h.slice(1)).scrollIntoView()};
 function renderNav(){const dl=D.d.map(x=>x.slug?`<a href="#/download/${encodeURIComponent(x.slug)}">${esc(x.title)}</a>`:`<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.title)}</a>`).join("");
-$("navL").innerHTML=D.n.filter(x=>x&&x.show!==false).map(x=>{const lb=esc(x["label_"+L]||x.label_ar||x.label_en||"");if(x.type=="downloads")return D.d.length?`<div class="dd" id="dd"><button class="ddb" id="ddb" aria-haspopup="true" aria-expanded="false">${lb} ▾</button><div class="ddm" id="ddm">${dl}</div></div>`:"";
+$("navL").innerHTML=D.n.filter(x=>x&&x.show!==false).map(x=>{const lb=esc(x["label_"+L]||x.label_ar||x.label_en||"");if(x.type=="downloads"){const mn=D.mn||{},ma=mn.show!==false?`<a href="${esc(manoUrl())}" class="dd-mano">${esc(mn["menu_"+L]||mn.menu_ar||"MANO")}</a>`:"";return (ma||D.d.length)?`<div class="dd" id="dd"><button class="ddb" id="ddb" aria-haspopup="true" aria-expanded="false">${lb} ▾</button><div class="ddm" id="ddm">${ma}${dl}</div></div>`:""}
 const h=x.href||"#",ext=/^(https?:|mailto:|tel:)/i.test(h);return `<a href="${esc(h)}"${ext?' target="_blank" rel="noopener"':""}>${lb}</a>`}).join("");
 const b=$("ddb");if(b)b.onclick=e=>{e.stopPropagation();const o=$("dd").classList.toggle("open");b.setAttribute("aria-expanded",o)}}
 document.addEventListener("click",e=>{const d=$("dd");if(d&&!d.contains(e.target))d.classList.remove("open")});
@@ -63,36 +63,9 @@ x+=(gx-x)*.06;y+=(gy-y)*.06;z=(Math.sin(t/6000)+1)/2;
 h.style.setProperty("--mx",x.toFixed(4));h.style.setProperty("--my",y.toFixed(4));h.style.setProperty("--z",z.toFixed(4));requestAnimationFrame(tick)}
 document.addEventListener("visibilitychange",go);go()})();
 
-let mnLast=false;
-function renderMano(){const pg=$("manopage"),x=D.mn||{},on=location.hash=="#/mano"&&x.show!==false;
-document.querySelectorAll('.nav a[href="#/mano"]').forEach(a=>a.classList.toggle("on",on));
-if(!on){pg.hidden=true;document.body.classList.remove("mnmode");mnLast=false;return false}
-document.body.classList.add("mnmode");document.body.classList.remove("dlmode");$("dlpage").hidden=true;pg.hidden=false;
-const t=T[L],g=k=>x[k+"_"+L]||x[k+"_ar"]||"",arr=k=>x[k+"_"+L]||x[k+"_ar"]||[],wa=(D.k||{}).whatsapp;
-const dl=x.download_url?`<a class="mn-btn mn-gold" href="${esc(x.download_url)}" target="_blank" rel="noopener" download><span class="mn-ic">⬇</span>${t.mnDl}${x.file_size?` <small>${esc(x.file_size)}</small>`:""}</a>`:`<span class="mn-btn mn-gold mn-off" aria-disabled="true"><span class="mn-ic">⬇</span>${t.mnSoon}</span>`;
-const share=`<button class="mn-btn mn-ghost" id="mnShare" type="button"><span class="mn-ic">⤴</span>${t.mnShare}</button>`;
-const feats=(x.features||[]).map((f,i)=>`<article class="mn-card" style="--d:${i*60}ms"><div class="mn-fi">${esc(f.icon||"✦")}</div><h3>${esc(f["title_"+L]||f.title_ar)}</h3><p>${esc(f["desc_"+L]||f.desc_ar)}</p></article>`).join("");
-const shots=(x.shots||[]).map((s,i)=>`<figure class="mn-shot${i==0?" mn-wide":""}" data-mi="${i}"><img loading="lazy" decoding="async" src="${esc(s.image)}" alt="${esc(s["caption_"+L]||"")}"><figcaption>${esc(s["caption_"+L]||s.caption_ar||"")}</figcaption></figure>`).join("");
-const steps=arr("steps").map(s=>`<li>${esc(s)}</li>`).join("");
-const flow=arr("flow").map(s=>`<li>${esc(s)}</li>`).join("");
-const inc=(x.features||[]).map(f=>`<li>${esc(f["title_"+L]||f.title_ar)}</li>`).join("");
-const sub=x.subscribe_url?`<a class="mn-btn mn-gold mn-full" href="${esc(x.subscribe_url)}" target="_blank" rel="noopener">${t.mnSub}</a>`:"";
-const ask=wa?`<a class="mn-btn mn-ghost mn-full" href="https://wa.me/${esc(wa)}?text=${encodeURIComponent(g("whatsapp_msg"))}" target="_blank" rel="noopener">${t.mnAsk}</a>`:"";
-const price=g("price");
-pg.innerHTML=`<section class="mn-hero"><div class="mn-glow"></div><img class="mn-logo" src="/images/mano/logo.webp" alt="MANO" width="1200" height="258"><p class="mn-for">${t.mnFor}${x.version?` · ${t.mnVer} ${esc(x.version)}`:""}</p><p class="mn-tag">${esc(g("tagline"))}</p><div class="mn-cta">${dl}${share}</div></section>
-<section class="mn-sec"><h2 class="mn-h">${t.mnFeat}</h2><div class="mn-grid">${feats}</div></section>
-${shots?`<section class="mn-sec"><h2 class="mn-h">${t.mnShots}</h2><div class="mn-shots">${shots}</div></section>`:""}
-${price?`<section class="mn-sec" id="mnPrice"><h2 class="mn-h">${t.mnPlan}</h2><div class="mn-pricewrap"><div class="mn-price"><div class="mn-plan">${esc(g("plan"))}</div><div class="mn-amt"><b>${esc(price)}</b><span>${esc(g("period"))}</span></div>${x.trial_days?`<div class="mn-trial">${(+x.trial_days==2&&t.mnTrial2)||t.mnTrial.replace("%d",+x.trial_days)}</div>`:""}<p class="mn-inc">${t.mnInc}</p><ul class="mn-check">${inc}</ul>${sub}${ask}</div>${flow?`<div class="mn-flow"><h3>${t.mnFlow}</h3><ol class="mn-steps">${flow}</ol></div>`:""}</div></section>`:""}
-${steps?`<section class="mn-sec"><h2 class="mn-h">${t.mnInstall}</h2><ol class="mn-steps mn-install">${steps}</ol><div class="mn-cta">${dl}${share}</div></section>`:""}
-<div class="mn-toast" id="mnToast" role="status" aria-live="polite"></div>`;
-pg.querySelectorAll("#mnShare").forEach(b=>b.onclick=mnShare);
-pg.querySelectorAll(".mn-shot").forEach(f=>f.onclick=()=>{list=(x.shots||[]).map(s=>({image:s.image,title_ar:s.caption_ar,title_en:s.caption_en}));open(+f.dataset.mi)});
-if(window.IntersectionObserver){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12});pg.querySelectorAll(".mn-card,.mn-shot,.mn-price,.mn-flow").forEach(el=>io.observe(el))}else pg.querySelectorAll(".mn-card,.mn-shot,.mn-price,.mn-flow").forEach(el=>el.classList.add("in"));
-if(!mnLast)window.scrollTo(0,0);mnLast=true;return true}
-function mnToast(m){const e=$("mnToast");if(!e)return;e.textContent=m;e.classList.add("show");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),2200)}
-async function mnShare(){const x=D.mn||{},url=location.origin+"/#/mano",title="MANO — DaVinci Resolve",text=x["tagline_"+L]||x.tagline_ar||"";
-if(navigator.share){try{await navigator.share({title,text,url});return}catch(e){if(e&&e.name=="AbortError")return}}
-try{await navigator.clipboard.writeText(url);mnToast(T[L].mnCopied)}catch(e){const i=document.createElement("textarea");i.value=url;i.style.position="fixed";i.style.opacity="0";document.body.appendChild(i);i.select();try{document.execCommand("copy");mnToast(T[L].mnCopied)}catch(_){prompt("",url)}i.remove()}}
+/* MANO: صفحة مستقلة على https://mano-plugin.pages.dev — الرابط القديم #/mano بيحوّل لها */
+const manoUrl=()=>(D.mn||{}).site_url||"https://mano-plugin.pages.dev";
+function renderMano(){if(location.hash=="#/mano"){location.replace(manoUrl());return true}return false}
 
 /* احجز الآن: زر في الهيرو + زر عائم، بيفتح واتساب برسالة جاهزة */
 function renderBook(){const t=T[L],s=D.s||{},wa=String((D.k||{}).whatsapp||"").replace(/\D+/g,""),h=$("bookH"),f=$("bookF");if(!h||!f)return;
