@@ -11,8 +11,8 @@ $("ddm").innerHTML=D.d.map(x=>x.slug?`<a href="#/download/${x.slug}">${x.title}<
 if(renderDl())return;
 const m=location.hash.match(/^#\/category\/(.+)/);cat=m?decodeURIComponent(m[1]):null;const cc=D.c.find(c=>c.id==cat);
 if(!cc)cat=null;$("back").hidden=!cat;$("back").textContent=t.back;$("gTitle").textContent=cat?cc["name_"+L]:t.gallery;
-$("cards").innerHTML=cat?"":D.c.map(c=>{const ps=D.g.filter(p=>p.category==c.id);if(!ps.length)return"";return `<a class="card" href="#/category/${c.id}"><img loading="lazy" src="${ps[0].image}" alt=""><div><b>${c["name_"+L]}</b><span>${ps.length} ${t.photos}</span></div></a>`}).join("");
-list=cat?D.g.filter(p=>p.category==cat):D.f;$("grid").classList.toggle("feat",!cat);$("grid").classList.toggle("reels",!!cat&&list.filter(p=>p.video).length*2>=list.length);
+$("cards").innerHTML=cat?"":D.c.map(c=>{const ps=D.g.filter(p=>p.category==c.id);if(!ps.length)return"";const cv=ps.find(p=>p.cover)||ps[0];const n=ps.filter(p=>!p.cover).length;return `<a class="card" href="#/category/${c.id}"><img loading="lazy" src="${cv.thumb||cv.image}" alt=""><div><b>${c["name_"+L]}</b><span>${n} ${t.photos}</span></div></a>`}).join("");
+list=cat?D.g.filter(p=>p.category==cat&&!p.cover):D.f;$("grid").classList.toggle("feat",!cat);$("grid").classList.toggle("reels",!!cat&&list.filter(p=>p.video).length*2>=list.length);
 $("grid").innerHTML=list.map((p,i)=>`<figure data-i="${i}"${p.video?' class="vid"':""}><img loading="lazy" decoding="async" src="${p.thumb||p.image}" alt="${p["title_"+L]||""}">${p.video?'<span class="play" aria-hidden="true"></span>':""}<figcaption>${p["title_"+L]||""}</figcaption></figure>`).join("");
 $("grid").querySelectorAll("figure").forEach(f=>f.onclick=()=>open(+f.dataset.i));
 const k=D.k,links=[["email","mailto:"+k.email,k.email],["phone","tel:"+k.phone,k.phone],["whatsapp","https://wa.me/"+k.whatsapp,"+"+k.whatsapp],["instagram",k.instagram,"@"],["facebook",k.facebook,"f"],["behance",k.behance,"b"]].filter(x=>x[1]&&!/(undefined|:|\+)$/.test(x[1])&&k[x[0]]);
