@@ -21,11 +21,6 @@
       "name_en": "Makeup Reels"
     },
     {
-      "id": "model-reel",
-      "name_ar": "ريل موديل",
-      "name_en": "Model Reel"
-    },
-    {
       "id": "fashion",
       "name_ar": "أزياء وموديلز",
       "name_en": "Fashion & Models"
@@ -47,8 +42,8 @@
     },
     {
       "id": "events",
-      "name_ar": "حفلات",
-      "name_en": "Parties"
+      "name_ar": "مناسبات وحفلات",
+      "name_en": "Events & Parties"
     },
     {
       "id": "cafes-reels",
