@@ -1,5 +1,5 @@
-const T={ar:{gallery:"أعمالي",about:"من أنا",contact:"تواصل معي",view:"شاهد الأعمال",all:"الكل",back:"→ رجوع",photos:"صورة",videos:"فيديو",email:"البريد",phone:"الهاتف",whatsapp:"واتساب",instagram:"إنستجرام",facebook:"فيسبوك",behance:"بيهانس",mnFeat:"المميزات",mnShots:"من جوه الأداة",mnInstall:"خطوات التثبيت",mnDl:"تحميل MANO",mnSoon:"رابط التحميل قريبًا",mnShare:"مشاركة",mnCopied:"اتنسخ الرابط",mnPlan:"الاشتراك",mnInc:"كل المميزات دي متضمنة:",mnSub:"اشترك الآن",mnAsk:"اسأل على واتساب",mnFlow:"إزاي تبدأ",mnTrial:"تجربة مجانية %d يوم من غير كارت",mnTrial2:"تجربة مجانية يومين من غير كارت",mnFor:"لـ DaVinci Resolve على Windows",mnVer:"الإصدار"},
-en:{gallery:"Portfolio",about:"About",contact:"Contact",view:"View Work",all:"All",back:"← Back",photos:"photos",videos:"videos",email:"Email",phone:"Phone",whatsapp:"WhatsApp",instagram:"Instagram",facebook:"Facebook",behance:"Behance",mnFeat:"Features",mnShots:"Inside the tool",mnInstall:"Install steps",mnDl:"Download MANO",mnSoon:"Download link coming soon",mnShare:"Share",mnCopied:"Link copied",mnPlan:"Subscription",mnInc:"Everything included:",mnSub:"Subscribe now",mnAsk:"Ask on WhatsApp",mnFlow:"How to start",mnTrial:"%d-day free trial, no card needed",mnFor:"For DaVinci Resolve on Windows",mnVer:"Version"}};
+const T={ar:{gallery:"أعمالي",about:"من أنا",contact:"تواصل معي",view:"شاهد الأعمال",all:"الكل",back:"→ رجوع",photos:"صورة",videos:"فيديو",email:"البريد",phone:"الهاتف",whatsapp:"واتساب",instagram:"إنستجرام",facebook:"فيسبوك",behance:"بيهانس",mnFeat:"المميزات",mnShots:"من جوه الأداة",mnInstall:"خطوات التثبيت",mnDl:"تحميل MANO",mnSoon:"رابط التحميل قريبًا",mnShare:"مشاركة",mnCopied:"اتنسخ الرابط",mnPlan:"الاشتراك",mnInc:"كل المميزات دي متضمنة:",mnSub:"اشترك الآن",mnAsk:"اسأل على واتساب",mnFlow:"إزاي تبدأ",mnTrial:"تجربة مجانية %d يوم من غير كارت",mnTrial2:"تجربة مجانية يومين من غير كارت",mnFor:"لـ DaVinci Resolve على Windows",mnVer:"الإصدار",book:"احجز الآن",bookMsg:"مرحبا، حابب أحجز جلسة تصوير"},
+en:{gallery:"Portfolio",about:"About",contact:"Contact",view:"View Work",all:"All",back:"← Back",photos:"photos",videos:"videos",email:"Email",phone:"Phone",whatsapp:"WhatsApp",instagram:"Instagram",facebook:"Facebook",behance:"Behance",mnFeat:"Features",mnShots:"Inside the tool",mnInstall:"Install steps",mnDl:"Download MANO",mnSoon:"Download link coming soon",mnShare:"Share",mnCopied:"Link copied",mnPlan:"Subscription",mnInc:"Everything included:",mnSub:"Subscribe now",mnAsk:"Ask on WhatsApp",mnFlow:"How to start",mnTrial:"%d-day free trial, no card needed",mnFor:"For DaVinci Resolve on Windows",mnVer:"Version",book:"Book Now",bookMsg:"Hi, I'd like to book a photo session"}};
 let L=localStorage.lang||"ar",D={},cat="all",list=[],idx=0;const $=id=>document.getElementById(id);
 const get=f=>fetch("/content/"+f+".json?"+Date.now()).then(r=>r.ok?r.json():{}).catch(()=>({}));
 const esc=x=>String(x==null?"":x).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -9,8 +9,8 @@ Promise.all(["settings","categories","gallery","contact","downloads","featured",
 function render(){const t=T[L],s=D.s;document.documentElement.lang=L;document.documentElement.dir=L=="ar"?"rtl":"ltr";
 $("lang").textContent=L=="ar"?"EN":"عربي";document.querySelectorAll("[data-i]").forEach(e=>e.textContent=t[e.dataset.i]);
 $("fname").textContent=s["name_"+L];$("tagline").textContent=s["tagline_"+L];document.title=s["name_"+L];
-$("heroBg").style.backgroundImage=`url(${s.hero_image})`;$("yr").textContent=new Date().getFullYear();
-renderNav();
+$("heroBg").style.backgroundImage=`url(${s.hero_image})`;$("yr").textContent="2017";
+renderNav();renderBook();
 if(renderMano())return;
 if(renderDl())return;
 const m=location.hash.match(/^#\/category\/(.+)/);cat=m?decodeURIComponent(m[1]):null;const cc=D.c.find(c=>c.id==cat);
@@ -93,3 +93,9 @@ function mnToast(m){const e=$("mnToast");if(!e)return;e.textContent=m;e.classLis
 async function mnShare(){const x=D.mn||{},url=location.origin+"/#/mano",title="MANO — DaVinci Resolve",text=x["tagline_"+L]||x.tagline_ar||"";
 if(navigator.share){try{await navigator.share({title,text,url});return}catch(e){if(e&&e.name=="AbortError")return}}
 try{await navigator.clipboard.writeText(url);mnToast(T[L].mnCopied)}catch(e){const i=document.createElement("textarea");i.value=url;i.style.position="fixed";i.style.opacity="0";document.body.appendChild(i);i.select();try{document.execCommand("copy");mnToast(T[L].mnCopied)}catch(_){prompt("",url)}i.remove()}}
+
+/* احجز الآن: زر في الهيرو + زر عائم، بيفتح واتساب برسالة جاهزة */
+function renderBook(){const t=T[L],s=D.s||{},wa=String((D.k||{}).whatsapp||"").replace(/\D+/g,""),h=$("bookH"),f=$("bookF");if(!h||!f)return;
+if(!wa){h.hidden=f.hidden=true;return}
+const lb=s["book_"+L]||t.book,msg=s["book_msg_"+L]||s.book_msg_ar||t.bookMsg,u="https://wa.me/"+wa+"?text="+encodeURIComponent(msg);
+h.hidden=f.hidden=false;h.href=f.href=u;h.textContent=lb;f.innerHTML=IC.whatsapp+"<span>"+esc(lb)+"</span>";f.setAttribute("aria-label",lb+" — "+t.whatsapp)}

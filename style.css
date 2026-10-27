@@ -117,3 +117,14 @@ footer{text-align:center;padding:30px;opacity:.5;border-top:1px solid #222}
 .mn-toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:800px){.mn-pricewrap{grid-template-columns:1fr}.mn-shots{grid-template-columns:1fr}.mn{padding-top:90px}.mn-hero{padding-top:40px}.mn-sec{margin-top:60px}.mn-btn{padding:13px 24px;font-size:1rem}}
 @media(prefers-reduced-motion:reduce){.mn-glow{animation:none}.mn-card,.mn-shot,.mn-price,.mn-flow{transition:none;opacity:1;transform:none}}
+/* Book Now (WhatsApp) */
+.hero-in .btn-book{margin-inline-start:14px;background:linear-gradient(135deg,#f3d37a,#CEA111 50%,#9a7408);color:#111;font-weight:700;border-color:#CEA111;box-shadow:0 6px 24px rgba(206,161,17,.35);transition:box-shadow .3s,filter .3s}
+.hero-in .btn-book:hover,.hero-in .btn-book:focus-visible{background:linear-gradient(135deg,#f3d37a,#CEA111 50%,#9a7408);color:#111;filter:brightness(1.08);box-shadow:0 8px 34px rgba(206,161,17,.6)}
+.btn-book[hidden],.bookf[hidden]{display:none!important}
+.bookf{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom));z-index:15;display:flex;align-items:center;gap:9px;padding:11px 20px 11px 16px;border-radius:40px;background:linear-gradient(135deg,#f3d37a,#CEA111 50%,#9a7408);color:#111;font-weight:700;font-size:1rem;box-shadow:0 8px 28px rgba(0,0,0,.55),0 0 22px rgba(206,161,17,.35);transition:transform .25s,box-shadow .25s,filter .25s}
+.bookf svg{width:22px;height:22px;fill:currentColor;flex:none}
+.bookf:hover,.bookf:focus-visible{transform:translateY(-3px);filter:brightness(1.07);box-shadow:0 12px 34px rgba(0,0,0,.6),0 0 32px rgba(206,161,17,.6)}
+[dir=rtl] .bookf{padding:11px 16px 11px 20px}
+footer{padding-bottom:84px}
+@media(max-width:600px){.hero-in .btn-book{margin-inline-start:8px}.bookf{right:14px;bottom:calc(14px + env(safe-area-inset-bottom));padding:10px 16px 10px 13px;font-size:.92rem}[dir=rtl] .bookf{padding:10px 13px 10px 16px}}
+@media(prefers-reduced-motion:reduce){.bookf,.hero-in .btn-book{transition:none}.bookf:hover{transform:none}}
