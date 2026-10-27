@@ -1024,26 +1024,6 @@
       "group": 1
     },
     {
-      "image": "/images/behance/v/realestate-7.webp",
-      "video": "https://www-ccv.adobe.io/v1/player/ccv/Ls8DD_X7TRT/embed?api_key=behance1",
-      "title_ar": "عقارات",
-      "title_en": "Real Estate",
-      "category": "realestate",
-      "thumb": "/images/behance/v/realestate-7.webp",
-      "preview": "/images/behance/vp/realestate-7.mp4",
-      "group": 1
-    },
-    {
-      "image": "/images/behance/v/realestate-8.webp",
-      "video": "https://www-ccv.adobe.io/v1/player/ccv/69a-VdT9fXE/embed?api_key=behance1",
-      "title_ar": "عقارات",
-      "title_en": "Real Estate",
-      "category": "realestate",
-      "thumb": "/images/behance/v/realestate-8.webp",
-      "preview": "/images/behance/vp/realestate-8.mp4",
-      "group": 1
-    },
-    {
       "image": "/images/behance/v/realestate-9.webp",
       "video": "https://www-ccv.adobe.io/v1/player/ccv/N-CrtBd9xc3/embed?api_key=behance1",
       "title_ar": "عقارات",
@@ -1051,16 +1031,6 @@
       "category": "realestate",
       "thumb": "/images/behance/v/realestate-9.webp",
       "preview": "/images/behance/vp/realestate-9.mp4",
-      "group": 1
-    },
-    {
-      "image": "/images/behance/v/realestate-10.webp",
-      "video": "https://www-ccv.adobe.io/v1/player/ccv/RXWRcDCPiwB/embed?api_key=behance1",
-      "title_ar": "عقارات",
-      "title_en": "Real Estate",
-      "category": "realestate",
-      "thumb": "/images/behance/v/realestate-10.webp",
-      "preview": "/images/behance/vp/realestate-10.mp4",
       "group": 1
     },
     {
@@ -5390,22 +5360,6 @@
       "cover": true,
       "group": 0,
       "thumb": "/images/uploads/t/be-10-events.webp"
-    },
-    {
-      "image": "/images/uploads/be-10-events.png",
-      "video": "https://www-ccv.adobe.io/v1/player/ccv/SLBMt4_CPBD/embed?api_key=behance1",
-      "title_ar": "مناسبات وحفلات",
-      "title_en": "Events & Parties",
-      "category": "events",
-      "group": 1
-    },
-    {
-      "image": "/images/uploads/be-10-events.png",
-      "video": "https://www-ccv.adobe.io/v1/player/ccv/SGZoMGj77ze/embed?api_key=behance1",
-      "title_ar": "مناسبات وحفلات",
-      "title_en": "Events & Parties",
-      "category": "events",
-      "group": 1
     },
     {
       "image": "/images/behance/v/events-2.webp",
