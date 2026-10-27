@@ -2,8 +2,8 @@ backend:
   name: github
   repo: ashmano19/ahmed-shaban-portfolio
   branch: main
-  base_url: https://api.netlify.com
-  site_domain: ahmed-sh-ph.netlify.app
+  base_url: https://ahmed-sh-ph.pages.dev
+  auth_endpoint: auth
 locale: ar
 media_folder: images/uploads
 public_folder: /images/uploads
