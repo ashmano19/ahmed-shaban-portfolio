@@ -42,3 +42,4 @@ footer{text-align:center;padding:30px;opacity:.5;border-top:1px solid #222}
 
 .gsub{grid-column:1/-1;margin:18px 0 4px;font-size:15px;letter-spacing:4px;color:#CEA111;font-weight:600;border-bottom:1px solid #CEA11155;padding-bottom:8px}.gsub:first-child{margin-top:0}.grid figure.vid{aspect-ratio:9/16}.grid.reels figure:not(.vid){aspect-ratio:4/5}
 .grid figure video{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s;background:#1a1a1a}.grid figure:hover video{transform:scale(1.05)}
+.grid hr.gdiv{grid-column:1/-1;height:1px;border:0;background:linear-gradient(90deg,transparent,#CEA111aa,transparent);margin:14px 0;padding:0}
