@@ -32,7 +32,7 @@ document.onkeydown=e=>{if(!$("lb").classList.contains("show"))return;if(e.key=="
 $("lang").onclick=()=>{L=L=="ar"?"en":"ar";localStorage.lang=L;render()};
 
 $("back").onclick=()=>{location.hash="#gallery"};window.onhashchange=()=>{render();const h=location.hash;if(h.startsWith("#/category"))$("gallery").scrollIntoView();else if(h=="#gallery"||h=="#contact")$(h.slice(1)).scrollIntoView()};
-function renderNav(){const dl=D.d.map(x=>x.slug?`<a href="#/download/${encodeURIComponent(x.slug)}">${esc(x.title)}</a>`:`<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.title)}</a>`).join("");
+function renderNav(){const dl=D.d.map(x=>x.page_url?`<a href="${esc(x.page_url)}">${esc(x.title)}</a>`:x.slug?`<a href="#/download/${encodeURIComponent(x.slug)}">${esc(x.title)}</a>`:`<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.title)}</a>`).join("");
 $("navL").innerHTML=D.n.filter(x=>x&&x.show!==false).map(x=>{const lb=esc(x["label_"+L]||x.label_ar||x.label_en||"");if(x.type=="downloads"){const mn=D.mn||{},ma=mn.show!==false?`<a href="${esc(manoUrl())}" class="dd-mano">${esc(mn["menu_"+L]||mn.menu_ar||"MANO")}</a>`:"";return (ma||D.d.length)?`<div class="dd" id="dd"><button class="ddb" id="ddb" aria-haspopup="true" aria-expanded="false">${lb} ▾</button><div class="ddm" id="ddm">${ma}${dl}</div></div>`:""}
 const h=x.href||"#",ext=/^(https?:|mailto:|tel:)/i.test(h);return `<a href="${esc(h)}"${ext?' target="_blank" rel="noopener"':""}>${lb}</a>`}).join("");
 const b=$("ddb");if(b)b.onclick=e=>{e.stopPropagation();const o=$("dd").classList.toggle("open");b.setAttribute("aria-expanded",o)}}
@@ -43,6 +43,7 @@ let h="",ul=false;for(const l of (s||"").split("\n")){const t=l.trim();if(!t.sta
 let m;if(m=t.match(/^!\[(.*?)\]\((.+?)\)$/))h+=`<img src="${m[2]}" alt="${esc(m[1])}" loading="lazy">`;else if(m=t.match(/^(#{1,4}) (.*)/))h+=`<h${m[1].length+1}>${inl(m[2])}</h${m[1].length+1}>`;
 else if(t.startsWith("- ")){if(!ul){h+="<ul>";ul=true}h+=`<li>${inl(t.slice(2))}</li>`}else if(t)h+=`<p>${inl(t)}</p>`}return h+(ul?"</ul>":"")}
 function renderDl(){const m=location.hash.match(/^#\/download\/(.+)/),pg=$("dlpage");if(!m){pg.hidden=true;document.body.classList.remove("dlmode");return false}
+{const it=D.d.find(o=>o&&o.slug==decodeURIComponent(m[1]));if(it&&it.page_url){location.replace(it.page_url);return true}}
 const x=D.d.find(i=>i.slug==decodeURIComponent(m[1]));if(!x){pg.hidden=true;document.body.classList.remove("dlmode");return false}
 document.body.classList.add("dlmode");pg.hidden=false;const ar=L=="ar";
 pg.innerHTML=`<button class="back" onclick="location.hash='#gallery'">${T[L].back}</button><h1>${x.title}</h1>${x.cover?`<img class="dlcover" src="${x.cover}" alt="">`:""}${x.video?`<div class="vid"><iframe src="${x.video}" allowfullscreen loading="lazy"></iframe></div>`:""}<div class="dlbody">${md(x.body)}</div>${x.download_url?`<a class="dlbtn" href="${x.download_url}" target="_blank" rel="noopener">⬇ ${ar?"رابط التحميل":"Download"}</a>`:""}`;
