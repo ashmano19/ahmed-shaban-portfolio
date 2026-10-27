@@ -3,7 +3,7 @@ const REPO="ashmano19/ahmed-shaban-portfolio",BR="main",API=(window.STUDIO_API||
 const MAX_IMG=2400,MAX_TH=700,MAX_VID=25*1024*1024; // Cloudflare Pages: أقصى حجم للملف 25MB
 const C=window.StudioCore,$=id=>document.getElementById(id),app=$("app");
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-let TOKEN="",base="",cats=[],st=null,orig=[],cur=null,dirty=false,busy=false;
+let TOKEN="",base="",cats=[],origCatsDoc={},origCatIds="",st=null,orig=[],cur=null,dirty=false,busy=false;
 const S={newGroup:true,atStart:false};
 
 function toast(t,err){const d=document.createElement("div");d.className="toast"+(err?" err":"");d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),err?6000:3000)}
@@ -31,7 +31,7 @@ async function start(){app.innerHTML=`<p class="empty">جاري تحميل ال�
     const ref=await gh("/git/ref/heads/"+BR);base=ref.object.sha;
     const raw=p=>gh("/contents/"+p+"?ref="+base,{raw:1,headers:{Accept:"application/vnd.github.raw+json"}});
     const [g,c]=await Promise.all([raw("content/gallery.json"),raw("content/categories.json")]);
-    orig=JSON.parse(g).photos||[];cats=JSON.parse(c).categories||[];st=C.load(orig,cats);
+    orig=JSON.parse(g).photos||[];origCatsDoc=JSON.parse(c);cats=origCatsDoc.categories||[];origCatIds=cats.map(x=>x.id).join();st=C.load(orig,cats);
     $("out").hidden=false;$("bar").hidden=false;setDirty(false);route()}
   catch(e){if(e.status==401){localStorage.removeItem("studioToken");localStorage.removeItem("decap-cms-user");loginView("انتهت الجلسة، ادخل تاني.")}else{app.innerHTML=`<p class="empty">حصلت مشكلة في التحميل (${esc(e.message)}). حدّث الصفحة.</p>`}}}
 
@@ -47,8 +47,12 @@ function route(){const m=location.hash.match(/^#c\/(.+)/);cur=m&&st.by[decodeURI
 window.onhashchange=()=>{if(st)route()};
 const src=o=>o._url||o.thumb||o.image;
 function homeView(){
-  app.innerHTML=`<div class="head"><h2>اختار القائمة</h2></div><div class="cards">${cats.map(c=>{const b=st.by[c.id],n=C.counts(b),cv=b.cover||b.photos[0]||b.videos[0],nw=[b.cover,...b.videos,...b.photos].filter(o=>o&&o._new).length;
-    return `<a class="card" href="#c/${encodeURIComponent(c.id)}">${cv?`<img loading="lazy" src="${esc(src(cv))}" alt="">`:""}${nw?`<i>${nw} جديد</i>`:""}<div><b>${esc(c.name_ar)}</b><span>${n.p} صورة · ${n.v} فيديو</span></div></a>`}).join("")}</div>`}
+  app.innerHTML=`<div class="head"><h2>اختار القائمة</h2></div><p class="hint">اسحب أي قائمة عشان تغيّر ترتيبها في الموقع (على الموبايل: اضغط مطوّل وبعدين اسحب) — وبعدين دوس نشر</p><div class="cards" id="cards">${cats.map(c=>{const b=st.by[c.id],n=C.counts(b),cv=b.cover||b.photos[0]||b.videos[0],nw=[b.cover,...b.videos,...b.photos].filter(o=>o&&o._new).length;
+    return `<div class="card" data-id="${esc(c.id)}" role="link" tabindex="0">${cv?`<img src="${esc(src(cv))}" data-full="${esc(cv.image||"")}" alt="" draggable="false" decoding="async">`:""}${nw?`<i>${nw} جديد</i>`:""}<div><b>${esc(c.name_ar)}</b><span>${n.p} صورة · ${n.v} فيديو</span></div></div>`}).join("")}</div>`;
+  const g=$("cards");g.querySelectorAll("img").forEach(im=>im.onerror=()=>{if(im.dataset.full&&im.src.indexOf(im.dataset.full)<0)im.src=im.dataset.full});
+  g.onclick=e=>{const c=e.target.closest(".card");if(c)location.hash="#c/"+encodeURIComponent(c.dataset.id)};
+  g.onkeydown=e=>{const c=e.target.closest(".card");if(c&&e.key=="Enter")c.click()};
+  sortable(g,ids=>{if(ids.join()===cats.map(c=>c.id).join())return;cats=ids.map(id=>cats.find(c=>c.id==id));setDirty(true);homeView()},".card")}
 function tile(o,i,kind){const d=i>0&&o._div;return `<div class="t${d?" div":""}${o._new?" new":""}" data-id="${o._id}"><img loading="lazy" src="${esc(src(o))}" alt="">${kind=="v"?`<span class="vb">▶ فيديو</span>`:""}
   <div class="bt">${i>0?`<button data-a="div" title="${d?"إلغاء الخط الذهبي":"بداية مجموعة جديدة (خط ذهبي قبلها)"}">✂</button>`:""}<button data-a="cover" title="اجعلها صورة الغلاف">★</button><button class="x" data-a="del" title="حذف">✕</button></div></div>`}
 function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);
@@ -68,8 +72,10 @@ function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);
     g.onclick=e=>{const bt=e.target.closest("button[data-a]");if(!bt)return;const t=bt.closest(".t"),o=b[k].find(x=>x._id==t.dataset.id);act(bt.dataset.a,o,k)};
     sortable(g,ids=>{const o=b[k].map(x=>x._id).join();if(ids.join()===o)return;b[k]=ids.map(id=>b[k].find(x=>x._id==id));setDirty(true);catView()})})}
 // ترتيب بالسحب (ماوس، وعلى الموبايل: اضغط مطوّل وبعدين اسحب)
-function sortable(g,done){
-  g.addEventListener("pointerdown",e=>{const t=e.target.closest(".t");if(!t||e.target.closest("button")||e.button>0)return;
+function sortable(g,done,sel){sel=sel||".t";
+  g.addEventListener("click",e=>{if(g._dragged){e.preventDefault();e.stopPropagation();g._dragged=false}},true);
+  g.addEventListener("contextmenu",e=>{if(e.target.closest(sel))e.preventDefault()});
+  g.addEventListener("pointerdown",e=>{const t=e.target.closest(sel);if(!t||t.parentNode!==g||e.target.closest("button")||e.button>0)return;
     const sx=e.clientX,sy=e.clientY,touch=e.pointerType!="mouse";let timer=0,on=false,fly=null,dx=0,dy=0;
     const begin=()=>{on=true;const r=t.getBoundingClientRect();dx=sx-r.left;dy=sy-r.top;fly=t.cloneNode(true);fly.classList.add("fly");
       Object.assign(fly.style,{left:r.left+"px",top:r.top+"px",width:r.width+"px",height:r.height+"px"});document.body.appendChild(fly);t.classList.add("ghostT");if(navigator.vibrate)navigator.vibrate(15)};
@@ -78,12 +84,12 @@ function sortable(g,done){
     const mv=ev=>{if(!on){if(Math.hypot(ev.clientX-sx,ev.clientY-sy)<6)return;if(touch){end();return}begin()}
       ev.preventDefault();fly.style.left=ev.clientX-dx+"px";fly.style.top=ev.clientY-dy+"px";
       if(ev.clientY<70)scrollBy(0,-18);else if(ev.clientY>innerHeight-130)scrollBy(0,18);
-      const o=(document.elementFromPoint(ev.clientX,ev.clientY)||{closest:()=>null}).closest(".t");if(!o||o===t||o.parentNode!==g)return;
+      const o=(document.elementFromPoint(ev.clientX,ev.clientY)||{closest:()=>null}).closest(sel);if(!o||o===t||o.parentNode!==g)return;
       const r=o.getBoundingClientRect(),rtl=getComputedStyle(g).direction=="rtl",mid=ev.clientX<r.left+r.width/2;
       const before=r.top>t.getBoundingClientRect().bottom||r.bottom<t.getBoundingClientRect().top?(rtl?!mid:mid):(o.compareDocumentPosition(t)&4?true:false);
       g.insertBefore(t,before?o:o.nextSibling)};
     const end=()=>{clearTimeout(timer);removeEventListener("pointermove",mv);removeEventListener("pointerup",end);removeEventListener("pointercancel",end);t.removeEventListener("touchmove",tm);
-      if(on){on=false;fly.remove();t.classList.remove("ghostT");done([...g.children].map(x=>x.dataset.id))}};
+      if(on){on=false;g._dragged=true;setTimeout(()=>g._dragged=false,400);fly.remove();t.classList.remove("ghostT");done([...g.children].map(x=>x.dataset.id))}};
     addEventListener("pointermove",mv,{passive:false});addEventListener("pointerup",end);addEventListener("pointercancel",end);t.addEventListener("touchmove",tm,{passive:false})})}
 function act(a,o,k){const b=st.by[cur];
   if(a=="del"){if(!confirm("تحذف العنصر ده؟"))return;const i=b[k].indexOf(o);if(o._div&&b[k][i+1]&&!b[k][i+1]._div)b[k][i+1]._div=true;b[k].splice(i,1);if(b.cover&&o._new&&b.cover.image==o.image)b.cover._files=(o._files||[]).filter(f=>"/"+f.path==o.image||"/"+f.path==o.thumb)}
@@ -132,12 +138,13 @@ $("pub").onclick=async()=>{if(busy||!dirty)return;busy=true;$("pub").disabled=tr
     const q=files.slice();await Promise.all([0,1,2].map(async()=>{while(q.length)await one(q.shift())}));
     $("bmsg").textContent="جاري النشر…";
     const out=C.build(st,cats);tree.push({path:"content/gallery.json",mode:"100644",type:"blob",content:JSON.stringify(out,null,2)});
+    const catJson=JSON.stringify(Object.assign({},origCatsDoc,{categories:cats}),null,2);if(cats.map(c=>c.id).join()!==origCatIds)tree.push({path:"content/categories.json",mode:"100644",type:"blob",content:catJson});
     C.orphans(orig,out.photos).forEach(p=>tree.push({path:p,mode:"100644",type:"blob",sha:null}));
     const bc=await gh("/git/commits/"+base);
     const t=await gh("/git/trees",{method:"POST",body:JSON.stringify({base_tree:bc.tree.sha,tree})});
     const cm=await gh("/git/commits",{method:"POST",body:JSON.stringify({message:"تحديث المعرض من الاستوديو",tree:t.sha,parents:[base]})});
     await gh("/git/refs/heads/"+BR,{method:"PATCH",body:JSON.stringify({sha:cm.sha,force:false})});
-    base=cm.sha;orig=out.photos;allItems().forEach(o=>{delete o._new;delete o._files});busy=false;showProg(-1);setDirty(false);
+    base=cm.sha;orig=out.photos;origCatIds=cats.map(x=>x.id).join();allItems().forEach(o=>{delete o._new;delete o._files});busy=false;showProg(-1);setDirty(false);
     toast("تم النشر ✓ الموقع هيتحدث خلال دقيقة أو اتنين");if(cur)catView();else homeView()}
   catch(e){busy=false;showProg(-1);setDirty(true);
     toast(e.status==422?"الموقع اتعدّل من مكان تاني. حدّث الصفحة وجرب تاني.":e.status==401?"انتهت الجلسة، اخرج وادخل تاني.":"النشر ما نجحش ("+e.message+"). جرب تاني.",1)}};
