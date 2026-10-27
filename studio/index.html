@@ -43,8 +43,28 @@ h3.sub{font-family:Georgia,serif;letter-spacing:.3em;color:#CEA111;font-size:.95
 .toast.err{background:#c33;color:#fff}
 .empty{opacity:.5;padding:16px 0;font-size:.95rem}
 @media(max-width:600px){.cards{grid-template-columns:1fr 1fr;gap:10px}.grid{grid-template-columns:repeat(3,1fr);gap:6px}.head h2{font-size:1.25rem}.drop{padding:24px 12px}.top h1{font-size:.95rem}}
+.tabs{display:flex;gap:6px;padding:0 4%;background:#111;border-bottom:1px solid #222;overflow-x:auto;position:sticky;top:67px;z-index:9}
+.tabs a{padding:12px 18px;color:#bbb;text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;font-weight:700;font-size:.95rem}.tabs a:hover{color:#fff}.tabs a.on{color:#CEA111;border-bottom-color:#CEA111}
+.rows{display:flex;flex-direction:column;gap:10px;max-width:980px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#161616;border:1px solid #262626;border-radius:10px;padding:10px 12px;touch-action:manipulation;-webkit-touch-callout:none}
+.row.off{opacity:.5}.row.ghostT{opacity:.3}.row.fly{background:#1c1c1c}.row .hd{cursor:grab;color:#CEA111;font-size:1.2rem;padding:0 6px;user-select:none;-webkit-user-select:none}
+.row input:not([type]){flex:1 1 160px;min-width:0}.row .fix{flex:1 1 160px;font-size:.88rem;color:#CEA111;opacity:.85}
+.row .x,.xs{width:34px;height:34px;border-radius:50%;border:0;background:#2a2a2a;color:#fff}.row .x:hover{background:#c33}.xs{background:none}
+.sw{display:flex;align-items:center;gap:6px;font-size:.9rem;cursor:pointer;white-space:nowrap}.sw input{accent-color:#CEA111;width:18px;height:18px}
+input:not([type]),textarea{font:inherit;background:#0f0f0f;color:#eee;border:1px solid #333;border-radius:8px;padding:9px 12px;width:100%}input:not([type]):focus,textarea:focus{outline:none;border-color:#CEA111}
+textarea{line-height:1.8;resize:vertical;min-height:260px}
+.form{display:flex;flex-direction:column;gap:18px;max-width:980px}.form label,.fl{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:.95rem}
+.form small{font-weight:400;opacity:.6;font-size:.82rem}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.covbox{display:flex;align-items:center;gap:14px;font-weight:400}.covbox img{width:180px;aspect-ratio:16/10;object-fit:cover;border-radius:8px;border:1px solid #CEA111}
+.nocov{display:grid;place-items:center;width:180px;aspect-ratio:16/10;border:1px dashed #444;border-radius:8px;font-size:.85rem;opacity:.6;font-weight:400}
+.card .nocov{width:100%;height:100%;border:0}.ghost.red{border-color:#c33;color:#e55}
+.tb{display:flex;flex-wrap:wrap;gap:6px;font-weight:400}.tb button{background:#1c1c1c;border:1px solid #333;color:#eee;border-radius:8px;padding:4px 12px;font-size:.88rem}.tb button:hover{border-color:#CEA111;color:#CEA111}.tb span{flex:1}
+.pv{background:#111;border:1px solid #333;border-radius:8px;padding:16px 20px;font-weight:400;min-height:260px}.pv img{max-width:100%;display:block;margin:14px auto;border-radius:8px}
+.pv h2,.pv h3,.pv h4{color:#CEA111;margin:20px 0 8px}.pv ul{padding-inline-start:22px}.pv b{color:#fff}
+@media(max-width:600px){.row input:not([type]){flex:1 1 40%}.row .fix{flex-basis:100%;order:5}.two{grid-template-columns:1fr}.tabs{top:62px}.tabs a{padding:10px 12px;font-size:.88rem}.covbox{flex-direction:column;align-items:flex-start}}
 </style></head><body>
 <header class="top"><img src="/images/logo.png" alt=""><h1>الاستوديو</h1><a class="site" href="/" target="_blank">فتح الموقع ↗</a><button class="ghost" id="out" hidden>خروج</button></header>
+<nav class="tabs" id="tabs" hidden><a href="#" data-t="cats">القوائم</a><a href="#nav" data-t="nav">القائمة العلوية</a><a href="#dl" data-t="dl">داونلود</a><a href="#set" data-t="set">الإعدادات</a></nav>
 <main class="wrap" id="app"><p class="empty">جاري التحميل…</p></main>
 <div class="bar" id="bar" hidden><div class="msg"><span id="bmsg"></span><div class="prog" id="prog" hidden><i id="progi"></i></div></div><button class="gold" id="pub">نشر</button></div>
 <input type="file" id="fi" multiple accept="image/*,video/mp4,video/quicktime,video/webm" hidden>

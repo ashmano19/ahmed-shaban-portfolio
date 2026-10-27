@@ -36,6 +36,17 @@ function orphans(before,after){
 function fitSize(w,h,max){const s=Math.min(1,max/Math.max(w,h));return [Math.max(1,Math.round(w*s)),Math.max(1,Math.round(h*s))]}
 function b64utf8(str){if(typeof Buffer!="undefined")return Buffer.from(str,"utf8").toString("base64");
   const u=new TextEncoder().encode(str);let s="";for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)}
-root.StudioCore={load,build,counts,orphans,fitSize,b64utf8,clean};
+// markdown بسيط زي اللي في الموقع (للمعاينة)
+function md(s,mapSrc){mapSrc=mapSrc||(x=>x);const esc=x=>x.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");const inl=x=>esc(x).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+  let h="",ul=false;for(const l of (s||"").split("\n")){const t=l.trim();if(!t.startsWith("- ")&&ul){h+="</ul>";ul=false}
+  let m;if(m=t.match(/^!\[(.*?)\]\((.+?)\)$/))h+=`<img src="${esc(mapSrc(m[2]))}" alt="${esc(m[1])}">`;else if(m=t.match(/^(#{1,4}) (.*)/))h+=`<h${m[1].length+1}>${inl(m[2])}</h${m[1].length+1}>`;
+  else if(t.startsWith("- ")){if(!ul){h+="<ul>";ul=true}h+=`<li>${inl(t.slice(2))}</li>`}else if(t)h+=`<p>${inl(t)}</p>`}return h+(ul?"</ul>":"")}
+// صور ونصوص مشاركة الداونلود
+const bodyImgs=b=>[...String(b||"").matchAll(/!\[[^\]]*\]\(([^)\s]+)\)/g)].map(m=>m[1]);
+const STUDIO_PREFIX=/^\/(images\/uploads\/s|files\/s)\//;
+function dlPaths(x){return [x.cover,x.download_url,...(x.images||[]),...bodyImgs(x.body)].filter(p=>typeof p=="string"&&STUDIO_PREFIX.test(p))}
+function dlOrphans(before,after){const used=new Set();after.forEach(x=>dlPaths(x).forEach(p=>used.add(p)));const del=new Set();before.forEach(x=>dlPaths(x).forEach(p=>{if(!used.has(p))del.add(p)}));return [...del].map(p=>p.slice(1))}
+function slugify(t){const s=String(t||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60);return s}
+root.StudioCore={load,build,counts,orphans,fitSize,b64utf8,clean,md,bodyImgs,dlPaths,dlOrphans,slugify};
 if(typeof module!="undefined")module.exports=root.StudioCore;
 })(typeof window!="undefined"?window:globalThis);
