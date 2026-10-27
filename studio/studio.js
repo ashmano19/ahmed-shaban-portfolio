@@ -212,11 +212,12 @@ async function dlImg(f){if(!f)return null;try{$("bmsg").textContent="جاري ت
   catch(e){toast("الصورة دي ما اتفتحتش: "+f.name,1);setDirty(dirty);return null}}
 
 // الإعدادات
-function setView(){const F=[["s","name_ar","الاسم (عربي)"],["s","name_en","الاسم (إنجليزي)",1],["s","tagline_ar","النص تحت اللوجو (عربي)"],["s","tagline_en","النص تحت اللوجو (إنجليزي)",1],
+function setView(){const F=[["s","name_ar","الاسم (عربي)"],["s","name_en","الاسم (إنجليزي)",1],["s","tagline_ar","النص تحت اللوجو (عربي)"],["s","tagline_en","النص تحت اللوجو (إنجليزي)",1],["s","book_ar","كلمة زر الحجز (عربي) — فاضي = احجز الآن"],["s","book_en","كلمة زر الحجز (إنجليزي) — فاضي = Book Now",1],["s","book_msg_ar","رسالة واتساب الجاهزة (عربي) — فاضي = مرحبا، حابب أحجز جلسة تصوير"],["s","book_msg_en","رسالة واتساب الجاهزة (إنجليزي) — فاضي = نفس العربي",1],
   ["k","whatsapp","رقم واتساب (بالكود الدولي من غير + — مثلاً 971504046867)",1],["k","instagram","لينك إنستجرام",1],["k","facebook","لينك فيسبوك (اختياري)",1],["k","behance","لينك بيهانس (اختياري)",1],["k","email","الإيميل (اختياري)",1],["k","phone","رقم الهاتف (اختياري)",1]];
   app.innerHTML=`<div class="head"><h2>الإعدادات</h2></div><div class="form">
    <h3 class="sub">الواجهة</h3><div class="two">${F.slice(0,4).map(f=>fld(f)).join("")}</div>
-   <h3 class="sub">التواصل</h3><p class="hint">واتساب وإنستجرام بيظهروا كأيقونات ذهبي في «تواصل معي». أي خانة فاضية مش هتظهر في الموقع.</p><div class="two">${F.slice(4).map(f=>fld(f)).join("")}</div></div>`;
+   <h3 class="sub">زر «احجز الآن»</h3><p class="hint">الزر بيفتح واتساب على الرقم اللي تحت، والرسالة بتكون مكتوبة جاهزة.</p><div class="two">${F.slice(4,8).map(f=>fld(f)).join("")}</div>
+   <h3 class="sub">التواصل</h3><p class="hint">واتساب وإنستجرام بيظهروا كأيقونات ذهبي في «تواصل معي». أي خانة فاضية مش هتظهر في الموقع.</p><div class="two">${F.slice(8).map(f=>fld(f)).join("")}</div></div>`;
   app.querySelectorAll("[data-o]").forEach(i=>i.oninput=()=>{const o=i.dataset.o=="s"?setObj:conObj;let v=i.value;if(i.dataset.f=="whatsapp"){v=v.replace(/\D+/g,"");if(v!==i.value)i.value=v}o[i.dataset.f]=v;touch()})}
 const fld=([o,f,l,ltr])=>`<label>${l}<input data-o="${o}" data-f="${f}"${ltr?' dir="ltr"':""} value="${esc((o=="s"?setObj:conObj)[f])}"></label>`;
 
