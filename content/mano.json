@@ -60,27 +60,37 @@
     {
       "image": "/images/mano/launcher.webp",
       "caption_ar": "الشاشة الرئيسية",
-      "caption_en": "Launcher"
+      "caption_en": "Launcher",
+      "desc_ar": "كل أقسام MANO قدامك في شاشة واحدة، تدخل أي قسم بضغطة.",
+      "desc_en": "Every MANO section on one screen, one click away."
     },
     {
       "image": "/images/mano/text.webp",
       "caption_ar": "قوالب النصوص",
-      "caption_en": "Text templates"
+      "caption_en": "Text templates",
+      "desc_ar": "قوالب نصوص وكابشن بمعاينة متحركة، وزرار إضافة تحت كل قالب.",
+      "desc_en": "Text and caption templates with animated previews and an add button on each."
     },
     {
       "image": "/images/mano/addons.webp",
       "caption_ar": "مكتبة الملحقات",
-      "caption_en": "Add-ons library"
+      "caption_en": "Add-ons library",
+      "desc_ar": "أيقونات وإيموجي ونيون وأرقام وشرايط تحميل و3D وخلفيات ومؤثرات.",
+      "desc_en": "Icons, emoji, neon, numbers, loading bars, 3D, backgrounds and effects."
     },
     {
       "image": "/images/mano/motion-ai.webp",
       "caption_ar": "Motion AI",
-      "caption_en": "Motion AI"
+      "caption_en": "Motion AI",
+      "desc_ar": "اكتب طلبك واختار الموديل من جوه الشات، بمفاتيحك أنت.",
+      "desc_en": "Type your request and pick the model inside the chat, with your own keys."
     },
     {
       "image": "/images/mano/bg-removal.webp",
       "caption_ar": "إزالة الخلفية",
-      "caption_en": "Background removal"
+      "caption_en": "Background removal",
+      "desc_ar": "ارفع صورة وخد PNG بخلفية شفافة.",
+      "desc_en": "Upload an image and get a transparent PNG."
     }
   ],
   "steps_ar": [
@@ -113,6 +123,77 @@
     "Enjoy a 2-day free trial, no card needed.",
     "Subscribe with “Subscribe now”, then go back to the tool and press “I paid — verify”."
   ],
-  "whatsapp_msg_ar": "أهلًا، عندي سؤال عن اشتراك MANO",
-  "whatsapp_msg_en": "Hi, I have a question about the MANO subscription"
+  "menu_ar": "MANO — إضافة DaVinci Resolve",
+  "menu_en": "MANO — DaVinci Resolve plugin",
+  "badge_ar": "إضافة لـ DaVinci Resolve",
+  "badge_en": "Plugin for DaVinci Resolve",
+  "hero_title_ar": "قوالب وملحقات وذكاء اصطناعي",
+  "hero_title_en": "Templates, add-ons and AI",
+  "hero_accent_ar": "جوه DaVinci Resolve.",
+  "hero_accent_en": "right inside DaVinci Resolve.",
+  "cta_title_ar": "مونتاج أسرع،",
+  "cta_title_en": "Faster edits,",
+  "cta_accent_ar": "وشكل أفخم.",
+  "cta_accent_en": "a richer look.",
+  "cta_text_ar": "قوالب نصوص وGlass، مكتبة ملحقات كاملة، Motion AI وإزالة خلفية — كلها في مكان واحد جوه DaVinci Resolve.",
+  "cta_text_en": "Text and Glass templates, a full add-ons library, Motion AI and background removal — all in one place inside DaVinci Resolve.",
+  "chips_ar": [
+    "DaVinci Resolve",
+    "Windows",
+    "عربي / English",
+    "مفاتيح AI بتاعتك",
+    "تثبيت بضغطة"
+  ],
+  "chips_en": [
+    "DaVinci Resolve",
+    "Windows",
+    "Arabic / English",
+    "Your own AI keys",
+    "One-click install"
+  ],
+  "faq": [
+    {
+      "q_ar": "إيه اللي موجود في MANO؟",
+      "q_en": "What's inside MANO?",
+      "a_ar": "قوالب نصوص وكابشن، قوالب Glass بكتابة مباشرة، مكتبة ملحقات (أيقونات، إيموجي، نيون، أرقام، شرايط تحميل، 3D، خلفيات ومؤثرات)، Motion AI، وإزالة الخلفية لـ PNG.",
+      "a_en": "Text and caption templates, Glass templates with live text, an add-ons library (icons, emoji, neon, numbers, loading bars, 3D, backgrounds and effects), Motion AI and background removal to PNG."
+    },
+    {
+      "q_ar": "فيه تجربة مجانية؟",
+      "q_en": "Is there a free trial?",
+      "a_ar": "أيوه، يومين مجانًا من وقت ما تعمل حسابك، ومن غير كارت.",
+      "a_en": "Yes, 2 days free from when you create your account, no card needed."
+    },
+    {
+      "q_ar": "إزاي أفعّل اشتراكي؟",
+      "q_en": "How do I activate my subscription?",
+      "a_ar": "سجّل دخولك في الأداة بإيميلك واكتب الكود اللي هيوصلك (6 أرقام). اشترك من «اشترك الآن»، وبعد الدفع ارجع للأداة ودوس «دفعت - تحقّق».",
+      "a_en": "Sign in inside the tool with your email and enter the 6-digit code you receive. Subscribe with “Subscribe now”, then go back to the tool and press “I paid — verify”."
+    },
+    {
+      "q_ar": "هل مفاتيح الذكاء الاصطناعي متضمنة؟",
+      "q_en": "Are AI keys included?",
+      "a_ar": "لا، Motion AI بيشتغل بمفاتيحك أنت من المنصات (OpenAI، Gemini، Claude، Grok، ElevenLabs، Kling، Luma، Higgsfield). باقي الأدوات مش محتاجة مفاتيح.",
+      "a_en": "No. Motion AI uses your own keys from the providers (OpenAI, Gemini, Claude, Grok, ElevenLabs, Kling, Luma, Higgsfield). The other tools don't need any keys."
+    },
+    {
+      "q_ar": "محتاج إنترنت طول الوقت؟",
+      "q_en": "Do I need to be online all the time?",
+      "a_ar": "الأداة بتتأكد من اشتراكك أونلاين، وتفضل شغالة لحد 3 أيام من غير إنترنت بعد آخر تأكيد.",
+      "a_en": "The tool checks your subscription online and keeps working for up to 3 days offline after the last check."
+    },
+    {
+      "q_ar": "بيشتغل على أنهي نظام؟",
+      "q_en": "Which system does it run on?",
+      "a_ar": "المثبّت الحالي لـ DaVinci Resolve على Windows.",
+      "a_en": "The current installer is for DaVinci Resolve on Windows."
+    },
+    {
+      "q_ar": "محتاج مساعدة؟",
+      "q_en": "Need help?",
+      "a_ar": "كلمنا على واتساب من الزرار اللي في قسم الأسعار.",
+      "a_en": "Message us on WhatsApp using the button in the pricing section."
+    }
+  ],
+  "site_url": "https://mano-plugin.pages.dev"
 }
