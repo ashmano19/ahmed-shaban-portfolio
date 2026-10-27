@@ -2,7 +2,7 @@ backend:
   name: github
   repo: ashmano19/ahmed-shaban-portfolio
   branch: main
-  base_url: https://ahmed-sh-ph.pages.dev
+  base_url: https://ahmedshaban-ph.com
   auth_endpoint: auth
 locale: ar
 media_folder: images/uploads
