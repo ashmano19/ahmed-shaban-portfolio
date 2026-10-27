@@ -1,6 +1,6 @@
 (function(){
 const REPO="ashmano19/ahmed-shaban-portfolio",BR="main",API=(window.STUDIO_API||"https://api.github.com")+"/repos/"+REPO;
-const MAX_IMG=2400,MAX_TH=700,MAX_VID=25*1024*1024; // Cloudflare Pages: أقصى حجم للملف 25MB
+const MAX_IMG=2400,MAX_TH=700,MAX_VID=25*1024*1024,VID_OK=24*1024*1024; // Cloudflare Pages: أقصى حجم للملف 25MB
 const C=window.StudioCore,$=id=>document.getElementById(id),app=$("app");
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let TOKEN="",base="",cats=[],origCatsDoc={},origCatIds="",st=null,orig=[],cur=null,dirty=false,busy=false;
@@ -68,7 +68,7 @@ function tile(o,i,kind){const d=i>0&&o._div;return `<div class="t${d?" div":""}$
 function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);
   app.innerHTML=`<div class="head"><a class="ghost" href="#">→ القوائم</a><h2>${esc(c.name_ar)} <small style="font-size:.9rem;color:#CEA111">${n.p} صورة · ${n.v} فيديو</small></h2>
     <div class="cov">${b.cover?`<img src="${esc(src(b.cover))}" alt="">`:""}<span>صورة الغلاف<br><small>غيّرها بزرار ★</small></span></div></div>
-  <div class="drop" id="drop"><b>اسحب الصور والفيديوهات هنا</b><small>أو دوس عشان تختار من جهازك — تقدر تختار كذا ملف مرة واحدة (الفيديو mp4 لحد 25MB)</small></div>
+  <div class="drop" id="drop"><b>اسحب الصور والفيديوهات هنا</b><small>أو دوس عشان تختار من جهازك — تقدر تختار كذا ملف مرة واحدة (الفيديوهات الكبيرة بتتضغط تلقائيًا)</small></div>
   <div class="opts"><label><input type="checkbox" id="ng" ${S.newGroup?"checked":""}> مجموعة جديدة (خط ذهبي يفصلها عن اللي قبلها)</label>
     <label><input type="checkbox" id="as" ${S.atStart?"checked":""}> حطهم في أول القائمة</label></div>
   <p class="hint">اسحب أي صورة عشان تغيّر مكانها · ✂ يحط خط ذهبي قبل الصورة · ★ يخليها غلاف القائمة · ✕ حذف</p>
@@ -121,15 +121,19 @@ function frame(file){return new Promise((res,rej)=>{const v=document.createEleme
   v.onseeked=()=>{if(done)return;done=true;res({el:v,w:v.videoWidth,h:v.videoHeight,url:u})};v.src=u})}
 async function addFiles(files){if(busy)return;const c=cats.find(x=>x.id==cur),b=st.by[cur];if(!c)return;
   files=files.filter(f=>/^(image|video)\//.test(f.type)||/\.(jpe?g|png|webp|mp4|mov|heic)$/i.test(f.name));if(!files.length)return;
-  busy=true;setDirty(dirty);const stamp=Date.now().toString(36),added={videos:[],photos:[]},bad=[];
+  busy=true;setDirty(dirty);const stamp=Date.now().toString(36),added={videos:[],photos:[]},bad=[];let warned=0;
   for(let i=0;i<files.length;i++){const f=files[i];$("bmsg").textContent=`جاري تجهيز ${i+1} من ${files.length}…`;showProg((i)/files.length);
     const name=stamp+"-"+(i+1),dir="images/uploads/s/"+cur;
     try{const o={_id:"n"+stamp+i,_new:1,category:cur,title_ar:c.name_ar,title_en:c.name_en};
       if(f.type.startsWith("video/")||/\.(mp4|mov)$/i.test(f.name)){
-        if(f.size>MAX_VID){bad.push(f.name+" (أكبر من 25MB)");continue}
-        const fr=await frame(f),p=await enc(canvasOf(fr.el,fr.w,fr.h,720),.8);const ext=(f.name.match(/\.(mp4|mov|webm)$/i)||[,"mp4"])[1].toLowerCase();
+        let vf=f,fr=null,ext=(f.name.match(/\.(mp4|mov|webm)$/i)||[,"mp4"])[1].toLowerCase();
+        if(f.size<=VID_OK&&(/mp4/.test(f.type)||/\.mp4$/i.test(f.name))){try{fr=await frame(f)}catch(_){}}
+        if(!fr){if(!warned){warned=1;toast("الفيديو بيتضغط تلقائيًا — ممكن ياخد كام دقيقة، سيب الصفحة مفتوحة")}
+          try{vf=await squeeze(f,i,files.length);ext="mp4"}catch(e){bad.push(f.name+" ("+vidErr(e)+")");continue}
+          fr=await frame(vf)}
+        const p=await enc(canvasOf(fr.el,fr.w,fr.h,720),.8);
         const vp=`${dir}/v/${name}.${ext}`,pp=`${dir}/v/${name}.${p.ext}`;
-        Object.assign(o,{image:"/"+pp,thumb:"/"+pp,video:"/"+vp,preview:"/"+vp,_url:URL.createObjectURL(p.blob),_files:[{path:vp,blob:f},{path:pp,blob:p.blob}]});added.videos.push(o)}
+        Object.assign(o,{image:"/"+pp,thumb:"/"+pp,video:"/"+vp,preview:"/"+vp,_url:URL.createObjectURL(p.blob),_files:[{path:vp,blob:vf},{path:pp,blob:p.blob}]});added.videos.push(o)}
       else{const im=await decode(f),big=await enc(canvasOf(im.el,im.w,im.h,MAX_IMG),.85),th=await enc(canvasOf(im.el,im.w,im.h,MAX_TH),.78);
         const ip=`${dir}/${name}.${big.ext}`,tp=`${dir}/t/${name}.${th.ext}`;
         Object.assign(o,{image:"/"+ip,thumb:"/"+tp,_url:URL.createObjectURL(th.blob),_files:[{path:ip,blob:big.blob},{path:tp,blob:th.blob}]});added.photos.push(o)}}
@@ -138,6 +142,14 @@ async function addFiles(files){if(busy)return;const c=cats.find(x=>x.id==cur),b=
     if(S.atStart){if(S.newGroup&&b[k][0])b[k][0]._div=true;b[k].unshift(...a)}else{a[0]._div=S.newGroup;b[k].push(...a)}});
   busy=false;showProg(-1);if(bad.length)toast("الملفات دي ما اتضافتش: "+bad.join("، "),1);
   if(added.videos.length+added.photos.length){setDirty(true);toast(`اتضاف ${added.photos.length} صورة و ${added.videos.length} فيديو — دوس نشر`)}else setDirty(dirty);catView()}
+// ضغط/تحويل الفيديو لـ mp4 أقل من 24MB (ffmpeg.wasm بيتحمل بس لما نحتاجه)
+let vmod=null;
+async function squeeze(f,i,n){const tag=n>1?` ${i+1} من ${n}`:"";
+  if(!vmod)vmod=import("/studio/ffmpeg/compress.js");let m;try{m=await vmod}catch(e){vmod=null;throw new Error("load")}
+  return m.compressVideo(f,s=>{const pc=Math.round((s.p||0)*100);
+    $("bmsg").textContent=s.phase=="load"?`بحمّل أداة ضغط الفيديو (أول مرة بس)… ${pc}%`:s.phase=="probe"?`بجهّز الفيديو${tag}…`:`بضغط الفيديو${tag}… ${pc}%`+(s.pass>1?" (محاولة أصغر)":"");
+    showProg(s.phase=="enc"?(i+(s.p||0))/n:i/n)})}
+function vidErr(e){const m=e&&e.message||"";return m=="toobig"?"طويل جدًا — حتى بعد الضغط أكبر من 25MB، قصّه وجرب تاني":m=="load"?"ما قدرتش أحمّل أداة الضغط، اتأكد من النت وجرب تاني":"ما قدرتش أضغط الفيديو ده"}
 function showProg(x){$("prog").hidden=x<0;$("progi").style.width=Math.round(Math.max(0,x)*100)+"%"}
 
 // ---------- باقي الموقع (القائمة العلوية · داونلود · الإعدادات) ----------
