@@ -95,6 +95,9 @@ collections:
         file: content/mano.json
         fields:
           - {name: show, label: إظهار الصفحة, widget: boolean, default: true}
+          - {name: menu_ar, label: "الاسم في قائمة Download بالعربي", widget: string, required: false}
+          - {name: menu_en, label: "الاسم في قائمة Download بالإنجليزي", widget: string, required: false}
+          - {name: site_url, label: "رابط موقع MANO", widget: string, required: false, hint: "موقع MANO المستقل (https://mano-plugin.pages.dev). زر MANO في قائمة Download بيفتحه. نص/أسعار/روابط التحميل والاشتراك هنا بتظهر في موقع MANO تلقائيًا."}
           - {name: version, label: الإصدار, widget: string, required: false}
           - {name: download_url, label: "رابط تحميل الـ ZIP", widget: string, required: false, hint: "الملف ~1.7GB: ارفعه على Google Drive أو GitHub Release وحط الرابط هنا. لو فاضي يظهر «رابط التحميل قريبًا»"}
           - {name: file_size, label: "حجم الملف (مثال 1.7 GB)", widget: string, required: false}
@@ -108,8 +111,30 @@ collections:
           - {name: period_en, label: المدة بالإنجليزي, widget: string}
           - {name: trial_days, label: أيام التجربة المجانية, widget: number, value_type: int, required: false}
           - {name: subscribe_url, label: "رابط الدفع (Stripe Payment Link)", widget: string, required: false, hint: "الرابط الحالي test mode — بدّله برابط Live"}
-          - {name: whatsapp_msg_ar, label: رسالة واتساب بالعربي, widget: string, required: false}
-          - {name: whatsapp_msg_en, label: رسالة واتساب بالإنجليزي, widget: string, required: false}
+          - {name: badge_ar, label: "الشارة فوق العنوان بالعربي", widget: string, required: false}
+          - {name: badge_en, label: "الشارة فوق العنوان بالإنجليزي", widget: string, required: false}
+          - {name: hero_title_ar, label: العنوان الرئيسي بالعربي, widget: string, required: false}
+          - {name: hero_title_en, label: العنوان الرئيسي بالإنجليزي, widget: string, required: false}
+          - {name: hero_accent_ar, label: "السطر الذهبي بالعربي", widget: string, required: false}
+          - {name: hero_accent_en, label: "السطر الذهبي بالإنجليزي", widget: string, required: false}
+          - {name: chips_ar, label: "شريط المزايا بالعربي", widget: list, required: false}
+          - {name: chips_en, label: "شريط المزايا بالإنجليزي", widget: list, required: false}
+          - {name: cta_title_ar, label: "عنوان الختام بالعربي", widget: string, required: false}
+          - {name: cta_title_en, label: "عنوان الختام بالإنجليزي", widget: string, required: false}
+          - {name: cta_accent_ar, label: "الجزء الذهبي في الختام بالعربي", widget: string, required: false}
+          - {name: cta_accent_en, label: "الجزء الذهبي في الختام بالإنجليزي", widget: string, required: false}
+          - {name: cta_text_ar, label: "نص الختام بالعربي", widget: text, required: false}
+          - {name: cta_text_en, label: "نص الختام بالإنجليزي", widget: text, required: false}
+          - name: faq
+            label: الأسئلة الشائعة
+            widget: list
+            required: false
+            summary: "{{fields.q_ar}}"
+            fields:
+              - {name: q_ar, label: السؤال بالعربي, widget: string}
+              - {name: q_en, label: السؤال بالإنجليزي, widget: string}
+              - {name: a_ar, label: الإجابة بالعربي, widget: text}
+              - {name: a_en, label: الإجابة بالإنجليزي, widget: text}
           - name: features
             label: المميزات
             widget: list
@@ -128,6 +153,8 @@ collections:
               - {name: image, label: الصورة, widget: image}
               - {name: caption_ar, label: التعليق بالعربي, widget: string, required: false}
               - {name: caption_en, label: التعليق بالإنجليزي, widget: string, required: false}
+              - {name: desc_ar, label: الوصف بالعربي, widget: string, required: false}
+              - {name: desc_en, label: الوصف بالإنجليزي, widget: string, required: false}
           - {name: flow_ar, label: "خطوات الاشتراك بالعربي", widget: list, required: false}
           - {name: flow_en, label: "خطوات الاشتراك بالإنجليزي", widget: list, required: false}
           - {name: steps_ar, label: خطوات التثبيت بالعربي, widget: list, required: false}
