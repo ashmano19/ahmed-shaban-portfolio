@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "type": "link",
+      "label_ar": "أعمالي",
+      "label_en": "Portfolio",
+      "href": "#gallery",
+      "show": true
+    },
+    {
+      "type": "link",
+      "label_ar": "تواصل معي",
+      "label_en": "Contact",
+      "href": "#contact",
+      "show": true
+    },
+    {
+      "type": "downloads",
+      "label_ar": "Download",
+      "label_en": "Download",
+      "show": true
+    }
+  ]
+}
