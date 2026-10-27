@@ -43,7 +43,7 @@ h3.sub{font-family:Georgia,serif;letter-spacing:.3em;color:#CEA111;font-size:.95
 .toast.err{background:#c33;color:#fff}
 .empty{opacity:.5;padding:16px 0;font-size:.95rem}
 @media(max-width:600px){.cards{grid-template-columns:1fr 1fr;gap:10px}.grid{grid-template-columns:repeat(3,1fr);gap:6px}.head h2{font-size:1.25rem}.drop{padding:24px 12px}.top h1{font-size:.95rem}}
-.tabs{display:flex;gap:6px;padding:0 4%;background:#111;border-bottom:1px solid #222;overflow-x:auto;position:sticky;top:67px;z-index:9}
+[hidden]{display:none!important}.tabs{display:flex;gap:6px;padding:0 4%;background:#111;border-bottom:1px solid #222;overflow-x:auto;position:sticky;top:67px;z-index:9}
 .tabs a{padding:12px 18px;color:#bbb;text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;font-weight:700;font-size:.95rem}.tabs a:hover{color:#fff}.tabs a.on{color:#CEA111;border-bottom-color:#CEA111}
 .rows{display:flex;flex-direction:column;gap:10px;max-width:980px}
 .row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#161616;border:1px solid #262626;border-radius:10px;padding:10px 12px;touch-action:manipulation;-webkit-touch-callout:none}
@@ -63,7 +63,7 @@ textarea{line-height:1.8;resize:vertical;min-height:260px}
 .pv h2,.pv h3,.pv h4{color:#CEA111;margin:20px 0 8px}.pv ul{padding-inline-start:22px}.pv b{color:#fff}
 @media(max-width:600px){.row input:not([type]){flex:1 1 40%}.row .fix{flex-basis:100%;order:5}.two{grid-template-columns:1fr}.tabs{top:62px}.tabs a{padding:10px 12px;font-size:.88rem}.covbox{flex-direction:column;align-items:flex-start}}
 </style></head><body>
-<header class="top"><img src="/images/logo.png" alt=""><h1>الاستوديو</h1><a class="site" href="/" target="_blank">فتح الموقع ↗</a><button class="ghost" id="out" hidden>خروج</button></header>
+<header class="top"><img src="/images/logo.svg" alt=""><h1>الاستوديو</h1><a class="site" href="/" target="_blank">فتح الموقع ↗</a><button class="ghost" id="out" hidden>خروج</button></header>
 <nav class="tabs" id="tabs" hidden><a href="#" data-t="cats">القوائم</a><a href="#nav" data-t="nav">القائمة العلوية</a><a href="#dl" data-t="dl">داونلود</a><a href="#set" data-t="set">الإعدادات</a></nav>
 <main class="wrap" id="app"><p class="empty">جاري التحميل…</p></main>
 <div class="bar" id="bar" hidden><div class="msg"><span id="bmsg"></span><div class="prog" id="prog" hidden><i id="progi"></i></div></div><button class="gold" id="pub">نشر</button></div>

@@ -17,7 +17,7 @@ async function gh(path,opt={}){const r=await fetch(path.startsWith("http")?path:
 // ---------- الدخول (نفس نافذة GitHub بتاعة /admin) ----------
 function savedToken(){if(localStorage.studioToken)return localStorage.studioToken;try{const u=JSON.parse(localStorage["decap-cms-user"]||"null");if(u&&u.token)return u.token}catch(_){}return ""}
 function loginView(msg){$("out").hidden=true;$("bar").hidden=true;$("tabs").hidden=true;
-  app.innerHTML=`<div class="login"><img src="/images/logo.png" alt=""><h2>أهلاً يا أحمد 👋</h2><p>${msg||"ادخل بحساب GitHub عشان تضيف صورك وفيديوهاتك وترتبها."}</p><button class="gold" id="lg">دخول بحساب GitHub</button></div>`;
+  app.innerHTML=`<div class="login"><img src="/images/logo.svg" alt=""><h2>أهلاً يا أحمد 👋</h2><p>${msg||"ادخل بحساب GitHub عشان تضيف صورك وفيديوهاتك وترتبها."}</p><button class="gold" id="lg">دخول بحساب GitHub</button></div>`;
   $("lg").onclick=login}
 function login(){const w=window.open("/auth?provider=github&scope=repo,user","gh-login","width=600,height=720");
   if(!w){toast("المتصفح منع النافذة، اسمح بالنوافذ المنبثقة وجرب تاني",1);return}
