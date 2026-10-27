@@ -4,7 +4,8 @@
       "image": "/images/uploads/be-1-beauty.png",
       "title_ar": "عيادات التجميل",
       "title_en": "Beauty Clinics",
-      "category": "beauty"
+      "category": "beauty",
+      "cover": true
     },
     {
       "image": "/images/behance/v/beauty-1.webp",
@@ -90,7 +91,8 @@
       "image": "/images/uploads/be-2-dental.png",
       "title_ar": "تصوير الأسنان",
       "title_en": "Dental Imaging",
-      "category": "dental"
+      "category": "dental",
+      "cover": true
     },
     {
       "image": "/images/behance/p2/001.webp",
@@ -343,7 +345,8 @@
       "image": "/images/uploads/be-3-realestate.jpg",
       "title_ar": "عقارات",
       "title_en": "Real Estate",
-      "category": "realestate"
+      "category": "realestate",
+      "cover": true
     },
     {
       "image": "/images/behance/p3/001.webp",
@@ -912,7 +915,8 @@
       "image": "/images/uploads/be-4-reels.jpg",
       "title_ar": "ريلز مكياج",
       "title_en": "Makeup Reels",
-      "category": "makeup-reels"
+      "category": "makeup-reels",
+      "cover": true
     },
     {
       "image": "/images/behance/v/makeup-reels-1.webp",
@@ -998,7 +1002,8 @@
       "image": "/images/uploads/be-5-fashion.jpg",
       "title_ar": "ريل موديل",
       "title_en": "Model Reel",
-      "category": "model-reel"
+      "category": "model-reel",
+      "cover": true
     },
     {
       "image": "/images/behance/v/model-reel-1.webp",
@@ -1012,7 +1017,8 @@
       "image": "/images/uploads/be-6-fashion.jpg",
       "title_ar": "تصوير أزياء وموديلز",
       "title_en": "Fashion & Model Photography",
-      "category": "fashion"
+      "category": "fashion",
+      "cover": true
     },
     {
       "image": "/images/behance/p6/001.webp",
@@ -2306,7 +2312,8 @@
       "image": "/images/uploads/be-7-reels.jpg",
       "title_ar": "ريلز جيم",
       "title_en": "Gym Reels",
-      "category": "gym-reels"
+      "category": "gym-reels",
+      "cover": true
     },
     {
       "image": "/images/behance/v/gym-reels-1.webp",
@@ -2360,7 +2367,8 @@
       "image": "/images/uploads/be-8-products.jpg",
       "title_ar": "تصوير منتجات",
       "title_en": "Products",
-      "category": "products"
+      "category": "products",
+      "cover": true
     },
     {
       "image": "/images/behance/p8/001.webp",
@@ -3381,7 +3389,8 @@
       "image": "/images/uploads/be-9-food.jpg",
       "title_ar": "تصوير الطعام",
       "title_en": "Food Photography",
-      "category": "food"
+      "category": "food",
+      "cover": true
     },
     {
       "image": "/images/behance/p9/001.webp",
@@ -4675,7 +4684,8 @@
       "image": "/images/uploads/be-10-events.png",
       "title_ar": "حفلات",
       "title_en": "Parties",
-      "category": "events"
+      "category": "events",
+      "cover": true
     },
     {
       "image": "/images/uploads/be-10-events.png",
@@ -4712,7 +4722,8 @@
       "image": "/images/uploads/be-11-reels.jpg",
       "title_ar": "ريلز كافيهات ومطاعم",
       "title_en": "Cafes & Restaurants Reels",
-      "category": "cafes-reels"
+      "category": "cafes-reels",
+      "cover": true
     },
     {
       "image": "/images/behance/v/cafes-reels-1.webp",
@@ -4870,7 +4881,8 @@
       "image": "/images/uploads/be-12-events.png",
       "title_ar": "صيف",
       "title_en": "Summer",
-      "category": "summer"
+      "category": "summer",
+      "cover": true
     },
     {
       "image": "/images/behance/p12/001.webp",
@@ -4939,7 +4951,8 @@
       "image": "/images/uploads/be-13.webp",
       "title_ar": "سيارات",
       "title_en": "Cars",
-      "category": "cars"
+      "category": "cars",
+      "cover": true
     },
     {
       "image": "/images/behance/v/cars-1.webp",
@@ -4969,7 +4982,8 @@
       "image": "/images/uploads/be-14.webp",
       "title_ar": "فيديو كأس الإمارات",
       "title_en": "Emirates Cup Video",
-      "category": "emirates-cup"
+      "category": "emirates-cup",
+      "cover": true
     },
     {
       "image": "/images/behance/v/emirates-cup-1.webp",
@@ -5135,7 +5149,8 @@
       "image": "/images/uploads/be-15.webp",
       "title_ar": "تامر حسني",
       "title_en": "Tamer Hosny",
-      "category": "tamer-hosny"
+      "category": "tamer-hosny",
+      "cover": true
     },
     {
       "image": "/images/behance/p15/001.webp",
