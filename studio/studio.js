@@ -8,7 +8,7 @@ let TOKEN="",base="",cats=[],origCatsDoc={},origCatIds="",st=null,orig=[],cur=nu
 const NAVD=[{type:"link",label_ar:"أعمالي",label_en:"Portfolio",href:"#gallery",show:true},{type:"link",label_ar:"تواصل معي",label_en:"Contact",href:"#contact",show:true},{type:"downloads",label_ar:"Download",label_en:"Download",show:true}];
 let galBase="",navItems=[],dlItems=[],dlOrig=[],setObj={},conObj={},mnObj=null,docs0={},KN=0;const dlFiles=new Map(),dlDocs={};
 const key=()=>"k"+(KN++);
-const S={up:"last"};try{S.up=localStorage.studioUp||"last"}catch(_){}
+const S={up:"last",autoPub:true};try{S.up=localStorage.studioUp||"last";S.autoPub=localStorage.studioAutoPub!="0"}catch(_){}
 // المجموعات: كل مجموعة بتبدأ بعنصر عليه _div (أو أول عنصر)
 const gSplit=a=>{const g=[];a.forEach((o,i)=>{if(i==0||o._div)g.push([]);g[g.length-1].push(o)});return g};
 const gJoin=g=>{const r=[];g.filter(x=>x.length).forEach((x,j)=>x.forEach((o,i)=>{o._div=i==0&&j>0;r.push(o)}));return r};
@@ -50,7 +50,7 @@ function setDirty(v){dirty=v;const n=countNew();$("pub").disabled=!v||busy;
 const allItems=()=>{const a=[];Object.values(st.by).forEach(b=>{if(b.cover)a.push(b.cover);a.push(...b.videos,...b.photos)});return a};
 const pendingFiles=()=>{const f=[];allItems().forEach(o=>(o._files||[]).forEach(x=>f.push(x)));return f};
 const countNew=()=>allItems().filter(o=>o._new).length+usedDlFiles().length;
-window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
+window.addEventListener("beforeunload",e=>{if(dirty||adding||busy){e.preventDefault();e.returnValue=""}});
 
 // ---------- الشاشات ----------
 function route(){app.oninput=app.onchange=app.onclick=null;const h=location.hash,tab=/^#nav/.test(h)?"nav":/^#dl/.test(h)?"dl":/^#set/.test(h)?"set":/^#works/.test(h)?"works":"cats";
@@ -258,25 +258,29 @@ const VEXT=/\.(mp4|mov|m4v|webm|mkv|avi|3gp)$/i,isVid=f=>f.type.startsWith("vide
 // لوحة تقدم واضحة في نص الشاشة أثناء تجهيز/ضغط الفيديوهات
 function vpShow(on){let d=$("vp");if(!on){if(d)d.remove();clearInterval(vpT);return}
   if(d)return;d=document.createElement("div");d.id="vp";d.innerHTML=`<div class="vpb"><b id="vpT">جاري تجهيز الملفات…</b><span id="vpN"></span><div class="vpbar"><i id="vpI"></i></div><small id="vpE"></small>
-  <p>سيب الصفحة دي مفتوحة لحد ما يخلص — بعدها دوس <b>نشر</b>.</p><button class="ghost" id="vpX">إلغاء</button></div>`;document.body.appendChild(d);
-  $("vpX").onclick=()=>{cancelled=true;queue=[];import("/studio/ffmpeg/compress.js?v=16").then(m=>m.abort&&m.abort()).catch(()=>{});$("vpT").textContent="بلغي…"};
+  <label class="vpa"><input type="checkbox" id="vpP" ${S.autoPub?"checked":""}> انشر لوحده أول ما يخلص</label>
+  <p>تقدر تصغّر اللوحة وتكمل شغلك في الاستوديو، أو تروح لأي برنامج أو تاب تاني — هيكمل. بس ما تقفلش التاب نفسه.</p>
+  <div class="vpk"><button class="gold" id="vpM">⇲ صغّرها وكمّل شغلك</button><button class="ghost" id="vpX">إلغاء</button></div></div><button class="vpmini" id="vpS"></button>`;document.body.appendChild(d);
+  $("vpP").onchange=e=>{S.autoPub=e.target.checked;try{localStorage.studioAutoPub=S.autoPub?"1":"0"}catch(_){}};
+  $("vpM").onclick=()=>d.classList.add("min");$("vpS").onclick=()=>d.classList.remove("min");
+  $("vpX").onclick=()=>{cancelled=true;queue=[];if(vctl.cancel)vctl.cancel().catch?.(()=>{});import("/studio/ffmpeg/compress.js?v=17").then(m=>m.abort&&m.abort()).catch(()=>{});$("vpT").textContent="بلغي…"};
   vpStart=Date.now();clearInterval(vpT);vpT=setInterval(vpTick,1000)}
 let vpP=0,cancelled=false;
-function vpSet(t,n,p){if(!$("vp"))return;if(t!=null)$("vpT").textContent=t;if(n!=null)$("vpN").textContent=n;if(p!=null){vpP=p;$("vpI").style.width=Math.round(p*100)+"%"}vpTick()}
+function vpSet(t,n,p){if(!$("vp"))return;if(t!=null){$("vpT").textContent=t;$("vpS").textContent="⏳ "+t}if(n!=null)$("vpN").textContent=n;if(p!=null){vpP=p;$("vpI").style.width=Math.round(p*100)+"%"}vpTick()}
 function vpTick(){const e=$("vpE");if(!e)return;const s=Math.round((Date.now()-vpStart)/1000),f=x=>Math.floor(x/60)+":"+String(x%60).padStart(2,"0");
   let t="الوقت: "+f(s);if(vpP>.03&&s>8)t+=" · فاضل تقريبًا "+f(Math.max(0,Math.round(s/vpP-s)));e.textContent=t}
-async function addFiles(files,tgt){tgt=tgt||{mode:S.up};const c=cats.find(x=>x.id==cur),b=st.by[cur];if(!c)return;
+async function addFiles(files,tgt){tgt=tgt||{mode:S.up};const cid=tgt.cid||cur,c=cats.find(x=>x.id==cid),b=st.by[cid];if(!c)return;tgt.cid=cid;
   const all=files;files=files.filter(f=>/^image\//.test(f.type)||isVid(f)||/\.(jpe?g|png|webp|heic|gif)$/i.test(f.name));
   if(files.length<all.length)toast("الملفات دي نوعها مش مدعوم: "+all.filter(f=>!files.includes(f)).map(f=>f.name).join("، "),1);
   if(!files.length)return;
   if(adding){queue.push(...files.map(f=>(f._t=tgt,f)));toast(`اتضافوا للطابور (${queue.length}) — هيتجهزوا بعد اللي شغالين`);return}
   if(busy)return toast("استنى لحد ما النشر يخلص",1);
-  adding=true;busy=true;cancelled=false;setDirty(dirty);const stamp=Date.now().toString(36),added={videos:[],photos:[]},bad=[];
+  adding=true;busy=true;cancelled=false;setDirty(dirty);let unlock=null;if(navigator.locks)navigator.locks.request("studio-work",()=>new Promise(r=>unlock=r)).catch(()=>{});const stamp=Date.now().toString(36),added={videos:[],photos:[]},bad=[];
   const hasVid=files.some(isVid);if(hasVid)vpShow(true);
   for(let i=0;i<files.length&&!cancelled;i++){const f=files[i],cnt=`${f.name} — ملف ${i+1} من ${files.length} · ${(f.size/1048576).toFixed(1)}MB`;
     $("bmsg").textContent=`جاري تجهيز ${i+1} من ${files.length}…`;showProg(i/files.length);vpSet("جاري تجهيز الملف…",cnt,i/files.length);
-    const name=stamp+"-"+(i+1),dir="images/uploads/s/"+cur;
-    try{const o={_id:"n"+stamp+i,_new:1,category:cur,title_ar:c.name_ar,title_en:c.name_en};
+    const name=stamp+"-"+(i+1),dir="images/uploads/s/"+cid;
+    try{const o={_id:"n"+stamp+i,_new:1,category:cid,title_ar:c.name_ar,title_en:c.name_en};
       if(isVid(f)){
         let vf=f,fr=null,ext="mp4";
         if(f.size<=VID_OK&&(/mp4/.test(f.type)||/\.(mp4|m4v)$/i.test(f.name))){vpSet("بقرا الفيديو…");try{fr=await frame(f)}catch(_){}}
@@ -294,13 +298,22 @@ async function addFiles(files,tgt){tgt=tgt||{mode:S.up};const c=cats.find(x=>x.i
     if(tgt.mode=="newStart")G.unshift(a);else if(tgt.mode=="newEnd")G.push(a);
     else if(tgt.mode=="into"&&tgt.k==k&&G[tgt.g])G[tgt.g].push(...a);else if(G.length)G[G.length-1].push(...a);else G.push(a);
     b[k]=gJoin(G)});
-  adding=false;busy=false;vpShow(false);showProg(-1);if(bad.length)toast("الملفات دي ما اتضافتش: "+bad.join("، "),1);
-  if(added.videos.length+added.photos.length){setDirty(true);toast(`اتضاف ${added.photos.length} صورة و ${added.videos.length} فيديو — دوس نشر`)}else setDirty(dirty);catView();
-  if(queue.length&&!cancelled){const q=queue.splice(0),t0=q[0]._t;addFiles(q,t0)}}
+  adding=false;busy=false;showProg(-1);if(bad.length)toast("الملفات دي ما اتضافتش: "+bad.join("، "),1);
+  const got=added.videos.length+added.photos.length;
+  if(got){setDirty(true);toast(`اتضاف ${added.photos.length} صورة و ${added.videos.length} فيديو`+(S.autoPub&&hasVid?" — بنشر دلوقتي…":" — دوس نشر"))}else setDirty(dirty);
+  if(location.hash=="#c/"+cid)catView();
+  if(queue.length&&!cancelled){if(unlock)unlock();const q=queue.splice(0),t0=q[0]._t;return addFiles(q,t0)}
+  if(got&&hasVid&&S.autoPub&&!cancelled){vpSet("بنشر على الموقع…","",1);try{await $("pub").onclick()}catch(_){}}
+  vpShow(false);if(unlock)unlock()}
 // ضغط/تحويل الفيديو لـ mp4 أقل من 24MB (ffmpeg.wasm بيتحمل بس لما نحتاجه)
 let vmod=null;
-async function squeeze(f,i,n,cnt){const tag=n>1?` ${i+1} من ${n}`:"";vpSet("بحمّل أداة ضغط الفيديو (أول مرة بس)…",cnt,0);
-  if(!vmod)vmod=import("/studio/ffmpeg/compress.js?v=16");let m;try{m=await vmod}catch(e){vmod=null;throw new Error("load")}
+let fmod=null,vctl={};
+async function squeeze(f,i,n,cnt){const tag=n>1?` ${i+1} من ${n}`:"";vpSet(`بضغط الفيديو${tag}…`,cnt,0);
+  try{if(!fmod)fmod=import("/studio/fast.js?v=17");const fm=await fmod;vpStart=Date.now();
+    return await fm.fastCompress(f,(p,pass)=>{const t=`بضغط الفيديو${tag}… ${Math.round(p*100)}%`+(pass>1?" (محاولة أصغر)":"");$("bmsg").textContent=t;showProg((i+p)/n);vpSet(t,null,p)},vctl)}
+  catch(e){vctl={};if(cancelled)throw e;if(e&&e.message=="toobig")throw e;console.warn("fast compress → ffmpeg",e)}
+  vpSet("بحمّل أداة الضغط الاحتياطية (أبطأ)…",cnt,0);
+  if(!vmod)vmod=import("/studio/ffmpeg/compress.js?v=17");let m;try{m=await vmod}catch(e){vmod=null;throw new Error("load")}
   return m.compressVideo(f,s=>{const pc=Math.round((s.p||0)*100);
     const t=s.phase=="load"?`بحمّل أداة ضغط الفيديو (أول مرة بس)… ${pc}%`:s.phase=="probe"?`بجهّز الفيديو${tag}…`:`بضغط الفيديو${tag}… ${pc}%`+(s.pass>1?" (محاولة أصغر)":"");
     $("bmsg").textContent=t;showProg(s.phase=="enc"?(i+(s.p||0))/n:i/n);
