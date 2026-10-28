@@ -5407,6 +5407,16 @@
       "thumb": "/images/uploads/t/be-10-events.webp"
     },
     {
+      "category": "events",
+      "title_ar": "مناسبات وحفلات",
+      "title_en": "Events & Parties",
+      "image": "/images/uploads/s/events/v/mvsl6eay-1.webp",
+      "thumb": "/images/uploads/s/events/v/mvsl6eay-1.webp",
+      "video": "/images/uploads/s/events/v/mvsl6eay-1.mp4",
+      "preview": "/images/uploads/s/events/v/mvsl6eay-1.mp4",
+      "group": 1
+    },
+    {
       "image": "/images/behance/v/events-2.webp",
       "video": "https://www-ccv.adobe.io/v1/player/ccv/Gdz_j2XzPG_/embed?api_key=behance1",
       "title_ar": "مناسبات وحفلات",
@@ -5414,7 +5424,7 @@
       "category": "events",
       "thumb": "/images/behance/v/events-2.webp",
       "preview": "/images/behance/vp/events-2.mp4",
-      "group": 1
+      "group": 2
     },
     {
       "image": "/images/behance/v/events-3.webp",
@@ -5424,7 +5434,7 @@
       "category": "events",
       "thumb": "/images/behance/v/events-3.webp",
       "preview": "/images/behance/vp/events-3.mp4",
-      "group": 1
+      "group": 3
     },
     {
       "image": "/images/behance/v/events-4.webp",
@@ -5434,7 +5444,7 @@
       "category": "events",
       "thumb": "/images/behance/v/events-4.webp",
       "preview": "/images/behance/vp/events-4.mp4",
-      "group": 1
+      "group": 3
     },
     {
       "image": "/images/uploads/be-12-events.png",
