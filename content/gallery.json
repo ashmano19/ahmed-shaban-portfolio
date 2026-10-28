@@ -2490,13 +2490,25 @@
       "group": 12
     },
     {
-      "image": "/images/uploads/be-7-reels.jpg",
+      "image": "/images/behance/v/gym-reels-6.webp",
       "title_ar": "ريلز جيم",
       "title_en": "Gym Reels",
       "category": "gym-reels",
       "cover": true,
       "group": 0,
-      "thumb": "/images/uploads/t/be-7-reels.webp"
+      "thumb": "/images/behance/v/gym-reels-6.webp",
+      "pos": "58% 41%",
+      "size": "big"
+    },
+    {
+      "image": "/images/behance/v/gym-reels-6.webp",
+      "video": "https://www-ccv.adobe.io/v1/player/ccv/2_RZZ5E_sUm/embed?api_key=behance1",
+      "title_ar": "ريلز جيم",
+      "title_en": "Gym Reels",
+      "category": "gym-reels",
+      "thumb": "/images/behance/v/gym-reels-6.webp",
+      "preview": "/images/behance/vp/gym-reels-6.mp4",
+      "group": 1
     },
     {
       "image": "/images/behance/v/gym-reels-1.webp",
@@ -2529,16 +2541,6 @@
       "group": 1
     },
     {
-      "image": "/images/behance/v/gym-reels-4.webp",
-      "video": "https://www-ccv.adobe.io/v1/player/ccv/85y48V5Ha5u/embed?api_key=behance1",
-      "title_ar": "ريلز جيم",
-      "title_en": "Gym Reels",
-      "category": "gym-reels",
-      "thumb": "/images/behance/v/gym-reels-4.webp",
-      "preview": "/images/behance/vp/gym-reels-4.mp4",
-      "group": 1
-    },
-    {
       "image": "/images/behance/v/gym-reels-5.webp",
       "video": "https://www-ccv.adobe.io/v1/player/ccv/IBVxiKFE76R/embed?api_key=behance1",
       "title_ar": "ريلز جيم",
@@ -2546,16 +2548,6 @@
       "category": "gym-reels",
       "thumb": "/images/behance/v/gym-reels-5.webp",
       "preview": "/images/behance/vp/gym-reels-5.mp4",
-      "group": 1
-    },
-    {
-      "image": "/images/behance/v/gym-reels-6.webp",
-      "video": "https://www-ccv.adobe.io/v1/player/ccv/2_RZZ5E_sUm/embed?api_key=behance1",
-      "title_ar": "ريلز جيم",
-      "title_en": "Gym Reels",
-      "category": "gym-reels",
-      "thumb": "/images/behance/v/gym-reels-6.webp",
-      "preview": "/images/behance/vp/gym-reels-6.mp4",
       "group": 1
     },
     {
