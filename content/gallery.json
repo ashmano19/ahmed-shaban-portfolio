@@ -2559,13 +2559,14 @@
       "group": 1
     },
     {
-      "image": "/images/uploads/be-8-products.jpg",
+      "image": "/images/behance/p8/009.webp",
       "title_ar": "تصوير منتجات",
       "title_en": "Products",
       "category": "products",
       "cover": true,
       "group": 0,
-      "thumb": "/images/uploads/t/be-8-products.webp"
+      "thumb": "/images/behance/p8/t/009.webp",
+      "pos": "45% 42%"
     },
     {
       "image": "/images/behance/p8/001.webp",
