@@ -5332,6 +5332,30 @@
       "group": 2
     },
     {
+      "category": "events",
+      "title_ar": "مناسبات وحفلات",
+      "title_en": "Events & Parties",
+      "w": 1080,
+      "h": 1920,
+      "image": "/images/uploads/s/events/v/mvsn2cki-1.webp",
+      "thumb": "/images/uploads/s/events/v/mvsn2cki-1.webp",
+      "video": "/images/uploads/s/events/v/mvsn2cki-1.mp4",
+      "preview": "/images/uploads/s/events/v/mvsn2cki-1.mp4",
+      "group": 2
+    },
+    {
+      "category": "events",
+      "title_ar": "مناسبات وحفلات",
+      "title_en": "Events & Parties",
+      "w": 720,
+      "h": 1280,
+      "image": "/images/uploads/s/events/v/mvsn2cki-2.webp",
+      "thumb": "/images/uploads/s/events/v/mvsn2cki-2.webp",
+      "video": "/images/uploads/s/events/v/mvsn2cki-2.mp4",
+      "preview": "/images/uploads/s/events/v/mvsn2cki-2.mp4",
+      "group": 2
+    },
+    {
       "image": "/images/behance/v/events-3.webp",
       "video": "https://www-ccv.adobe.io/v1/player/ccv/9SD99pzfCxz/embed?api_key=behance1",
       "title_ar": "مناسبات وحفلات",
