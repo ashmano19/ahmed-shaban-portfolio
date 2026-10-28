@@ -38,7 +38,7 @@ async function start(){app.innerHTML=`<p class="empty">جاري تحميل ال�
     const [g,c,nv,dl,se,co,mn]=await Promise.all([raw("content/gallery.json"),raw("content/categories.json"),opt("content/nav.json",null),opt("content/downloads.json",{items:[]}),opt("content/settings.json",{}),opt("content/contact.json",{}),opt("content/mano.json",null)]);mnObj=mn;
     dlDocs.dl=dl;navItems=((nv&&nv.items)||NAVD).map(x=>Object.assign({},x,{_k:key()}));
     dlItems=(dl.items||[]).map(x=>Object.assign({},x,{_k:key()}));dlOrig=JSON.parse(JSON.stringify(dl.items||[]));setObj=se;conObj=co;docs0=siteDocs();if(!nv)docs0["content/nav.json"]="";
-    orig=JSON.parse(g).photos||[];origCatsDoc=JSON.parse(c);cats=origCatsDoc.categories||[];origCatIds=cats.map(x=>x.id).join();st=C.load(orig,cats);galBase=JSON.stringify(C.build(C.load(orig,cats),cats));
+    orig=JSON.parse(g).photos||[];origCatsDoc=JSON.parse(c);cats=origCatsDoc.categories||[];origCatIds=JSON.stringify(cats);st=C.load(orig,cats);galBase=JSON.stringify(C.build(C.load(orig,cats),cats));
     $("out").hidden=false;$("bar").hidden=false;$("tabs").hidden=false;setDirty(false);route()}
   catch(e){if(e.status==401){localStorage.removeItem("studioToken");localStorage.removeItem("decap-cms-user");loginView("انتهت الجلسة، ادخل تاني.")}else{app.innerHTML=`<p class="empty">حصلت مشكلة في التحميل (${esc(e.message)}). حدّث الصفحة.</p>`}}}
 
@@ -58,15 +58,16 @@ window.onhashchange=()=>{if(st)route()};
 const src=o=>o._url||o.thumb||o.image;
 function homeView(){
   app.innerHTML=`<div class="head"><h2>اختار القائمة</h2></div><p class="hint">اسحب أي قائمة عشان تغيّر ترتيبها في الموقع (على الموبايل: اضغط مطوّل وبعدين اسحب) — وبعدين دوس نشر</p><div class="cards" id="cards">${cats.map(c=>{const b=st.by[c.id],n=C.counts(b),cv=b.cover||b.photos[0]||b.videos[0],cst=cv&&cv.cover?`object-position:${cv.pos||"50% 50%"};object-fit:${cv.fit||"cover"};transform:scale(${cv.zoom||1});transform-origin:${cv.pos||"50% 50%"}`:"",nw=[b.cover,...b.videos,...b.photos].filter(o=>o&&o._new).length;
-    return `<div class="card" data-id="${esc(c.id)}" role="link" tabindex="0">${cv?`<img src="${esc(src(cv))}" data-full="${esc(cv.image||"")}" alt="" draggable="false" decoding="async" style="${cst}">`:""}${nw?`<i>${nw} جديد</i>`:""}<span class="cvbs"><button class="cvb" data-ce="${esc(c.id)}" title="ضبط مكان وحجم الغلاف">✎ ضبط</button><button class="cvb" data-cv="${esc(c.id)}" title="غيّر غلاف القائمة من جهازك">🖼 غلاف</button></span><div><b>${esc(c.name_ar)}</b><span>${n.p} صورة · ${n.v} فيديو</span></div></div>`}).join("")}</div>`;
+    return `<div class="card" data-id="${esc(c.id)}" role="link" tabindex="0">${cv?`<img src="${esc(src(cv))}" data-full="${esc(cv.image||"")}" alt="" draggable="false" decoding="async" style="${cst}">`:""}${nw?`<i>${nw} جديد</i>`:""}<span class="cvbs"><button class="cvb" data-ce="${esc(c.id)}" title="ضبط مكان وحجم الغلاف">✎ ضبط</button><button class="cvb" data-cv="${esc(c.id)}" title="غيّر غلاف القائمة من جهازك">🖼 غلاف</button><button class="cvb dl" data-dc="${esc(c.id)}" title="احذف القائمة">🗑</button></span><div><b>${esc(c.name_ar)}</b><span>${n.p} صورة · ${n.v} فيديو</span></div></div>`}).join("")}<div class="addc" id="addCat" role="button" tabindex="0"><b>＋</b><span>قائمة جديدة</span></div></div>`;
   const g=$("cards");g.querySelectorAll("img").forEach(im=>im.onerror=()=>{if(im.dataset.full&&im.src.indexOf(im.dataset.full)<0)im.src=im.dataset.full});
-  g.onclick=e=>{const cb=e.target.closest("[data-cv]");if(cb){e.stopPropagation();coverUpload(cb.dataset.cv);return}const ce=e.target.closest("[data-ce]");if(ce){e.stopPropagation();coverEdit(ce.dataset.ce);return}const c=e.target.closest(".card");if(c)location.hash="#c/"+encodeURIComponent(c.dataset.id)};
+  $("addCat").onclick=()=>catForm();$("addCat").onkeydown=e=>{if(e.key=="Enter")catForm()};
+  g.onclick=e=>{const dc=e.target.closest("[data-dc]");if(dc){e.stopPropagation();catDel(dc.dataset.dc);return}const cb=e.target.closest("[data-cv]");if(cb){e.stopPropagation();coverUpload(cb.dataset.cv);return}const ce=e.target.closest("[data-ce]");if(ce){e.stopPropagation();coverEdit(ce.dataset.ce);return}const c=e.target.closest(".card");if(c)location.hash="#c/"+encodeURIComponent(c.dataset.id)};
   g.onkeydown=e=>{const c=e.target.closest(".card");if(c&&e.key=="Enter")c.click()};
-  sortable(g,ids=>{if(ids.join()===cats.map(c=>c.id).join())return;cats=ids.map(id=>cats.find(c=>c.id==id));setDirty(true);homeView()},".card")}
+  sortable(g,ids=>{ids=ids.filter(Boolean);if(ids.join()===cats.map(c=>c.id).join())return;cats=ids.map(id=>cats.find(c=>c.id==id));setDirty(true);homeView()},".card")}
 function tile(o,i,kind){const d=i>0&&o._div,on=SEL.has(o._id);return `<div class="t${d?" div":""}${o._new?" new":""}${on?" sel":""}" data-id="${o._id}"><img loading="lazy" src="${esc(src(o))}" alt="">${kind=="v"?`<span class="vb">▶ فيديو</span>`:""}<span class="ck" title="تحديد">✓</span>
   <div class="bt">${kind=="v"?`<button data-a="poster" title="غيّر غلاف الفيديو من جهازك">🖼</button>`:""}${i>0?`<button data-a="div" title="${d?"إلغاء الخط الذهبي":"بداية مجموعة جديدة (خط ذهبي قبلها)"}">✂</button>`:""}<button data-a="cover" title="اجعلها صورة الغلاف">★</button><button class="x" data-a="del" title="حذف">✕</button></div></div>`}
 function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);if(catView._c!==cur){catView._c=cur;SEL.clear();selAnchor=null}
-  app.innerHTML=`<div class="head"><a class="ghost" href="#">→ القوائم</a><h2>${esc(c.name_ar)} <small style="font-size:.9rem;color:#CEA111">${n.p} صورة · ${n.v} فيديو</small></h2>
+  app.innerHTML=`<div class="head"><a class="ghost" href="#">→ القوائم</a><h2>${esc(c.name_ar)} <button class="ghost" id="catRn" style="font-size:.8rem;padding:2px 12px">✎ الاسم</button> <small style="font-size:.9rem;color:#CEA111">${n.p} صورة · ${n.v} فيديو</small></h2>
     <div class="cov">${b.cover?`<img src="${esc(src(b.cover))}" alt="">`:""}<span>صورة الغلاف<br><small>★ من الصور أو</small></span><button class="ghost" id="cvUp">🖼 غلاف من جهازك</button><button class="ghost" id="cvEd">✎ ضبط الغلاف</button></div>
     <button class="ghost" id="selT">☑ تحديد الكل</button></div>
   ${`<div class="selbar" id="selbar" hidden><b id="selN"></b><button data-s="all">تحديد الكل</button><button data-s="none">إلغاء التحديد</button><button data-s="top">⇡ للأول</button><button data-s="end">⇣ للآخر</button>
@@ -78,7 +79,7 @@ function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);if
   <h3 class="sub">VIDEO</h3>${b.videos.length?`<div class="grid" id="gv">${b.videos.map((o,i)=>tile(o,i,"v")).join("")}</div>`:`<p class="empty">مفيش فيديوهات في القائمة دي.</p>`}
   <h3 class="sub">PHOTO</h3>${b.photos.length?`<div class="grid" id="gp">${b.photos.map((o,i)=>tile(o,i,"p")).join("")}</div>`:`<p class="empty">مفيش صور في القائمة دي.</p>`}`;
   $("ng").onchange=e=>S.newGroup=e.target.checked;$("as").onchange=e=>S.atStart=e.target.checked;
-  $("cvUp").onclick=()=>coverUpload(cur);$("cvEd").onclick=()=>coverEdit(cur);$("selT").onclick=()=>bulk("all");
+  $("catRn").onclick=()=>catForm(cur);$("cvUp").onclick=()=>coverUpload(cur);$("cvEd").onclick=()=>coverEdit(cur);$("selT").onclick=()=>bulk("all");
   document.querySelectorAll(".selbar [data-s]").forEach(x=>x.onclick=()=>bulk(x.dataset.s));$("selMv").onchange=e=>{if(e.target.value)bulk("move",e.target.value)};selUpd();
   const dr=$("drop");dr.onclick=()=>{pick=null;$("fi").click()};
   dr.ondragover=e=>{e.preventDefault();dr.classList.add("on")};dr.ondragleave=()=>dr.classList.remove("on");
@@ -142,6 +143,23 @@ function act(a,o,k){const b=st.by[cur];
   else if(a=="cover"){const c=cats.find(x=>x.id==cur);if(!b.cover)b.cover={_id:"c"+Date.now(),category:cur,title_ar:c.name_ar,title_en:c.name_en,cover:true};
     b.cover.image=o.image;b.cover.thumb=o.thumb||o.image;b.cover._url=o._url;b.cover._files=[];toast("تم تغيير صورة الغلاف")}
   setDirty(true);catView()}
+// ---------- إضافة / تسمية / حذف القوائم ----------
+function catForm(id){const c=id?cats.find(x=>x.id==id):null;const d=document.createElement("div");d.className="cved";
+  d.innerHTML=`<div class="cvbox" style="width:min(460px,100%)"><h3>${c?"اسم القائمة":"قائمة جديدة"}</h3>
+   <div class="form"><label>الاسم بالعربي<input id="cn_ar" value="${esc(c?c.name_ar:"")}" placeholder="مثلاً: تصوير منتجات"></label>
+   <label>الاسم بالإنجليزي<input id="cn_en" dir="ltr" value="${esc(c?c.name_en:"")}" placeholder="e.g. Product Photography"></label>
+   ${c?"":`<p class="hint">القائمة بتظهر في الموقع أول ما تضيف فيها صور أو فيديوهات وتدوس نشر.</p>`}</div>
+   <div class="cvrow"><span style="flex:1"></span><button class="ghost" id="cnNo">إلغاء</button><button class="gold" id="cnOk">${c?"حفظ":"إضافة"}</button></div></div>`;
+  document.body.appendChild(d);const A=d.querySelector("#cn_ar"),E=d.querySelector("#cn_en");A.focus();
+  d.querySelector("#cnNo").onclick=()=>d.remove();d.onclick=e=>{if(e.target==d)d.remove()};
+  const ok=()=>{const ar=A.value.trim(),en=E.value.trim();if(!ar){toast("اكتب اسم القائمة بالعربي",1);return}
+    if(c){c.name_ar=ar;c.name_en=en||ar;const b=st.by[c.id];[b.cover,...b.videos,...b.photos].forEach(o=>{if(o){o.title_ar=c.name_ar;o.title_en=c.name_en}})}
+    else{let base=C.slugify(en)||"list",nid=base,n=2;while(cats.some(x=>x.id==nid))nid=base+"-"+(n++);cats.push({id:nid,name_ar:ar,name_en:en||ar});st.by[nid]={cover:null,videos:[],photos:[]};id=nid}
+    d.remove();setDirty(true);toast(c?"اتغيّر الاسم — دوس نشر":"اتضافت القائمة — ضيف فيها صور وبعدين دوس نشر");location.hash="#c/"+encodeURIComponent(id);route()};
+  d.querySelector("#cnOk").onclick=ok;d.addEventListener("keydown",e=>{if(e.key=="Enter")ok();if(e.key=="Escape")d.remove()})}
+function catDel(id){const c=cats.find(x=>x.id==id),n=C.counts(st.by[id]);if(!c)return;
+  if(!confirm(`تحذف قائمة «${c.name_ar}»${n.p+n.v?` وكل اللي فيها (${n.p} صورة و ${n.v} فيديو)`:""}؟\nالحذف بيتنفذ في الموقع لما تدوس نشر.`))return;
+  cats=cats.filter(x=>x.id!=id);delete st.by[id];setDirty(true);toast("اتحذفت القائمة — دوس نشر");homeView()}
 // ---------- محرر الغلاف: مكان الصورة (اسحب)، تكبير، ملء/احتواء، وحجم الكارت في الموقع ----------
 function coverEdit(cid){const c=cats.find(x=>x.id==cid),b=st.by[cid];let cv=b.cover;
   if(!cv){const f=b.photos[0]||b.videos[0];if(!f){toast("ضيف صور للقائمة الأول",1);return}
@@ -342,7 +360,7 @@ $("pub").onclick=async()=>{if(busy||!dirty)return;
     const q=files.slice();await Promise.all([0,1,2].map(async()=>{while(q.length)await one(q.shift())}));
     $("bmsg").textContent="جاري النشر…";
     const out=C.build(st,cats);if(JSON.stringify(out)!==galBase)tree.push({path:"content/gallery.json",mode:"100644",type:"blob",content:JSON.stringify(out,null,2)});
-    const catJson=JSON.stringify(Object.assign({},origCatsDoc,{categories:cats}),null,2);if(cats.map(c=>c.id).join()!==origCatIds)tree.push({path:"content/categories.json",mode:"100644",type:"blob",content:catJson});
+    const catJson=JSON.stringify(Object.assign({},origCatsDoc,{categories:cats}),null,2);if(JSON.stringify(cats)!==origCatIds)tree.push({path:"content/categories.json",mode:"100644",type:"blob",content:catJson});
     C.orphans(orig,out.photos).forEach(p=>tree.push({path:p,mode:"100644",type:"blob",sha:null}));
     const sd=siteDocs();Object.keys(sd).forEach(p=>{if(sd[p]!==docs0[p])tree.push({path:p,mode:"100644",type:"blob",content:sd[p]})});
     const dlNow=JSON.parse(sd["content/downloads.json"]).items;C.dlOrphans(dlOrig,dlNow).forEach(p=>tree.push({path:p,mode:"100644",type:"blob",sha:null}));
@@ -350,7 +368,7 @@ $("pub").onclick=async()=>{if(busy||!dirty)return;
     const t=await gh("/git/trees",{method:"POST",body:JSON.stringify({base_tree:bc.tree.sha,tree})});
     const cm=await gh("/git/commits",{method:"POST",body:JSON.stringify({message:"تحديث الموقع من الاستوديو",tree:t.sha,parents:[base]})});
     await gh("/git/refs/heads/"+BR,{method:"PATCH",body:JSON.stringify({sha:cm.sha,force:false})});
-    base=cm.sha;orig=out.photos;galBase=JSON.stringify(out);docs0=sd;dlOrig=JSON.parse(JSON.stringify(dlNow));dlItems.forEach(x=>delete x._ed);[...dlFiles.keys()].forEach(p=>{if(usedDlFiles().includes(p))dlFiles.get(p).done=1});origCatIds=cats.map(x=>x.id).join();allItems().forEach(o=>{delete o._new;delete o._files});busy=false;showProg(-1);setDirty(false);
+    base=cm.sha;orig=out.photos;galBase=JSON.stringify(out);docs0=sd;dlOrig=JSON.parse(JSON.stringify(dlNow));dlItems.forEach(x=>delete x._ed);[...dlFiles.keys()].forEach(p=>{if(usedDlFiles().includes(p))dlFiles.get(p).done=1});origCatIds=JSON.stringify(cats);allItems().forEach(o=>{delete o._new;delete o._files});busy=false;showProg(-1);setDirty(false);
     toast("تم النشر ✓ الموقع هيتحدث خلال دقيقة أو اتنين");route()}
   catch(e){busy=false;showProg(-1);setDirty(true);
     toast(e.status==422?"الموقع اتعدّل من مكان تاني. حدّث الصفحة وجرب تاني.":e.status==401?"انتهت الجلسة، اخرج وادخل تاني.":"النشر ما نجحش ("+e.message+"). جرب تاني.",1)}};
