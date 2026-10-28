@@ -296,10 +296,10 @@ async function addFiles(files,tgt){tgt=tgt||{mode:S.up};const cid=tgt.cid||cur,c
           fr=await frame(vf)}
         const p=await enc(canvasOf(fr.el,fr.w,fr.h,720),.8);
         const vp=`${dir}/v/${name}.${ext}`,pp=`${dir}/v/${name}.${p.ext}`;
-        Object.assign(o,{image:"/"+pp,thumb:"/"+pp,video:"/"+vp,preview:"/"+vp,_url:URL.createObjectURL(p.blob),_files:[{path:vp,blob:vf},{path:pp,blob:p.blob}]});added.videos.push(o);seq.push(o)}
+        Object.assign(o,{w:fr.w,h:fr.h,image:"/"+pp,thumb:"/"+pp,video:"/"+vp,preview:"/"+vp,_url:URL.createObjectURL(p.blob),_files:[{path:vp,blob:vf},{path:pp,blob:p.blob}]});added.videos.push(o);seq.push(o)}
       else{const im=await decode(f),big=await enc(canvasOf(im.el,im.w,im.h,MAX_IMG),.85),th=await enc(canvasOf(im.el,im.w,im.h,MAX_TH),.78);
         const ip=`${dir}/${name}.${big.ext}`,tp=`${dir}/t/${name}.${th.ext}`;
-        Object.assign(o,{image:"/"+ip,thumb:"/"+tp,_url:URL.createObjectURL(th.blob),_files:[{path:ip,blob:big.blob},{path:tp,blob:th.blob}]});added.photos.push(o);seq.push(o)}}
+        Object.assign(o,{w:im.w,h:im.h,image:"/"+ip,thumb:"/"+tp,_url:URL.createObjectURL(th.blob),_files:[{path:ip,blob:big.blob},{path:tp,blob:th.blob}]});added.photos.push(o);seq.push(o)}}
     catch(e){console.warn(e);bad.push(f.name+(/heic/i.test(f.name)?" (HEIC مش مدعوم في المتصفح — حوّلها JPG)":""))}}
   // «ضيف هنا» بصور جوه مجموعة فيديو (أو العكس) = القائمة تبقى صور وفيديو مع بعض تلقائيًا، والملفات تدخل نفس المجموعة
   if(tgt.mode=="into"&&c.order!="mixed"&&seq.some(o=>!!o.video!=(tgt.k=="videos"))){
