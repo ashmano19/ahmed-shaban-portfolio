@@ -44,7 +44,8 @@
     {
       "id": "events",
       "name_ar": "مناسبات وحفلات",
-      "name_en": "Events & Parties"
+      "name_en": "Events & Parties",
+      "order": "mixed"
     },
     {
       "id": "summer",
