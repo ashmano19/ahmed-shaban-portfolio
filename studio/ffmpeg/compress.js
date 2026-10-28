@@ -32,6 +32,7 @@ async function getFF(onLoad) {
   return ffP;
 }
 export function preload(onLoad) { return getFF(onLoad) }
+export function abort() { if (ffP) { const p = ffP; ffP = null; p.then(f => { try { f.terminate() } catch (_) {} }).catch(() => {}) } }
 
 // onStatus({phase:"load"|"probe"|"enc", p:0..1, pass:1|2})
 export async function compressVideo(file, onStatus = () => {}) {
@@ -69,7 +70,7 @@ export async function compressVideo(file, onStatus = () => {}) {
     return data;
   };
   try {
-    const side = vk < 1500 ? 1280 : 1920;
+    const side = vk < 1500 || dur > 30 ? 1280 : 1920;  // أسرع في المتصفح، وكفاية للموقع
     let data = await run(vk, side, 1);
     if (data.length > LIMIT) {
       const k2 = Math.max(120, Math.floor(vk * (TARGET / data.length) * 0.85));
