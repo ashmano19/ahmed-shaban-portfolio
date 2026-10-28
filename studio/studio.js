@@ -79,13 +79,17 @@ function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);if
   <div class="opts"><label>الملفات الجديدة تتضاف في: <select id="upT"><option value="last">آخر مجموعة</option><option value="newEnd">مجموعة جديدة في الآخر</option><option value="newStart">مجموعة جديدة في الأول</option></select></label>
     <span class="hint" style="margin:0">أو استخدم «＋ ضيف هنا» جوه أي مجموعة · «＋ مجموعة جديدة» تحت كل قسم</span></div>
   <p class="hint">🖱 دوس على أي صورة تتحدد (ودوسة تانية تلغيها) · اسحب الماوس على الصور عشان تحدد كذا صورة مرة واحدة · <b>Shift</b>+دوسة تحدد من-لحد · اسحب صورة <b>محددة</b> عشان تنقل كل المحدد مع بعض · <b>Delete</b> حذف · <b>Ctrl+A</b> الكل · <b>Esc</b> إلغاء<br>✂ يبدأ مجموعة جديدة من الصورة دي · ★ غلاف القائمة · ✕ حذف · المحدد تقدر تعمله «مجموعة جديدة» من شريط التحديد</p>
-  <div class="ordbar"><span>ترتيب الأقسام في الموقع:</span><button class="ghost${c.order=="photos"?"":" on"}" data-ord="videos">🎬 الفيديو فوق</button><button class="ghost${c.order=="photos"?" on":""}" data-ord="photos">🖼 الصور فوق</button></div>
-  ${(()=>{const V=`<h3 class="sub">VIDEO</h3>${secHtml(b.videos,"videos","v")}`,P=`<h3 class="sub">PHOTO</h3>${secHtml(b.photos,"photos","p")}`;return c.order=="photos"?P+V:V+P})()}`;
+  <div class="ordbar"><span>العرض في الموقع:</span><button class="ghost${!c.order?" on":""}" data-ord="videos">🎬 الفيديو فوق</button><button class="ghost${c.order=="photos"?" on":""}" data-ord="photos">🖼 الصور فوق</button><button class="ghost${c.order=="mixed"?" on":""}" data-ord="mixed">🔀 صور وفيديو مع بعض</button></div>
+  ${(()=>{if(c.order=="mixed")return `<h3 class="sub">PHOTO · VIDEO</h3>${secHtml(b.photos,"photos","m")}`;const V=`<h3 class="sub">VIDEO</h3>${secHtml(b.videos,"videos","v")}`,P=`<h3 class="sub">PHOTO</h3>${secHtml(b.photos,"photos","p")}`;return c.order=="photos"?P+V:V+P})()}`;
   $("upT").value=S.up;$("upT").onchange=e=>{S.up=e.target.value;try{localStorage.studioUp=S.up}catch(_){}};
   app.querySelectorAll("[data-g]").forEach(x=>x.onclick=()=>grpAct(x.dataset.ga,x.dataset.k,+x.dataset.g));
   app.querySelectorAll("[data-ng]").forEach(x=>x.onclick=()=>choose("image/*,video/*",true,fs=>addFiles(fs,{mode:"newEnd"})));
   $("catRn").onclick=()=>catForm(cur);
-  app.querySelectorAll("[data-ord]").forEach(x=>x.onclick=()=>{const v=x.dataset.ord;if((c.order=="photos"?"photos":"videos")==v)return;if(v=="photos")c.order="photos";else delete c.order;setDirty(true);toast(v=="photos"?"الصور هتظهر فوق الفيديو — دوس نشر":"الفيديو هيظهر فوق الصور — دوس نشر");catView()});$("cvUp").onclick=()=>coverUpload(cur);$("cvEd").onclick=()=>coverEdit(cur);$("selT").onclick=()=>bulk("all");
+  app.querySelectorAll("[data-ord]").forEach(x=>x.onclick=()=>{const v=x.dataset.ord,was=c.order||"videos";if(was==v)return;
+    if(v=="mixed"){const G=was=="photos"?[...gSplit(b.photos),...gSplit(b.videos)]:[...gSplit(b.videos),...gSplit(b.photos)];b.photos=gJoin(G);b.videos=[]}
+    else if(was=="mixed"){const a=b.photos;b.videos=gJoin(gSplit(a.filter(o=>o.video)));b.photos=gJoin(gSplit(a.filter(o=>!o.video)))}
+    if(v=="videos")delete c.order;else c.order=v;SEL.clear();setDirty(true);
+    toast(v=="photos"?"الصور هتظهر فوق الفيديو — دوس نشر":v=="mixed"?"الصور والفيديو بقوا مع بعض — رتّبهم زي ما تحب ودوس نشر":"الفيديو هيظهر فوق الصور — دوس نشر");catView()});$("cvUp").onclick=()=>coverUpload(cur);$("cvEd").onclick=()=>coverEdit(cur);$("selT").onclick=()=>bulk("all");
   document.querySelectorAll(".selbar [data-s]").forEach(x=>x.onclick=()=>bulk(x.dataset.s));$("selMv").onchange=e=>{if(e.target.value)bulk("move",e.target.value)};selUpd();
   const dr=$("drop");dr.onclick=()=>{pick=null;$("fi").click()};
   dr.ondragover=e=>{e.preventDefault();dr.classList.add("on")};dr.ondragleave=()=>dr.classList.remove("on");
@@ -99,12 +103,12 @@ function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);if
         const rest=ids.filter(id=>!SEL.has(id)||id==dragged),at=rest.indexOf(dragged);rest.splice(at,1,...grp);ids=rest;grp.forEach(id=>gi[id]=gi[dragged])}}
       const before=b[k].map(x=>x._id+":"+(x._div?1:0)).join(),G=[];ids.forEach(id=>{const o=b[k].find(x=>x._id==id);(G[gi[id]]=G[gi[id]]||[]).push(o)});
       const nb=gJoin(G.filter(Boolean));if(nb.map(x=>x._id+":"+(x._div?1:0)).join()===before)return;b[k]=nb;setDirty(true);catView()})})}
-function secHtml(arr,k,kind){if(!arr.length)return `<p class="empty">مفيش ${kind=="v"?"فيديوهات":"صور"} في القائمة دي.</p><div class="gadd"><button class="ghost" data-ng="${k}">＋ ضيف ${kind=="v"?"فيديوهات":"صور"}</button></div>`;
+function secHtml(arr,k,kind){if(!arr.length)return `<p class="empty">مفيش ${kind=="v"?"فيديوهات":kind=="m"?"حاجة":"صور"} في القائمة دي.</p><div class="gadd"><button class="ghost" data-ng="${k}">＋ ضيف ${kind=="v"?"فيديوهات":kind=="m"?"صور وفيديوهات":"صور"}</button></div>`;
   const G=gSplit(arr);let i=0;
-  return `<div class="grid" id="g${kind}">${G.map((g,j)=>`<div class="ghd" data-k="${k}" data-gi="${j}"><b>مجموعة ${j+1}</b><small>${g.length} ${kind=="v"?"فيديو":"صورة"}</small><span>
+  return `<div class="grid" id="${k=="videos"?"gv":"gp"}">${G.map((g,j)=>`<div class="ghd" data-k="${k}" data-gi="${j}"><b>مجموعة ${j+1}</b><small>${kind=="m"?(v=>[g.length-v&&`${g.length-v} صورة`,v&&`${v} فيديو`].filter(Boolean).join(" · "))(g.filter(o=>o.video).length):`${g.length} ${kind=="v"?"فيديو":"صورة"}`}</small><span>
     <button class="ghost" data-g="${j}" data-ga="add" data-k="${k}" title="ضيف ملفات في آخر المجموعة دي">＋ ضيف هنا</button><button class="ghost" data-g="${j}" data-ga="sel" data-k="${k}">☑ تحديد</button>
     ${j>0?`<button class="ghost" data-g="${j}" data-ga="up" data-k="${k}" title="طلّع المجموعة فوق">⇡</button>`:""}${j<G.length-1?`<button class="ghost" data-g="${j}" data-ga="down" data-k="${k}" title="نزّل المجموعة تحت">⇣</button>`:""}
-    ${j>0?`<button class="ghost" data-g="${j}" data-ga="merge" data-k="${k}" title="ادمجها مع المجموعة اللي قبلها">⤒ دمج</button>`:""}<button class="ghost red" data-g="${j}" data-ga="del" data-k="${k}" title="احذف المجموعة بكل اللي فيها">🗑</button></span></div>`+g.map(o=>tile(o,i++,kind)).join("")).join("")}</div>
+    ${j>0?`<button class="ghost" data-g="${j}" data-ga="merge" data-k="${k}" title="ادمجها مع المجموعة اللي قبلها">⤒ دمج</button>`:""}<button class="ghost red" data-g="${j}" data-ga="del" data-k="${k}" title="احذف المجموعة بكل اللي فيها">🗑</button></span></div>`+g.map(o=>tile(o,i++,o.video?"v":"p")).join("")).join("")}</div>
   <div class="gadd"><button class="ghost" data-ng="${k}">＋ مجموعة جديدة</button></div>`}
 function grpAct(a,k,j){const b=st.by[cur],G=gSplit(b[k]);if(!G[j])return;
   if(a=="add"){choose("image/*,video/*",true,fs=>addFiles(fs,{mode:"into",k,g:j}));return}
@@ -119,7 +123,7 @@ addEventListener("dragover",e=>{if(e.dataTransfer&&[...e.dataTransfer.types].inc
 addEventListener("drop",e=>{if(!e.dataTransfer||!e.dataTransfer.files.length)return;e.preventDefault();if(cur&&/^#c\//.test(location.hash))addFiles([...e.dataTransfer.files]);else toast("افتح القائمة الأول وبعدين اسحب الملفات جواها",1)});
 // ---------- تحديد زي سطح المكتب: دوسة، Ctrl، Shift، مربع بالماوس، كيبورد ----------
 let selAnchor=null;
-const selOrder=()=>{const b=st.by[cur],c=cats.find(x=>x.id==cur);return b?(c&&c.order=="photos"?[...b.photos,...b.videos]:[...b.videos,...b.photos]).map(o=>o._id):[]};
+const selOrder=()=>{const b=st.by[cur],c=cats.find(x=>x.id==cur);return b?(c&&c.order!="videos"&&c.order?[...b.photos,...b.videos]:[...b.videos,...b.photos]).map(o=>o._id):[]};
 function selUpd(){document.querySelectorAll("#app .t").forEach(t=>t.classList.toggle("sel",SEL.has(t.dataset.id)));
   const bar=$("selbar");if(bar){bar.hidden=!SEL.size;const n=$("selN");if(n)n.textContent=SEL.size+" محدد"}}
 function selClick(id,e){if(e.shiftKey&&selAnchor){const o=selOrder(),a=o.indexOf(selAnchor),z=o.indexOf(id);if(a>=0&&z>=0){if(!(e.ctrlKey||e.metaKey))SEL.clear();o.slice(Math.min(a,z),Math.max(a,z)+1).forEach(x=>SEL.add(x))}}
@@ -238,7 +242,9 @@ function bulk(a,arg){const b=st.by[cur],ks=["videos","photos"];
   else if(a=="grp")ks.forEach(k=>{const mv=b[k].filter(o=>SEL.has(o._id));if(!mv.length)return;const G=gSplit(b[k]).map(g=>g.filter(o=>!SEL.has(o._id)));G.push(mv);b[k]=gJoin(G)});
   else if(a=="top"||a=="end")ks.forEach(k=>{const s1=b[k].filter(o=>SEL.has(o._id)),s2=b[k].filter(o=>!SEL.has(o._id));s1.forEach(o=>o._div=false);b[k]=a=="top"?s1.concat(s2):s2.concat(s1)});
   else if(a=="move"){const t=cats.find(x=>x.id==arg),tb=st.by[arg];if(!t||!tb)return;
-    ks.forEach(k=>{const mv=b[k].filter(o=>SEL.has(o._id));b[k]=b[k].filter(o=>!SEL.has(o._id));mv.forEach((o,i)=>{o.category=arg;o.title_ar=t.name_ar;o.title_en=t.name_en;o._div=i==0&&tb[k].length>0});tb[k].push(...mv)});
+    const mv=[];ks.forEach(k=>{mv.push(...b[k].filter(o=>SEL.has(o._id)));b[k]=gJoin(gSplit(b[k]).map(g=>g.filter(o=>!SEL.has(o._id))))});
+    mv.forEach(o=>{o.category=arg;o.title_ar=t.name_ar;o.title_en=t.name_en});
+    (t.order=="mixed"?[["photos",mv]]:[["videos",mv.filter(o=>o.video)],["photos",mv.filter(o=>!o.video)]]).forEach(([k,a])=>{if(!a.length)return;const G=gSplit(tb[k]);G.push(a);tb[k]=gJoin(G)});
     toast(`اتنقل ${n} عنصر لـ «${t.name_ar}» — دوس نشر`)}
   SEL.clear();setDirty(true);catView()}
 $("fi").onchange=e=>{const fs=[...e.target.files];e.target.value="";if(pick){const p=pick;pick=null;p(fs)}else addFiles(fs)};
@@ -275,7 +281,7 @@ async function addFiles(files,tgt){tgt=tgt||{mode:S.up};const cid=tgt.cid||cur,c
   if(!files.length)return;
   if(adding){queue.push(...files.map(f=>(f._t=tgt,f)));toast(`اتضافوا للطابور (${queue.length}) — هيتجهزوا بعد اللي شغالين`);return}
   if(busy)return toast("استنى لحد ما النشر يخلص",1);
-  adding=true;busy=true;cancelled=false;setDirty(dirty);let unlock=null;if(navigator.locks)navigator.locks.request("studio-work",()=>new Promise(r=>unlock=r)).catch(()=>{});const stamp=Date.now().toString(36),added={videos:[],photos:[]},bad=[];
+  adding=true;busy=true;cancelled=false;setDirty(dirty);let unlock=null;if(navigator.locks)navigator.locks.request("studio-work",()=>new Promise(r=>unlock=r)).catch(()=>{});const stamp=Date.now().toString(36),added={videos:[],photos:[]},bad=[],seq=[];
   const hasVid=files.some(isVid);if(hasVid)vpShow(true);
   for(let i=0;i<files.length&&!cancelled;i++){const f=files[i],cnt=`${f.name} — ملف ${i+1} من ${files.length} · ${(f.size/1048576).toFixed(1)}MB`;
     $("bmsg").textContent=`جاري تجهيز ${i+1} من ${files.length}…`;showProg(i/files.length);vpSet("جاري تجهيز الملف…",cnt,i/files.length);
@@ -288,19 +294,20 @@ async function addFiles(files,tgt){tgt=tgt||{mode:S.up};const cid=tgt.cid||cur,c
           fr=await frame(vf)}
         const p=await enc(canvasOf(fr.el,fr.w,fr.h,720),.8);
         const vp=`${dir}/v/${name}.${ext}`,pp=`${dir}/v/${name}.${p.ext}`;
-        Object.assign(o,{image:"/"+pp,thumb:"/"+pp,video:"/"+vp,preview:"/"+vp,_url:URL.createObjectURL(p.blob),_files:[{path:vp,blob:vf},{path:pp,blob:p.blob}]});added.videos.push(o)}
+        Object.assign(o,{image:"/"+pp,thumb:"/"+pp,video:"/"+vp,preview:"/"+vp,_url:URL.createObjectURL(p.blob),_files:[{path:vp,blob:vf},{path:pp,blob:p.blob}]});added.videos.push(o);seq.push(o)}
       else{const im=await decode(f),big=await enc(canvasOf(im.el,im.w,im.h,MAX_IMG),.85),th=await enc(canvasOf(im.el,im.w,im.h,MAX_TH),.78);
         const ip=`${dir}/${name}.${big.ext}`,tp=`${dir}/t/${name}.${th.ext}`;
-        Object.assign(o,{image:"/"+ip,thumb:"/"+tp,_url:URL.createObjectURL(th.blob),_files:[{path:ip,blob:big.blob},{path:tp,blob:th.blob}]});added.photos.push(o)}}
+        Object.assign(o,{image:"/"+ip,thumb:"/"+tp,_url:URL.createObjectURL(th.blob),_files:[{path:ip,blob:big.blob},{path:tp,blob:th.blob}]});added.photos.push(o);seq.push(o)}}
     catch(e){console.warn(e);bad.push(f.name+(/heic/i.test(f.name)?" (HEIC مش مدعوم في المتصفح — حوّلها JPG)":""))}}
+  if(c.order=="mixed"){added.photos=seq;added.videos=[]}
   ["videos","photos"].forEach(k=>{const a=added[k];if(!a.length)return;
     a.forEach(o=>o._div=false);const G=gSplit(b[k]);
     if(tgt.mode=="newStart")G.unshift(a);else if(tgt.mode=="newEnd")G.push(a);
     else if(tgt.mode=="into"&&tgt.k==k&&G[tgt.g])G[tgt.g].push(...a);else if(G.length)G[G.length-1].push(...a);else G.push(a);
     b[k]=gJoin(G)});
   adding=false;busy=false;showProg(-1);if(bad.length)toast("الملفات دي ما اتضافتش: "+bad.join("، "),1);
-  const got=added.videos.length+added.photos.length;
-  if(got){setDirty(true);toast(`اتضاف ${added.photos.length} صورة و ${added.videos.length} فيديو`+(S.autoPub&&hasVid?" — بنشر دلوقتي…":" — دوس نشر"))}else setDirty(dirty);
+  const got=seq.length,gv=seq.filter(o=>o.video).length;
+  if(got){setDirty(true);toast(`اتضاف ${got-gv} صورة و ${gv} فيديو`+(S.autoPub&&hasVid?" — بنشر دلوقتي…":" — دوس نشر"))}else setDirty(dirty);
   if(location.hash=="#c/"+cid)catView();
   if(queue.length&&!cancelled){if(unlock)unlock();const q=queue.splice(0),t0=q[0]._t;return addFiles(q,t0)}
   if(got&&hasVid&&S.autoPub&&!cancelled){vpSet("بنشر على الموقع…","",1);try{await $("pub").onclick()}catch(_){}}

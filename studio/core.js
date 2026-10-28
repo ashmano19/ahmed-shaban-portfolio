@@ -5,9 +5,10 @@ const isVid=p=>!!p.video;
 function load(photos,cats){
   const by={},extra=[];cats.forEach(c=>by[c.id]={cover:null,videos:[],photos:[]});
   let n=0;
+  const mixed=new Set(cats.filter(c=>c.order=="mixed").map(c=>c.id));
   photos.forEach(p=>{const o=Object.assign({},p,{_id:"i"+(n++)});const b=by[p.category];
     if(!b){extra.push(o);return}
-    if(p.cover&&!b.cover)b.cover=o;else if(isVid(p))b.videos.push(o);else b.photos.push(o)});
+    if(p.cover&&!b.cover)b.cover=o;else if(isVid(p)&&!mixed.has(p.category))b.videos.push(o);else b.photos.push(o)});
   Object.values(by).forEach(b=>["videos","photos"].forEach(k=>b[k].forEach((o,i,a)=>{o._div=i>0&&o.group!=null&&a[i-1].group!=null&&o.group!=a[i-1].group})));
   return {by,extra};
 }
@@ -25,7 +26,7 @@ function build(st,cats){
   st.extra.forEach(o=>out.push(clean(o)));
   return {photos:out};
 }
-function counts(b){return {p:b?b.photos.length:0,v:b?b.videos.length:0}}
+function counts(b){if(!b)return {p:0,v:0};const a=[...b.videos,...b.photos],v=a.filter(isVid).length;return {p:a.length-v,v}}
 // الملفات القديمة اللي اترفعت من الاستوديو ومبقتش مستخدمة -> تتمسح من الريبو
 function orphans(before,after){
   const used=new Set();const paths=p=>[p.image,p.thumb,p.preview,p.video].filter(x=>typeof x=="string"&&x.startsWith("/images/uploads/s/"));
