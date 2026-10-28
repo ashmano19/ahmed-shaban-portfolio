@@ -77,8 +77,8 @@ function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);if
     <label><input type="checkbox" id="as" ${S.atStart?"checked":""}> حطهم في أول القائمة</label></div>
   <p class="hint">🖱 دوس على أي صورة تتحدد (ودوسة تانية تلغيها) · اسحب الماوس على الصور عشان تحدد كذا صورة مرة واحدة · <b>Shift</b>+دوسة تحدد من-لحد · اسحب صورة <b>محددة</b> عشان تنقل كل المحدد مع بعض · <b>Delete</b> حذف · <b>Ctrl+A</b> الكل · <b>Esc</b> إلغاء<br>✂ خط ذهبي قبل الصورة · ★ غلاف القائمة · ✕ حذف</p>
   <div class="ordbar"><span>ترتيب الأقسام في الموقع:</span><button class="ghost${c.order=="photos"?"":" on"}" data-ord="videos">🎬 الفيديو فوق</button><button class="ghost${c.order=="photos"?" on":""}" data-ord="photos">🖼 الصور فوق</button></div>
-  ${(()=>{const V=`<h3 class="sub">VIDEO</h3>${b.videos.length?`<div class="grid" id="gv">${b.videos.map((o,i)=>tile(o,i,"v")).join("")}</div>`:`<p class="empty">مفيش فيديوهات في القائمة دي.</p>`}`,
-    P=`<h3 class="sub">PHOTO</h3>${b.photos.length?`<div class="grid" id="gp">${b.photos.map((o,i)=>tile(o,i,"p")).join("")}</div>`:`<p class="empty">مفيش صور في القائمة دي.</p>`}`;return c.order=="photos"?P+V:V+P})()}`;
+  ${(()=>{const V=`<h3 class="sub">VIDEO</h3>${b.videos.length?`<div class="grid" id="gv">${b.videos.map((o,i)=>(i>0&&o._div?`<div class="gsep"></div>`:"")+tile(o,i,"v")).join("")}</div>`:`<p class="empty">مفيش فيديوهات في القائمة دي.</p>`}`,
+    P=`<h3 class="sub">PHOTO</h3>${b.photos.length?`<div class="grid" id="gp">${b.photos.map((o,i)=>(i>0&&o._div?`<div class="gsep"></div>`:"")+tile(o,i,"p")).join("")}</div>`:`<p class="empty">مفيش صور في القائمة دي.</p>`}`;return c.order=="photos"?P+V:V+P})()}`;
   $("ng").onchange=e=>S.newGroup=e.target.checked;$("as").onchange=e=>S.atStart=e.target.checked;
   $("catRn").onclick=()=>catForm(cur);
   app.querySelectorAll("[data-ord]").forEach(x=>x.onclick=()=>{const v=x.dataset.ord;if((c.order=="photos"?"photos":"videos")==v)return;if(v=="photos")c.order="photos";else delete c.order;setDirty(true);toast(v=="photos"?"الصور هتظهر فوق الفيديو — دوس نشر":"الفيديو هيظهر فوق الصور — دوس نشر");catView()});$("cvUp").onclick=()=>coverUpload(cur);$("cvEd").onclick=()=>coverEdit(cur);$("selT").onclick=()=>bulk("all");
@@ -137,7 +137,7 @@ function sortable(g,done,sel,vert){sel=sel||".t";
       const before=vert?ev.clientY<r.top+r.height/2:r.top>t.getBoundingClientRect().bottom||r.bottom<t.getBoundingClientRect().top?(rtl?!mid:mid):(o.compareDocumentPosition(t)&4?true:false);
       g.insertBefore(t,before?o:o.nextSibling)};
     const end=()=>{clearTimeout(timer);removeEventListener("pointermove",mv);removeEventListener("pointerup",end);removeEventListener("pointercancel",end);t.removeEventListener("touchmove",tm);
-      if(on){on=false;g._dragged=true;setTimeout(()=>g._dragged=false,400);fly.remove();g.querySelectorAll(".ghostT").forEach(x=>x.classList.remove("ghostT"));done([...g.children].map(x=>x.dataset.id),t.dataset.id)}};
+      if(on){on=false;g._dragged=true;setTimeout(()=>g._dragged=false,400);fly.remove();g.querySelectorAll(".ghostT").forEach(x=>x.classList.remove("ghostT"));done([...g.children].filter(x=>x.matches(sel)).map(x=>x.dataset.id),t.dataset.id)}};
     addEventListener("pointermove",mv,{passive:false});addEventListener("pointerup",end);addEventListener("pointercancel",end);t.addEventListener("touchmove",tm,{passive:false})})}
 function act(a,o,k){const b=st.by[cur];
   if(a=="del"){if(!confirm("تحذف العنصر ده؟"))return;const i=b[k].indexOf(o);if(o._div&&b[k][i+1]&&!b[k][i+1]._div)b[k][i+1]._div=true;b[k].splice(i,1);if(b.cover&&o._new&&b.cover.image==o.image)b.cover._files=(o._files||[]).filter(f=>"/"+f.path==o.image||"/"+f.path==o.thumb)}
