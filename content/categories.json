@@ -38,7 +38,8 @@
     {
       "id": "food",
       "name_ar": "مطاعم و كافيه",
-      "name_en": "Food Photography"
+      "name_en": "Food Photography",
+      "order": "photos"
     },
     {
       "id": "events",
