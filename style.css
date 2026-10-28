@@ -26,7 +26,8 @@ footer{text-align:center;padding:30px;opacity:.5;border-top:1px solid #222}
 .hero-logo img{width:clamp(200px,24vw,320px);height:auto;display:block;margin:0 auto 10px}
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
 .card{position:relative;border-radius:10px;overflow:hidden;cursor:pointer;aspect-ratio:4/3;background:#1c1c1c}
-.card img{width:100%;height:100%;object-fit:cover;transition:transform .5s}.card:hover img{transform:scale(1.06)}
+.card img{width:100%;height:100%;object-fit:cover;transform:scale(var(--z,1));transition:transform .5s}.card:hover img{transform:scale(calc(var(--z,1)*1.06))}
+.cards{grid-auto-flow:row dense}.card.wide{grid-column:span 2;aspect-ratio:8/3}.card.big{grid-column:span 2}
 .card div{position:absolute;inset:auto 0 0 0;padding:14px 18px;background:linear-gradient(transparent,#000d)}
 .card b{display:block;font-size:1.15rem}.card span{color:#CEA111;font-size:.9rem}
 .back{background:none;border:1px solid #CEA111;color:#CEA111;padding:6px 18px;border-radius:20px;cursor:pointer;font-family:inherit;margin-bottom:20px}
