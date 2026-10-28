@@ -98,9 +98,10 @@ function selClick(id,e){if(e.shiftKey&&selAnchor){const o=selOrder(),a=o.indexOf
   else{SEL.has(id)?SEL.delete(id):SEL.add(id);selAnchor=id}
   selUpd()}
 // مربع التحديد: اسحب في أي مكان فاضي في صفحة القائمة
-app.addEventListener("pointerdown",e=>{if(!cur||!/^#c\//.test(location.hash)||e.button>0||e.pointerType!="mouse")return;
-  if(e.target.closest("button,a,input,select,textarea,label,.drop,.selbar,.head,.opts,.cved,.ck"))return;
+document.addEventListener("pointerdown",e=>{if(!cur||!/^#c\//.test(location.hash)||e.button>0||e.pointerType!="mouse")return;
+  if(e.target.closest("button,a,input,select,textarea,label,.drop,.selbar,.cved,.ck,.top,.tabs,.bar,.toast,.cov"))return;
   const onT=e.target.closest(".t");if(onT&&SEL.has(onT.dataset.id))return;      // سحب صورة محددة = نقل المحدد
+  e.preventDefault();
   const sx=e.pageX,sy=e.pageY,base=(onT||e.ctrlKey||e.metaKey||e.shiftKey)?new Set(SEL):new Set();let box=null,raf=0,lx=e.clientX,ly=e.clientY;
   const tiles=[...document.querySelectorAll("#app .t")];
   const upd=()=>{raf=0;const x1=Math.min(sx,lx+scrollX),x2=Math.max(sx,lx+scrollX),y1=Math.min(sy,ly+scrollY),y2=Math.max(sy,ly+scrollY);
