@@ -76,10 +76,12 @@ function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);if
   <div class="opts"><label><input type="checkbox" id="ng" ${S.newGroup?"checked":""}> مجموعة جديدة (خط ذهبي يفصلها عن اللي قبلها)</label>
     <label><input type="checkbox" id="as" ${S.atStart?"checked":""}> حطهم في أول القائمة</label></div>
   <p class="hint">🖱 دوس على أي صورة تتحدد (ودوسة تانية تلغيها) · اسحب الماوس على الصور عشان تحدد كذا صورة مرة واحدة · <b>Shift</b>+دوسة تحدد من-لحد · اسحب صورة <b>محددة</b> عشان تنقل كل المحدد مع بعض · <b>Delete</b> حذف · <b>Ctrl+A</b> الكل · <b>Esc</b> إلغاء<br>✂ خط ذهبي قبل الصورة · ★ غلاف القائمة · ✕ حذف</p>
-  <h3 class="sub">VIDEO</h3>${b.videos.length?`<div class="grid" id="gv">${b.videos.map((o,i)=>tile(o,i,"v")).join("")}</div>`:`<p class="empty">مفيش فيديوهات في القائمة دي.</p>`}
-  <h3 class="sub">PHOTO</h3>${b.photos.length?`<div class="grid" id="gp">${b.photos.map((o,i)=>tile(o,i,"p")).join("")}</div>`:`<p class="empty">مفيش صور في القائمة دي.</p>`}`;
+  <div class="ordbar"><span>ترتيب الأقسام في الموقع:</span><button class="ghost${c.order=="photos"?"":" on"}" data-ord="videos">🎬 الفيديو فوق</button><button class="ghost${c.order=="photos"?" on":""}" data-ord="photos">🖼 الصور فوق</button></div>
+  ${(()=>{const V=`<h3 class="sub">VIDEO</h3>${b.videos.length?`<div class="grid" id="gv">${b.videos.map((o,i)=>tile(o,i,"v")).join("")}</div>`:`<p class="empty">مفيش فيديوهات في القائمة دي.</p>`}`,
+    P=`<h3 class="sub">PHOTO</h3>${b.photos.length?`<div class="grid" id="gp">${b.photos.map((o,i)=>tile(o,i,"p")).join("")}</div>`:`<p class="empty">مفيش صور في القائمة دي.</p>`}`;return c.order=="photos"?P+V:V+P})()}`;
   $("ng").onchange=e=>S.newGroup=e.target.checked;$("as").onchange=e=>S.atStart=e.target.checked;
-  $("catRn").onclick=()=>catForm(cur);$("cvUp").onclick=()=>coverUpload(cur);$("cvEd").onclick=()=>coverEdit(cur);$("selT").onclick=()=>bulk("all");
+  $("catRn").onclick=()=>catForm(cur);
+  app.querySelectorAll("[data-ord]").forEach(x=>x.onclick=()=>{const v=x.dataset.ord;if((c.order=="photos"?"photos":"videos")==v)return;if(v=="photos")c.order="photos";else delete c.order;setDirty(true);toast(v=="photos"?"الصور هتظهر فوق الفيديو — دوس نشر":"الفيديو هيظهر فوق الصور — دوس نشر");catView()});$("cvUp").onclick=()=>coverUpload(cur);$("cvEd").onclick=()=>coverEdit(cur);$("selT").onclick=()=>bulk("all");
   document.querySelectorAll(".selbar [data-s]").forEach(x=>x.onclick=()=>bulk(x.dataset.s));$("selMv").onchange=e=>{if(e.target.value)bulk("move",e.target.value)};selUpd();
   const dr=$("drop");dr.onclick=()=>{pick=null;$("fi").click()};
   dr.ondragover=e=>{e.preventDefault();dr.classList.add("on")};dr.ondragleave=()=>dr.classList.remove("on");
@@ -91,7 +93,7 @@ function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);if
       const o=b[k].map(x=>x._id).join();if(ids.join()===o)return;b[k]=ids.map(id=>b[k].find(x=>x._id==id));setDirty(true);catView()})})}
 // ---------- تحديد زي سطح المكتب: دوسة، Ctrl، Shift، مربع بالماوس، كيبورد ----------
 let selAnchor=null;
-const selOrder=()=>{const b=st.by[cur];return b?[...b.videos,...b.photos].map(o=>o._id):[]};
+const selOrder=()=>{const b=st.by[cur],c=cats.find(x=>x.id==cur);return b?(c&&c.order=="photos"?[...b.photos,...b.videos]:[...b.videos,...b.photos]).map(o=>o._id):[]};
 function selUpd(){document.querySelectorAll("#app .t").forEach(t=>t.classList.toggle("sel",SEL.has(t.dataset.id)));
   const bar=$("selbar");if(bar){bar.hidden=!SEL.size;const n=$("selN");if(n)n.textContent=SEL.size+" محدد"}}
 function selClick(id,e){if(e.shiftKey&&selAnchor){const o=selOrder(),a=o.indexOf(selAnchor),z=o.indexOf(id);if(a>=0&&z>=0){if(!(e.ctrlKey||e.metaKey))SEL.clear();o.slice(Math.min(a,z),Math.max(a,z)+1).forEach(x=>SEL.add(x))}}
