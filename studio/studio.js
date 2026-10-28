@@ -50,9 +50,9 @@ const countNew=()=>allItems().filter(o=>o._new).length+usedDlFiles().length;
 window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
 
 // ---------- الشاشات ----------
-function route(){const h=location.hash,tab=/^#nav/.test(h)?"nav":/^#dl/.test(h)?"dl":/^#set/.test(h)?"set":"cats";
+function route(){const h=location.hash,tab=/^#nav/.test(h)?"nav":/^#dl/.test(h)?"dl":/^#set/.test(h)?"set":/^#works/.test(h)?"works":"cats";
   document.querySelectorAll("#tabs a").forEach(a=>a.classList.toggle("on",a.dataset.t==tab));cur=null;
-  if(tab=="nav")navView();else if(tab=="set")setView();else if(tab=="dl"){const m=h.match(/^#dl\/(.+)/);m?dlEdit(decodeURIComponent(m[1])):dlList()}
+  if(tab=="works"&&window.MANOWorks)window.MANOWorks(app);else if(tab=="nav")navView();else if(tab=="set")setView();else if(tab=="dl"){const m=h.match(/^#dl\/(.+)/);m?dlEdit(decodeURIComponent(m[1])):dlList()}
   else{const m=h.match(/^#c\/(.+)/);cur=m&&st.by[decodeURIComponent(m[1])]?decodeURIComponent(m[1]):null;cur?catView():homeView()}window.scrollTo(0,0)}
 window.onhashchange=()=>{if(st)route()};
 const src=o=>o._url||o.thumb||o.image;
