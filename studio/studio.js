@@ -120,7 +120,9 @@ function grpAct(a,k,j){const b=st.by[cur],G=gSplit(b[k]);if(!G[j])return;
   b[k]=gJoin(G);setDirty(true);catView()}
 // إفلات ملفات في أي حتة في صفحة القائمة = إضافة (بدل ما المتصفح يفتح الملف ويسيب الاستوديو)
 addEventListener("dragover",e=>{if(e.dataTransfer&&[...e.dataTransfer.types].includes("Files"))e.preventDefault()});
-addEventListener("drop",e=>{if(!e.dataTransfer||!e.dataTransfer.files.length)return;e.preventDefault();if(cur&&/^#c\//.test(location.hash))addFiles([...e.dataTransfer.files]);else toast("افتح القائمة الأول وبعدين اسحب الملفات جواها",1)});
+addEventListener("drop",e=>{if(!e.dataTransfer||!e.dataTransfer.files.length)return;e.preventDefault();if(cur&&/^#c\//.test(location.hash)){const t=e.target.closest&&e.target.closest("#gv .t,#gp .t");let tg;
+  if(t){const g=t.parentNode;let j=-1;for(const x of g.children){if(x.classList.contains("ghd"))j++;if(x===t)break}tg={mode:"into",k:g.id=="gv"?"videos":"photos",g:Math.max(0,j)}}
+  addFiles([...e.dataTransfer.files],tg)}else toast("افتح القائمة الأول وبعدين اسحب الملفات جواها",1)});
 // ---------- تحديد زي سطح المكتب: دوسة، Ctrl، Shift، مربع بالماوس، كيبورد ----------
 let selAnchor=null;
 const selOrder=()=>{const b=st.by[cur],c=cats.find(x=>x.id==cur);return b?(c&&c.order!="videos"&&c.order?[...b.photos,...b.videos]:[...b.videos,...b.photos]).map(o=>o._id):[]};
@@ -299,6 +301,11 @@ async function addFiles(files,tgt){tgt=tgt||{mode:S.up};const cid=tgt.cid||cur,c
         const ip=`${dir}/${name}.${big.ext}`,tp=`${dir}/t/${name}.${th.ext}`;
         Object.assign(o,{image:"/"+ip,thumb:"/"+tp,_url:URL.createObjectURL(th.blob),_files:[{path:ip,blob:big.blob},{path:tp,blob:th.blob}]});added.photos.push(o);seq.push(o)}}
     catch(e){console.warn(e);bad.push(f.name+(/heic/i.test(f.name)?" (HEIC مش مدعوم في المتصفح — حوّلها JPG)":""))}}
+  // «ضيف هنا» بصور جوه مجموعة فيديو (أو العكس) = القائمة تبقى صور وفيديو مع بعض تلقائيًا، والملفات تدخل نفس المجموعة
+  if(tgt.mode=="into"&&c.order!="mixed"&&seq.some(o=>!!o.video!=(tgt.k=="videos"))){
+    const pf=c.order=="photos",first=pf?"photos":"videos",off=tgt.k==first?0:gSplit(b[first]).length;
+    b.photos=gJoin(pf?[...gSplit(b.photos),...gSplit(b.videos)]:[...gSplit(b.videos),...gSplit(b.photos)]);b.videos=[];c.order="mixed";
+    tgt={mode:"into",k:"photos",g:tgt.g+off,cid};toast("القائمة بقت «صور وفيديو مع بعض» — الصور اتضافت جنب الفيديو")}
   if(c.order=="mixed"){added.photos=seq;added.videos=[]}
   ["videos","photos"].forEach(k=>{const a=added[k];if(!a.length)return;
     a.forEach(o=>o._div=false);const G=gSplit(b[k]);
