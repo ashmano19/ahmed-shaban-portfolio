@@ -61,17 +61,17 @@ window.onhashchange=()=>{if(st)route()};
 const src=o=>o._url||o.thumb||o.image;
 function homeView(){
   app.innerHTML=`<div class="head"><h2>اختار القائمة</h2></div><p class="hint">اسحب أي قائمة عشان تغيّر ترتيبها في الموقع (على الموبايل: اضغط مطوّل وبعدين اسحب) — وبعدين دوس نشر</p><div class="cards" id="cards">${cats.map(c=>{const b=st.by[c.id],n=C.counts(b),cv=b.cover||b.photos[0]||b.videos[0],cst=cv&&cv.cover?`object-position:${cv.pos||"50% 50%"};object-fit:${cv.fit||"cover"};transform:scale(${cv.zoom||1});transform-origin:${cv.pos||"50% 50%"}`:"",nw=[b.cover,...b.videos,...b.photos].filter(o=>o&&o._new).length;
-    return `<div class="card" data-id="${esc(c.id)}" role="link" tabindex="0">${cv?`<img src="${esc(src(cv))}" data-full="${esc(cv.image||"")}" alt="" draggable="false" decoding="async" style="${cst}">`:""}${nw?`<i>${nw} جديد</i>`:""}<span class="cvbs"><button class="cvb" data-ce="${esc(c.id)}" title="ضبط مكان وحجم الغلاف">✎ ضبط</button><button class="cvb" data-cv="${esc(c.id)}" title="غيّر غلاف القائمة من جهازك">🖼 غلاف</button><button class="cvb dl" data-dc="${esc(c.id)}" title="احذف القائمة">🗑</button></span><div><b>${esc(c.name_ar)}</b><span>${n.p} صورة · ${n.v} فيديو</span></div></div>`}).join("")}<div class="addc" id="addCat" role="button" tabindex="0"><b>＋</b><span>قائمة جديدة</span></div></div>`;
+    return `<div class="card" data-id="${esc(c.id)}" role="link" tabindex="0">${cv?`<img src="${esc(src(cv))}" data-full="${esc(cv.image||"")}" alt="" draggable="false" decoding="async" style="${cst}">`:""}${nw?`<i>${nw} جديد</i>`:""}<span class="cvbs"><button class="cvb" data-ce="${esc(c.id)}" title="ضبط مكان وحجم الغلاف">✎ ضبط</button><button class="cvb" data-cv="${esc(c.id)}" title="اختار غلاف من صور القائمة أو ارفع من جهازك">🖼 غلاف</button><button class="cvb dl" data-dc="${esc(c.id)}" title="احذف القائمة">🗑</button></span><div><b>${esc(c.name_ar)}</b><span>${n.p} صورة · ${n.v} فيديو</span></div></div>`}).join("")}<div class="addc" id="addCat" role="button" tabindex="0"><b>＋</b><span>قائمة جديدة</span></div></div>`;
   const g=$("cards");g.querySelectorAll("img").forEach(im=>im.onerror=()=>{if(im.dataset.full&&im.src.indexOf(im.dataset.full)<0)im.src=im.dataset.full});
   $("addCat").onclick=()=>catForm();$("addCat").onkeydown=e=>{if(e.key=="Enter")catForm()};
-  g.onclick=e=>{const dc=e.target.closest("[data-dc]");if(dc){e.stopPropagation();catDel(dc.dataset.dc);return}const cb=e.target.closest("[data-cv]");if(cb){e.stopPropagation();coverUpload(cb.dataset.cv);return}const ce=e.target.closest("[data-ce]");if(ce){e.stopPropagation();coverEdit(ce.dataset.ce);return}const c=e.target.closest(".card");if(c)location.hash="#c/"+encodeURIComponent(c.dataset.id)};
+  g.onclick=e=>{const dc=e.target.closest("[data-dc]");if(dc){e.stopPropagation();catDel(dc.dataset.dc);return}const cb=e.target.closest("[data-cv]");if(cb){e.stopPropagation();coverPick(cb.dataset.cv);return}const ce=e.target.closest("[data-ce]");if(ce){e.stopPropagation();coverEdit(ce.dataset.ce);return}const c=e.target.closest(".card");if(c)location.hash="#c/"+encodeURIComponent(c.dataset.id)};
   g.onkeydown=e=>{const c=e.target.closest(".card");if(c&&e.key=="Enter")c.click()};
   sortable(g,ids=>{ids=ids.filter(Boolean);if(ids.join()===cats.map(c=>c.id).join())return;cats=ids.map(id=>cats.find(c=>c.id==id));setDirty(true);homeView()},".card")}
 function tile(o,i,kind){const d=i>0&&o._div,on=SEL.has(o._id);return `<div class="t${d?" div":""}${o._new?" new":""}${on?" sel":""}" data-id="${o._id}"><img loading="lazy" src="${esc(src(o))}" alt="">${kind=="v"?`<span class="vb">▶ فيديو</span>`:""}<span class="ck" title="تحديد">✓</span>
   <div class="bt">${kind=="v"?`<button data-a="poster" title="غيّر غلاف الفيديو من جهازك">🖼</button>`:""}${i>0?`<button data-a="div" title="${d?"إلغاء الخط الذهبي":"بداية مجموعة جديدة (خط ذهبي قبلها)"}">✂</button>`:""}<button data-a="cover" title="اجعلها صورة الغلاف">★</button><button class="x" data-a="del" title="حذف">✕</button></div></div>`}
 function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);if(catView._c!==cur){catView._c=cur;SEL.clear();selAnchor=null}
   app.innerHTML=`<div class="head"><a class="ghost" href="#">→ القوائم</a><h2>${esc(c.name_ar)} <button class="ghost" id="catRn" style="font-size:.8rem;padding:2px 12px">✎ الاسم</button> <small style="font-size:.9rem;color:#CEA111">${n.p} صورة · ${n.v} فيديو</small></h2>
-    <div class="cov">${b.cover?`<img src="${esc(src(b.cover))}" alt="">`:""}<span>صورة الغلاف<br><small>★ من الصور أو</small></span><button class="ghost" id="cvUp">🖼 غلاف من جهازك</button><button class="ghost" id="cvEd">✎ ضبط الغلاف</button></div>
+    <div class="cov">${b.cover?`<img src="${esc(src(b.cover))}" alt="">`:""}<span>صورة الغلاف</span><button class="ghost" id="cvUp">🖼 اختار / ارفع غلاف</button><button class="ghost" id="cvEd">✎ ضبط الغلاف</button></div>
     <button class="ghost" id="selT">☑ تحديد الكل</button></div>
   ${`<div class="selbar" id="selbar" hidden><b id="selN"></b><button data-s="all">تحديد الكل</button><button data-s="none">إلغاء التحديد</button><button data-s="grp">▦ مجموعة جديدة منهم</button><button data-s="top">⇡ للأول</button><button data-s="end">⇣ للآخر</button>
     <select id="selMv"><option value="">نقل إلى قائمة…</option>${cats.filter(x=>x.id!=cur).map(x=>`<option value="${esc(x.id)}">${esc(x.name_ar)}</option>`).join("")}</select><button data-s="del" class="red">🗑 حذف المحدد</button></div>`}
@@ -89,7 +89,7 @@ function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);if
     if(v=="mixed"){const G=was=="photos"?[...gSplit(b.photos),...gSplit(b.videos)]:[...gSplit(b.videos),...gSplit(b.photos)];b.photos=gJoin(G);b.videos=[]}
     else if(was=="mixed"){const a=b.photos;b.videos=gJoin(gSplit(a.filter(o=>o.video)));b.photos=gJoin(gSplit(a.filter(o=>!o.video)))}
     if(v=="videos")delete c.order;else c.order=v;SEL.clear();setDirty(true);
-    toast(v=="photos"?"الصور هتظهر فوق الفيديو — دوس نشر":v=="mixed"?"الصور والفيديو بقوا مع بعض — رتّبهم زي ما تحب ودوس نشر":"الفيديو هيظهر فوق الصور — دوس نشر");catView()});$("cvUp").onclick=()=>coverUpload(cur);$("cvEd").onclick=()=>coverEdit(cur);$("selT").onclick=()=>bulk("all");
+    toast(v=="photos"?"الصور هتظهر فوق الفيديو — دوس نشر":v=="mixed"?"الصور والفيديو بقوا مع بعض — رتّبهم زي ما تحب ودوس نشر":"الفيديو هيظهر فوق الصور — دوس نشر");catView()});$("cvUp").onclick=()=>coverPick(cur);$("cvEd").onclick=()=>coverEdit(cur);$("selT").onclick=()=>bulk("all");
   document.querySelectorAll(".selbar [data-s]").forEach(x=>x.onclick=()=>bulk(x.dataset.s));$("selMv").onchange=e=>{if(e.target.value)bulk("move",e.target.value)};selUpd();
   const dr=$("drop");dr.onclick=()=>{pick=null;$("fi").click()};
   dr.ondragover=e=>{e.preventDefault();dr.classList.add("on")};dr.ondragleave=()=>dr.classList.remove("on");
@@ -175,8 +175,7 @@ function act(a,o,k){const b=st.by[cur];
   if(a=="del"){if(!confirm("تحذف العنصر ده؟"))return;const i=b[k].indexOf(o);if(o._div&&b[k][i+1]&&!b[k][i+1]._div)b[k][i+1]._div=true;b[k].splice(i,1);if(b.cover&&o._new&&b.cover.image==o.image)b.cover._files=(o._files||[]).filter(f=>"/"+f.path==o.image||"/"+f.path==o.thumb)}
   else if(a=="div")o._div=!o._div;
   else if(a=="poster"){posterUpload(o);return}
-  else if(a=="cover"){const c=cats.find(x=>x.id==cur);if(!b.cover)b.cover={_id:"c"+Date.now(),category:cur,title_ar:c.name_ar,title_en:c.name_en,cover:true};
-    b.cover.image=o.image;b.cover.thumb=o.thumb||o.image;b.cover._url=o._url;b.cover._files=[];toast("تم تغيير صورة الغلاف")}
+  else if(a=="cover"){coverFrom(cur,o);toast("تم تغيير صورة الغلاف")}
   setDirty(true);catView()}
 // ---------- إضافة / تسمية / حذف القوائم ----------
 function catForm(id){const c=id?cats.find(x=>x.id==id):null;const d=document.createElement("div");d.className="cved";
@@ -226,6 +225,17 @@ function coverEdit(cid){const c=cats.find(x=>x.id==cid),b=st.by[cid];let cv=b.co
 let SEL=new Set();
 async function makeImg(file,dir,name){const im=await decode(file),big=await enc(canvasOf(im.el,im.w,im.h,MAX_IMG),.85),th=await enc(canvasOf(im.el,im.w,im.h,MAX_TH),.78);
   const ip=`${dir}/${name}.${big.ext}`,tp=`${dir}/t/${name}.${th.ext}`;return {image:"/"+ip,thumb:"/"+tp,_url:URL.createObjectURL(th.blob),_files:[{path:ip,blob:big.blob},{path:tp,blob:th.blob}]}}
+function coverFrom(cid,o){const c=cats.find(x=>x.id==cid),b=st.by[cid];if(!b.cover)b.cover={_id:"c"+Date.now(),category:cid,title_ar:c.name_ar,title_en:c.name_en,cover:true};
+  b.cover.image=o.image;b.cover.thumb=o.thumb||o.image;b.cover._url=o._url;b.cover._files=[];if(o.w&&o.h){b.cover.w=o.w;b.cover.h=o.h}else{delete b.cover.w;delete b.cover.h}}
+// اختيار غلاف القائمة: من صور/فيديوهات القائمة نفسها أو رفع من الجهاز
+function coverPick(cid){if(busy)return;const c=cats.find(x=>x.id==cid),b=st.by[cid];if(!c||!b)return;const items=[...b.videos,...b.photos];
+  const d=document.createElement("div");d.className="cved";
+  d.innerHTML=`<div class="cvp"><div class="cvph"><b>غلاف «${esc(c.name_ar)}»</b><button class="gold" id="cpUp">⬆ ارفع صورة من جهازك</button><button class="ghost" id="cpX">✕</button></div>
+  <p class="hint" style="margin:0 0 10px">أو اختار من صور وفيديوهات القائمة:</p>
+  <div class="cvpg">${items.length?items.map(o=>`<button class="cvpi${b.cover&&b.cover.image==o.image?" on":""}" data-id="${o._id}" title="اختارها غلاف"><img src="${esc(src(o))}" alt="" loading="lazy">${o.video?'<span class="vb">▶</span>':""}</button>`).join(""):`<p class="empty">القائمة لسه فاضية — ارفع غلاف من جهازك.</p>`}</div></div>`;
+  document.body.appendChild(d);const close=()=>d.remove();d.onclick=e=>{if(e.target==d)close()};$("cpX").onclick=close;
+  $("cpUp").onclick=()=>{close();coverUpload(cid)};
+  d.querySelectorAll(".cvpi").forEach(x=>x.onclick=()=>{const o=items.find(i=>i._id==x.dataset.id);if(!o)return;coverFrom(cid,o);close();setDirty(true);toast("اتغيّر غلاف «"+c.name_ar+"» — دوس نشر");route()})}
 function coverUpload(cid){if(busy)return;choose("image/*",false,async fs=>{const f=fs[0];if(!f)return;
   try{const c=cats.find(x=>x.id==cid),b=st.by[cid];const r=await makeImg(f,"images/uploads/s/"+cid+"/cover","c"+Date.now().toString(36));
     if(!b.cover)b.cover={_id:"c"+Date.now(),category:cid,title_ar:c.name_ar,title_en:c.name_en,cover:true};Object.assign(b.cover,r,{_new:1});
