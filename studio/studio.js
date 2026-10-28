@@ -11,7 +11,7 @@ const key=()=>"k"+(KN++);
 const S={newGroup:true,atStart:false};
 
 function toast(t,err){const d=document.createElement("div");d.className="toast"+(err?" err":"");d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),err?6000:3000)}
-async function gh(path,opt={}){const r=await fetch(path.startsWith("http")?path:API+path,Object.assign({},opt,{headers:Object.assign({Authorization:"token "+TOKEN,Accept:"application/vnd.github+json"},opt.headers||{})}));
+async function gh(path,opt={}){const r=await fetch(path.startsWith("http")?path:API+path,Object.assign({cache:"no-store"},opt,{headers:Object.assign({Authorization:"token "+TOKEN,Accept:"application/vnd.github+json"},opt.headers||{})}));
   if(!r.ok){const e=new Error("GitHub "+r.status);e.status=r.status;try{e.body=await r.text()}catch(_){}throw e}return opt.raw?r.text():r.json()}
 
 // ---------- الدخول (نفس نافذة GitHub بتاعة /admin) ----------
@@ -399,9 +399,13 @@ $("pub").onclick=async()=>{if(busy||!dirty)return;
     C.orphans(orig,out.photos).forEach(p=>tree.push({path:p,mode:"100644",type:"blob",sha:null}));
     const sd=siteDocs();Object.keys(sd).forEach(p=>{if(sd[p]!==docs0[p])tree.push({path:p,mode:"100644",type:"blob",content:sd[p]})});
     const dlNow=JSON.parse(sd["content/downloads.json"]).items;C.dlOrphans(dlOrig,dlNow).forEach(p=>tree.push({path:p,mode:"100644",type:"blob",sha:null}));
-    const bc=await gh("/git/commits/"+base);
+    const head=(await gh("/git/ref/heads/"+BR+"?t="+Date.now())).object.sha;     // آخر نسخة في GitHub (حتى لو اتعدّل من مكان تاني)
+    const bc=await gh("/git/commits/"+head);
+    if(head!==base){const have=new Set();   // ملفات اتمسحت في النسخة الأحدث: ما نمسحهاش تاني
+      const full=await gh("/git/trees/"+bc.tree.sha+"?recursive=1");(full.tree||[]).forEach(x=>have.add(x.path));
+      for(let i=tree.length-1;i>=0;i--)if(tree[i].sha===null&&!have.has(tree[i].path))tree.splice(i,1)}
     const t=await gh("/git/trees",{method:"POST",body:JSON.stringify({base_tree:bc.tree.sha,tree})});
-    const cm=await gh("/git/commits",{method:"POST",body:JSON.stringify({message:"تحديث الموقع من الاستوديو",tree:t.sha,parents:[base]})});
+    const cm=await gh("/git/commits",{method:"POST",body:JSON.stringify({message:"تحديث الموقع من الاستوديو",tree:t.sha,parents:[head]})});
     await gh("/git/refs/heads/"+BR,{method:"PATCH",body:JSON.stringify({sha:cm.sha,force:false})});
     base=cm.sha;orig=out.photos;galBase=JSON.stringify(out);docs0=sd;dlOrig=JSON.parse(JSON.stringify(dlNow));dlItems.forEach(x=>delete x._ed);[...dlFiles.keys()].forEach(p=>{if(usedDlFiles().includes(p))dlFiles.get(p).done=1});origCatIds=JSON.stringify(cats);allItems().forEach(o=>{delete o._new;delete o._files});busy=false;showProg(-1);setDirty(false);
     toast("تم النشر ✓ الموقع هيتحدث خلال دقيقة أو اتنين");route()}
