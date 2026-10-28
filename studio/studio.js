@@ -50,7 +50,7 @@ const countNew=()=>allItems().filter(o=>o._new).length+usedDlFiles().length;
 window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
 
 // ---------- الشاشات ----------
-function route(){const h=location.hash,tab=/^#nav/.test(h)?"nav":/^#dl/.test(h)?"dl":/^#set/.test(h)?"set":/^#works/.test(h)?"works":"cats";
+function route(){app.oninput=app.onchange=app.onclick=null;const h=location.hash,tab=/^#nav/.test(h)?"nav":/^#dl/.test(h)?"dl":/^#set/.test(h)?"set":/^#works/.test(h)?"works":"cats";
   document.querySelectorAll("#tabs a").forEach(a=>a.classList.toggle("on",a.dataset.t==(tab=="works"?"dl":tab)));cur=null;
   if(tab=="works"&&window.MANOWorks)window.MANOWorks(app);else if(tab=="nav")navView();else if(tab=="set")setView();else if(tab=="dl"){const m=h.match(/^#dl\/(.+)/);m?dlEdit(decodeURIComponent(m[1])):dlList()}
   else{const m=h.match(/^#c\/(.+)/);cur=m&&st.by[decodeURIComponent(m[1])]?decodeURIComponent(m[1]):null;cur?catView():homeView()}window.scrollTo(0,0)}
@@ -296,15 +296,48 @@ function dlList(){
   sortable(g,ids=>{if(ids.join()===dlItems.map(x=>x._k).join())return;dlItems=ids.map(id=>dlItems.find(x=>x._k==id));touch();dlList()},".card")}
 
 // الداونلود: تعديل مشاركة
+// MANO: كل بيانات صفحة MANO (موقع mano-plugin بيقراها من content/mano.json هنا)
+const MNG=[["القائمة في موقعك",["show","menu_ar","menu_en","site_url"]],["الأساسيات",["version","download_url","file_size","subscribe_url","trial_days"]],
+ ["أول الصفحة",["badge_ar","badge_en","hero_title_ar","hero_title_en","hero_accent_ar","hero_accent_en","tagline_ar","tagline_en"]],
+ ["الاشتراك",["plan_ar","plan_en","price_ar","price_en","period_ar","period_en"]],["آخر الصفحة",["cta_title_ar","cta_title_en","cta_accent_ar","cta_accent_en","cta_text_ar","cta_text_en"]],
+ ["قوائم قصيرة (كل سطر عنصر)",["chips_ar","chips_en","flow_ar","flow_en","steps_ar","steps_en"]],["المميزات",["features"]],["لقطات من جوه الأداة",["shots"]],["فيديوهات",["videos"]],["أسئلة",["faq"]],
+ ["تواصل",["whatsapp","instagram","author_ar","author_en","portfolio_url"]]];
+const MNL={show:"ظاهر في قائمة Download",menu_ar:"الاسم في القائمة (عربي)",menu_en:"الاسم في القائمة (English)",site_url:"رابط موقع MANO",version:"رقم الإصدار",download_url:"رابط التحميل",file_size:"حجم الملف",subscribe_url:"رابط الاشتراك (Stripe)",trial_days:"أيام التجربة المجانية",
+ badge_ar:"الشارة (عربي)",badge_en:"الشارة (English)",hero_title_ar:"العنوان (عربي)",hero_title_en:"العنوان (English)",hero_accent_ar:"الجزء الذهبي من العنوان (عربي)",hero_accent_en:"الجزء الذهبي (English)",tagline_ar:"الوصف (عربي)",tagline_en:"الوصف (English)",
+ plan_ar:"اسم الباقة (عربي)",plan_en:"اسم الباقة (English)",price_ar:"السعر (عربي)",price_en:"السعر (English)",period_ar:"المدة (عربي)",period_en:"المدة (English)",
+ cta_title_ar:"العنوان (عربي)",cta_title_en:"العنوان (English)",cta_accent_ar:"الجزء الذهبي (عربي)",cta_accent_en:"الجزء الذهبي (English)",cta_text_ar:"النص (عربي)",cta_text_en:"النص (English)",
+ chips_ar:"الشرايط (عربي)",chips_en:"الشرايط (English)",flow_ar:"خطوات البداية (عربي)",flow_en:"خطوات البداية (English)",steps_ar:"خطوات التثبيت (عربي)",steps_en:"خطوات التثبيت (English)",
+ whatsapp:"واتساب (رقم دولي)",instagram:"رابط إنستجرام",author_ar:"اسم المطوّر (عربي)",author_en:"اسم المطوّر (English)",portfolio_url:"رابط موقعك",
+ icon:"أيقونة",title_ar:"العنوان (عربي)",title_en:"العنوان (English)",desc_ar:"الوصف (عربي)",desc_en:"الوصف (English)",image:"الصورة (مسار في موقع MANO)",caption_ar:"الاسم (عربي)",caption_en:"الاسم (English)",
+ q_ar:"السؤال (عربي)",q_en:"السؤال (English)",a_ar:"الإجابة (عربي)",a_en:"الإجابة (English)",mp4:"فيديو mp4",webm:"فيديو webm",poster:"صورة الغلاف"};
+const MNTPL={features:{icon:"✦",title_ar:"",title_en:"",desc_ar:"",desc_en:""},shots:{image:"images/",caption_ar:"",caption_en:"",desc_ar:"",desc_en:""},videos:{mp4:"",webm:"",poster:"",caption_ar:"",caption_en:"",desc_ar:"",desc_en:""},faq:{q_ar:"",q_en:"",a_ar:"",a_en:""}};
 function mnEdit(){const m=mnObj;if(!m){location.hash="#dl";return}
+  const long=k=>/^(desc|tagline|cta_text|a)_/.test(k),ltr=k=>/_en$|url|^(mp4|webm|poster|image|version|whatsapp|file_size)$/.test(k);
+  const fld=(k,v,path)=>{const lb=esc(MNL[k]||k),p=esc(path);
+    if(typeof v=="boolean")return `<label class="sw" style="font-weight:700"><input type="checkbox" data-p="${p}" ${v?"checked":""}> ${lb}</label>`;
+    if(Array.isArray(v)&&!v.some(x=>x&&typeof x=="object"))return `<label>${lb}<textarea data-p="${p}" data-t="lines" rows="${Math.max(3,v.length+1)}" style="min-height:0"${ltr(k)?' dir="ltr"':""}>${esc(v.join("\n"))}</textarea></label>`;
+    if(typeof v=="number")return `<label>${lb}<input data-p="${p}" data-t="num" dir="ltr" value="${esc(v)}"></label>`;
+    return long(k)?`<label>${lb}<textarea data-p="${p}" rows="3" style="min-height:0"${ltr(k)?' dir="ltr"':""}>${esc(v)}</textarea></label>`:`<label>${lb}<input data-p="${p}" value="${esc(v)}"${ltr(k)?' dir="ltr"':""}></label>`};
+  const pair=(ks,obj,pre)=>{let h="",i=0;while(i<ks.length){const a=ks[i],b=ks[i+1];
+    if(b&&a.endsWith("_ar")&&b==a.slice(0,-3)+"_en"&&!(Array.isArray(obj[a])&&obj[a].some(x=>x&&typeof x=="object"))){h+=`<div class="two">${fld(a,obj[a]??"",pre+a)}${fld(b,obj[b]??"",pre+b)}</div>`;i+=2}
+    else{h+=fld(a,obj[a]??"",pre+a);i++}}return h};
+  const list=k=>{const arr=m[k]||[],keys=[...new Set([].concat(...arr.map(o=>Object.keys(o)),Object.keys(MNTPL[k]||{})))];
+    return `<div class="rows">${arr.map((o,i)=>`<div class="mnitem"><div class="mnbar"><b>${i+1}</b><span style="flex:1"></span><button class="xs" data-mv="${k}:${i}:-1" title="فوق">↑</button><button class="xs" data-mv="${k}:${i}:1" title="تحت">↓</button><button class="x" data-rm="${k}:${i}" title="حذف">✕</button></div>${pair(keys,o,k+"."+i+".")}</div>`).join("")}</div><button class="ghost" data-add="${k}">+ إضافة</button>`};
+  const used=new Set([].concat(...MNG.map(g=>g[1])));const other=Object.keys(m).filter(k=>!used.has(k)&&k!="cms_url");
+  const groups=MNG.concat(other.length?[["أخرى",other]]:[]);
   app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ الداونلود</a><h2>MANO</h2><a class="ghost" href="${esc(m.site_url||"https://mano-plugin.pages.dev")}" target="_blank" rel="noopener">فتح موقع MANO ↗</a></div>
-  <div class="form"><div class="covbox"><img src="https://mano-plugin.pages.dev/images/og.jpg" alt=""><span>رابط MANO بيظهر أول حاجة في قائمة Download في موقعك.<br><small>محتوى صفحة MANO نفسها (المميزات، السعر، الإصدار) بيتعدّل من موقع MANO.</small></span></div>
-   <label class="sw" style="font-weight:700"><input type="checkbox" id="m_show" ${m.show===false?"":"checked"}> ظاهر في قائمة Download</label>
-   <div class="two"><label>الاسم في القائمة (عربي)<input id="m_ar" value="${esc(m.menu_ar||"")}" placeholder="MANO — إضافة DaVinci Resolve"></label><label>الاسم في القائمة (English)<input id="m_en" dir="ltr" value="${esc(m.menu_en||"")}" placeholder="MANO — DaVinci Resolve plugin"></label></div>
-   <label>رابط موقع MANO<input id="m_url" dir="ltr" value="${esc(m.site_url||"")}" placeholder="https://mano-plugin.pages.dev"></label>
-   <div class="fl">أعمال الناس<div class="covbox"><a class="gold" href="#works" style="text-decoration:none;padding:10px 26px;font-size:.95rem">🖼 أعمال MANO — مراجعة ونشر</a><span><small>الأعمال اللي الناس بترفعها من موقع MANO: تنشرها أو تخفيها أو تحذفها.</small></span></div></div></div>`;
-  $("m_show").onchange=e=>{m.show=e.target.checked;touch()};
-  [["m_ar","menu_ar"],["m_en","menu_en"],["m_url","site_url"]].forEach(([id,k])=>$(id).oninput=e=>{m[k]=e.target.value;touch()})}
+  <p class="hint">كل بيانات صفحة MANO. أي تعديل هنا + نشر = يظهر في موقع MANO خلال دقيقة (الصفحة بتقرا البيانات من موقعك).</p>
+  <div class="form"><div class="fl">أعمال الناس<div class="covbox"><a class="gold" href="#works" style="text-decoration:none;padding:10px 26px;font-size:.95rem">🖼 أعمال MANO — مراجعة ونشر</a><span><small>الأعمال اللي الناس بترفعها من موقع MANO.</small></span></div></div>
+  ${groups.map(([t,ks])=>`<details class="mng"${t=="القائمة في موقعك"||t=="الأساسيات"?" open":""}><summary>${esc(t)}</summary><div class="form">${ks.some(k=>Array.isArray(m[k])&&m[k].some(x=>x&&typeof x=="object")||MNTPL[k])?ks.map(list).join(""):pair(ks.filter(k=>k in m||!["videos","portfolio_url"].includes(k)),m,"")}</div></details>`).join("")}</div>`;
+  const open=[...app.querySelectorAll("details.mng")].map(d=>d.open);
+  const setp=(path,val)=>{const ps=path.split(".");let o=m;for(let i=0;i<ps.length-1;i++)o=o[ps[i]];o[ps[ps.length-1]]=val;touch()};
+  app.oninput=app.onchange=e=>{const el=e.target,p=el.dataset.p;if(!p)return;
+    setp(p,el.type=="checkbox"?el.checked:el.dataset.t=="lines"?el.value.split("\n").map(x=>x.trim()).filter(Boolean):el.dataset.t=="num"?(+el.value||0):el.value)};
+  const redraw=()=>{const op=[...app.querySelectorAll("details.mng")].map(d=>d.open),y=scrollY;mnEdit();app.querySelectorAll("details.mng").forEach((d,i)=>d.open=op[i]);scrollTo(0,y)};
+  app.onclick=e=>{const a=e.target.closest("[data-add]"),r=e.target.closest("[data-rm]"),v=e.target.closest("[data-mv]");
+    if(a){const k=a.dataset.add;m[k]=m[k]||[];m[k].push(JSON.parse(JSON.stringify(MNTPL[k]||{})));touch();redraw()}
+    else if(r){const [k,i]=r.dataset.rm.split(":");if(!confirm("تحذف العنصر ده؟"))return;m[k].splice(+i,1);touch();redraw()}
+    else if(v){const [k,i,d]=v.dataset.mv.split(":"),a_=m[k],j=+i+ +d;if(j<0||j>=a_.length)return;[a_[+i],a_[j]]=[a_[j],a_[+i]];touch();redraw()}}}
 function dlEdit(k){if(k=="mano")return mnEdit();const x=dlItems.find(i=>i._k==k);if(!x){location.hash="#dl";return}
   app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ كل المشاركات</a><h2>${x.title?esc(x.title):"مشاركة جديدة"}</h2><button class="ghost red" id="delP">حذف المشاركة</button></div>
   <div class="form">

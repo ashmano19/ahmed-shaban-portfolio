@@ -1,7 +1,7 @@
 {
   "show": true,
-  "version": "1.2",
-  "download_url": "",
+  "version": "1.4",
+  "download_url": "https://drive.google.com/drive/folders/1yYNIso8Zlb7wdRVQh79CGoTPyiUfdol1?usp=sharing",
   "file_size": "",
   "tagline_ar": "إضافة لـ DaVinci Resolve بتجمع قوالب النصوص والـ Glass ومكتبة ملحقات كاملة وأدوات ذكاء اصطناعي، في مكان واحد.",
   "tagline_en": "A DaVinci Resolve plugin that brings text templates, Glass titles, a full add-ons library and AI tools together in one place.",
@@ -24,22 +24,22 @@
       "icon": "✦",
       "title_ar": "مكتبة الملحقات",
       "title_en": "Add-ons library",
-      "desc_ar": "أيقونات، إيموجي، نيون، أرقام، شرايط تحميل، عناصر 3D، خلفيات ومؤثرات.",
-      "desc_en": "Icons, emoji, neon, numbers, loading bars, 3D elements, backgrounds and effects."
+      "desc_ar": "Glass وقوالب FORMS في أول المكتبة، وبعدهم أيقونات، إيموجي، نيون، أرقام، شرايط تحميل، عناصر 3D، خلفيات ومؤثرات.",
+      "desc_en": "Glass and FORMS templates first, then icons, emoji, neon, numbers, loading bars, 3D elements, backgrounds and effects."
     },
     {
       "icon": "AI",
       "title_ar": "Motion AI",
       "title_en": "Motion AI",
-      "desc_ar": "اكتب طلبك وهو يفهمه وينفّذه، بمفاتيحك أنت لـ: OpenAI، Gemini، Claude، Grok، ElevenLabs، Kling، Luma، Higgsfield.",
-      "desc_en": "Describe what you want and it handles it, using your own keys for OpenAI, Gemini, Claude, Grok, ElevenLabs, Kling, Luma and Higgsfield."
+      "desc_ar": "مساعد ذكاء اصطناعي في شات واحد: حسّن الكابشن، ترجم، عناوين وهوكس، نقاط قطع، لخّص، تعليق صوتي واصنع مشهد فيديو. بمفاتيحك أنت لـ: OpenAI، Gemini، Claude، Grok، ElevenLabs، Kling، Luma، Higgsfield.",
+      "desc_en": "An AI assistant in one chat: polish captions, translate, titles and hooks, cut points, summaries, voice-over and scene-to-video. Uses your own keys for OpenAI, Gemini, Claude, Grok, ElevenLabs, Kling, Luma and Higgsfield."
     },
     {
       "icon": "◐",
       "title_ar": "إزالة الخلفية",
       "title_en": "Background removal",
-      "desc_ar": "ارفع أي صورة وخد نسخة PNG بخلفية شفافة.",
-      "desc_en": "Upload any image and get a transparent-background PNG."
+      "desc_ar": "شيل خلفية أي صورة أو فيديو: PNG شفاف، أو فيديو شفاف بالصوت يتحط على التايم لاين.",
+      "desc_en": "Remove the background of any image or video: a transparent PNG, or a transparent video with its audio, placed on the timeline."
     },
     {
       "icon": "ع/E",
@@ -49,48 +49,76 @@
       "desc_en": "The whole interface in Arabic and English, switchable in one tap."
     },
     {
+      "icon": "☰",
+      "title_ar": "قوائم ومفاتيح حديثة وسريعة",
+      "title_en": "Modern, fast menus & switches",
+      "desc_ar": "قوائم منسدلة داكنة بلمسة ذهبية مع تنقل بالكيبورد، مفاتيح تشغيل بشكل iOS، وصفحات بتفتح وتتمرر في لحظتها.",
+      "desc_en": "Dark-gold popover menus with keyboard navigation, iOS-style on/off switches, and pages that open and scroll instantly."
+    },
+    {
       "icon": "⚡",
       "title_ar": "تثبيت بضغطة واحدة",
       "title_en": "One-click installer",
       "desc_ar": "مثبّت سريع لـ DaVinci Resolve على Windows.",
       "desc_en": "A fast installer for DaVinci Resolve on Windows."
+    },
+    {
+      "icon": "↻",
+      "title_ar": "تحديثات تلقائية",
+      "title_en": "Automatic updates",
+      "desc_ar": "لما ينزل إصدار جديد بتظهرلك نافذة جوه الأداة وتحدّث بضغطة، من غير ما تنزّل حاجة من الموقع.",
+      "desc_en": "When a new version is out, a window appears inside the tool and you update in one click, with no re-download."
     }
   ],
   "shots": [
     {
-      "image": "/images/mano/launcher.webp",
+      "image": "images/launcher.webp",
       "caption_ar": "الشاشة الرئيسية",
       "caption_en": "Launcher",
       "desc_ar": "كل أقسام MANO قدامك في شاشة واحدة، تدخل أي قسم بضغطة.",
       "desc_en": "Every MANO section on one screen, one click away."
     },
     {
-      "image": "/images/mano/text.webp",
+      "image": "images/text.webp",
       "caption_ar": "قوالب النصوص",
       "caption_en": "Text templates",
       "desc_ar": "قوالب نصوص وكابشن بمعاينة متحركة، وزرار إضافة تحت كل قالب.",
       "desc_en": "Text and caption templates with animated previews and an add button on each."
     },
     {
-      "image": "/images/mano/addons.webp",
+      "image": "images/addons.webp",
       "caption_ar": "مكتبة الملحقات",
       "caption_en": "Add-ons library",
-      "desc_ar": "أيقونات وإيموجي ونيون وأرقام وشرايط تحميل و3D وخلفيات ومؤثرات.",
-      "desc_en": "Icons, emoji, neon, numbers, loading bars, 3D, backgrounds and effects."
+      "desc_ar": "Glass وFORMS في أول المكتبة، ومعاهم أيقونات وإيموجي ونيون وأرقام وشرايط تحميل و3D وخلفيات ومؤثرات.",
+      "desc_en": "Glass and FORMS up front, plus icons, emoji, neon, numbers, loading bars, 3D, backgrounds and effects."
     },
     {
-      "image": "/images/mano/motion-ai.webp",
+      "image": "images/motion-ai.webp",
       "caption_ar": "Motion AI",
       "caption_en": "Motion AI",
-      "desc_ar": "اكتب طلبك واختار الموديل من جوه الشات، بمفاتيحك أنت.",
-      "desc_en": "Type your request and pick the model inside the chat, with your own keys."
+      "desc_ar": "شات بتصميم ذهبي: اكتب طلبك أو اختار اقتراح (حسّن الكابشن، تعليق صوتي، اصنع مشهدًا)، وضيف مراجع، بمفاتيحك أنت.",
+      "desc_en": "A gold-themed chat: type a request or pick a suggestion (polish captions, voice-over, build a scene), add references, with your own keys."
     },
     {
-      "image": "/images/mano/bg-removal.webp",
+      "image": "images/bg-removal.webp",
       "caption_ar": "إزالة الخلفية",
       "caption_en": "Background removal",
-      "desc_ar": "ارفع صورة وخد PNG بخلفية شفافة.",
-      "desc_en": "Upload an image and get a transparent PNG."
+      "desc_ar": "صورة أو فيديو ← PNG أو فيديو شفاف (ProRes 4444) مع الصوت.",
+      "desc_en": "Image or video → transparent PNG or ProRes 4444 video with audio."
+    },
+    {
+      "image": "images/face.webp",
+      "caption_ar": "تنعيم الوجه",
+      "caption_en": "Face smoothing",
+      "desc_ar": "إعدادات جاهزة (منها رجالي وبيوتي)، تختار لون البشرة من الصورة، وتشوف قناع البشرة، والنتيجة تفضل قابلة للتعديل في Fusion.",
+      "desc_en": "Presets (incl. Men and Beauty), pick the skin tone from the frame, view the skin mask; the result stays editable in Fusion."
+    },
+    {
+      "image": "images/login.webp",
+      "caption_ar": "تسجيل الدخول بكود",
+      "caption_en": "Sign in with a code",
+      "desc_ar": "اكتب إيميلك وهيوصلك كود من 6 أرقام، من غير كلمة سر.",
+      "desc_en": "Enter your email and get a 6-digit code, no password needed."
     }
   ],
   "steps_ar": [
@@ -153,6 +181,18 @@
   ],
   "faq": [
     {
+      "q_ar": "إيه الجديد في الإصدار 1.3؟",
+      "q_en": "What's new in version 1.3?",
+      "a_ar": "Motion AI بقى شات مساعد بتصميم ذهبي (حسّن الكابشن، ترجم، عناوين وهوكس، نقاط قطع، تعليق صوتي، اصنع مشهدًا، ومراجع تضيفها للطلب)، تسجيل دخول بكود من 6 أرقام على إيميلك، وتحديثات تلقائية جوه الأداة.",
+      "a_en": "Motion AI is now a gold-themed assistant chat (polish captions, translate, titles and hooks, cut points, voice-over, scene-to-video, plus references you can attach), sign-in with a 6-digit email code, and automatic updates inside the tool."
+    },
+    {
+      "q_ar": "إزاي أحدّث الأداة؟",
+      "q_en": "How do I update the tool?",
+      "a_ar": "لما ينزل إصدار جديد بتظهرلك نافذة «فيه تحديث جديد» جوه MANO. دوس «تحديث الآن» وبعدها أقفل MANO وافتحه تاني. التحديث بيشتغل لحد اللي عنده تجربة أو اشتراك شغّال، ومن الإصدار 1.3 وأعلى.",
+      "a_en": "When a new version is out, a “New update available” window appears inside MANO. Press “Update now”, then close and reopen MANO. Updates work for anyone with an active trial or subscription, from version 1.3 on."
+    },
+    {
       "q_ar": "إيه اللي موجود في MANO؟",
       "q_en": "What's inside MANO?",
       "a_ar": "قوالب نصوص وكابشن، قوالب Glass بكتابة مباشرة، مكتبة ملحقات (أيقونات، إيموجي، نيون، أرقام، شرايط تحميل، 3D، خلفيات ومؤثرات)، Motion AI، وإزالة الخلفية لـ PNG.",
@@ -187,13 +227,50 @@
       "q_en": "Which system does it run on?",
       "a_ar": "المثبّت الحالي لـ DaVinci Resolve على Windows.",
       "a_en": "The current installer is for DaVinci Resolve on Windows."
-    },
-    {
-      "q_ar": "محتاج مساعدة؟",
-      "q_en": "Need help?",
-      "a_ar": "كلمنا على واتساب من الزرار اللي في قسم الأسعار.",
-      "a_en": "Message us on WhatsApp using the button in the pricing section."
     }
   ],
-  "site_url": "https://mano-plugin.pages.dev"
+  "site_url": "https://mano-plugin.pages.dev",
+  "whatsapp": "971504046867",
+  "instagram": "https://www.instagram.com/ahmed_sh_ph/",
+  "author_ar": "أحمد شعبان",
+  "author_en": "Ahmed Shaban",
+  "portfolio_url": "https://ahmed-sh-ph.pages.dev",
+  "videos": [
+    {
+      "mp4": "videos/launcher.mp4",
+      "webm": "videos/launcher.webm",
+      "poster": "videos/launcher.webp",
+      "caption_ar": "الشاشة الرئيسية",
+      "caption_en": "Launcher",
+      "desc_ar": "كل الأدوات في شاشة واحدة بحركة خفيفة",
+      "desc_en": "Every tool on one screen, with subtle motion"
+    },
+    {
+      "mp4": "videos/addons.mp4",
+      "webm": "videos/addons.webm",
+      "poster": "videos/addons.webp",
+      "caption_ar": "مكتبة الملحقات",
+      "caption_en": "Add-ons library",
+      "desc_ar": "افتح القسم وشوف العناصر قبل ما تضيفها",
+      "desc_en": "Open a pack and preview items before adding"
+    },
+    {
+      "mp4": "videos/bgr.mp4",
+      "webm": "videos/bgr.webm",
+      "poster": "videos/bgr.webp",
+      "caption_ar": "إزالة الخلفية",
+      "caption_en": "Background removal",
+      "desc_ar": "صورة أو فيديو ← شفاف في ثواني",
+      "desc_en": "Image or video to transparent in seconds"
+    },
+    {
+      "mp4": "videos/face.mp4",
+      "webm": "videos/face.webm",
+      "poster": "videos/face.webp",
+      "caption_ar": "تنعيم الوجه",
+      "caption_en": "Face smoothing",
+      "desc_ar": "إعدادات جاهزة وتحكم كامل",
+      "desc_en": "Presets and fine control"
+    }
+  ]
 }
