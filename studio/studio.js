@@ -63,29 +63,57 @@ function homeView(){
   g.onclick=e=>{const cb=e.target.closest("[data-cv]");if(cb){e.stopPropagation();coverUpload(cb.dataset.cv);return}const ce=e.target.closest("[data-ce]");if(ce){e.stopPropagation();coverEdit(ce.dataset.ce);return}const c=e.target.closest(".card");if(c)location.hash="#c/"+encodeURIComponent(c.dataset.id)};
   g.onkeydown=e=>{const c=e.target.closest(".card");if(c&&e.key=="Enter")c.click()};
   sortable(g,ids=>{if(ids.join()===cats.map(c=>c.id).join())return;cats=ids.map(id=>cats.find(c=>c.id==id));setDirty(true);homeView()},".card")}
-function tile(o,i,kind){const d=i>0&&o._div,on=SEL.has(o._id);return `<div class="t${d?" div":""}${o._new?" new":""}${SELMODE?" selm":""}${on?" sel":""}" data-id="${o._id}"><img loading="lazy" src="${esc(src(o))}" alt="">${kind=="v"?`<span class="vb">▶ فيديو</span>`:""}${SELMODE?`<span class="ck">${on?"✓":""}</span>`:""}
+function tile(o,i,kind){const d=i>0&&o._div,on=SEL.has(o._id);return `<div class="t${d?" div":""}${o._new?" new":""}${on?" sel":""}" data-id="${o._id}"><img loading="lazy" src="${esc(src(o))}" alt="">${kind=="v"?`<span class="vb">▶ فيديو</span>`:""}<span class="ck" title="تحديد">✓</span>
   <div class="bt">${kind=="v"?`<button data-a="poster" title="غيّر غلاف الفيديو من جهازك">🖼</button>`:""}${i>0?`<button data-a="div" title="${d?"إلغاء الخط الذهبي":"بداية مجموعة جديدة (خط ذهبي قبلها)"}">✂</button>`:""}<button data-a="cover" title="اجعلها صورة الغلاف">★</button><button class="x" data-a="del" title="حذف">✕</button></div></div>`}
-function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);if(catView._c!==cur){catView._c=cur;SEL.clear();SELMODE=false}
+function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);if(catView._c!==cur){catView._c=cur;SEL.clear();selAnchor=null}
   app.innerHTML=`<div class="head"><a class="ghost" href="#">→ القوائم</a><h2>${esc(c.name_ar)} <small style="font-size:.9rem;color:#CEA111">${n.p} صورة · ${n.v} فيديو</small></h2>
     <div class="cov">${b.cover?`<img src="${esc(src(b.cover))}" alt="">`:""}<span>صورة الغلاف<br><small>★ من الصور أو</small></span><button class="ghost" id="cvUp">🖼 غلاف من جهازك</button><button class="ghost" id="cvEd">✎ ضبط الغلاف</button></div>
-    <button class="ghost${SELMODE?" on":""}" id="selT">${SELMODE?"إنهاء التحديد":"☑ تحديد"}</button></div>
-  ${SELMODE?`<div class="selbar"><b>${SEL.size} محدد</b><button data-s="all">تحديد الكل</button><button data-s="none">إلغاء التحديد</button><button data-s="top">⇡ للأول</button><button data-s="end">⇣ للآخر</button>
-    <select id="selMv"><option value="">نقل إلى قائمة…</option>${cats.filter(x=>x.id!=cur).map(x=>`<option value="${esc(x.id)}">${esc(x.name_ar)}</option>`).join("")}</select><button data-s="del" class="red">🗑 حذف المحدد</button></div>`:""}
+    <button class="ghost" id="selT">☑ تحديد الكل</button></div>
+  ${`<div class="selbar" id="selbar" hidden><b id="selN"></b><button data-s="all">تحديد الكل</button><button data-s="none">إلغاء التحديد</button><button data-s="top">⇡ للأول</button><button data-s="end">⇣ للآخر</button>
+    <select id="selMv"><option value="">نقل إلى قائمة…</option>${cats.filter(x=>x.id!=cur).map(x=>`<option value="${esc(x.id)}">${esc(x.name_ar)}</option>`).join("")}</select><button data-s="del" class="red">🗑 حذف المحدد</button></div>`}
   <div class="drop" id="drop"><b>اسحب الصور والفيديوهات هنا</b><small>أو دوس عشان تختار من جهازك — تقدر تختار كذا ملف مرة واحدة (الفيديوهات الكبيرة بتتضغط تلقائيًا)</small></div>
   <div class="opts"><label><input type="checkbox" id="ng" ${S.newGroup?"checked":""}> مجموعة جديدة (خط ذهبي يفصلها عن اللي قبلها)</label>
     <label><input type="checkbox" id="as" ${S.atStart?"checked":""}> حطهم في أول القائمة</label></div>
-  <p class="hint">اسحب أي صورة عشان تغيّر مكانها · ✂ يحط خط ذهبي قبل الصورة · ★ يخليها غلاف القائمة · ✕ حذف</p>
+  <p class="hint">🖱 دوس على صورة عشان تحددها · <b>Ctrl</b>+دوسة تضيف/تشيل · <b>Shift</b>+دوسة تحدد من-لحد · اسحب في مكان فاضي عشان تحدد بمربع · اسحب صورة محددة عشان تنقل كل المحدد مع بعض · <b>Delete</b> حذف · <b>Ctrl+A</b> الكل · <b>Esc</b> إلغاء<br>✂ خط ذهبي قبل الصورة · ★ غلاف القائمة · ✕ حذف</p>
   <h3 class="sub">VIDEO</h3>${b.videos.length?`<div class="grid" id="gv">${b.videos.map((o,i)=>tile(o,i,"v")).join("")}</div>`:`<p class="empty">مفيش فيديوهات في القائمة دي.</p>`}
   <h3 class="sub">PHOTO</h3>${b.photos.length?`<div class="grid" id="gp">${b.photos.map((o,i)=>tile(o,i,"p")).join("")}</div>`:`<p class="empty">مفيش صور في القائمة دي.</p>`}`;
   $("ng").onchange=e=>S.newGroup=e.target.checked;$("as").onchange=e=>S.atStart=e.target.checked;
-  $("cvUp").onclick=()=>coverUpload(cur);$("cvEd").onclick=()=>coverEdit(cur);$("selT").onclick=()=>{SELMODE=!SELMODE;SEL.clear();catView()};
-  if(SELMODE){document.querySelectorAll(".selbar [data-s]").forEach(x=>x.onclick=()=>bulk(x.dataset.s));$("selMv").onchange=e=>{if(e.target.value)bulk("move",e.target.value)}}
+  $("cvUp").onclick=()=>coverUpload(cur);$("cvEd").onclick=()=>coverEdit(cur);$("selT").onclick=()=>bulk("all");
+  document.querySelectorAll(".selbar [data-s]").forEach(x=>x.onclick=()=>bulk(x.dataset.s));$("selMv").onchange=e=>{if(e.target.value)bulk("move",e.target.value)};selUpd();
   const dr=$("drop");dr.onclick=()=>{pick=null;$("fi").click()};
   dr.ondragover=e=>{e.preventDefault();dr.classList.add("on")};dr.ondragleave=()=>dr.classList.remove("on");
   dr.ondrop=e=>{e.preventDefault();dr.classList.remove("on");addFiles([...e.dataTransfer.files])};
   [["gv","videos"],["gp","photos"]].forEach(([id,k])=>{const g=$(id);if(!g)return;
-    g.onclick=e=>{const bt=e.target.closest("button[data-a]");if(!bt){const t=e.target.closest(".t");if(SELMODE&&t){SEL.has(t.dataset.id)?SEL.delete(t.dataset.id):SEL.add(t.dataset.id);catView()}return}const t=bt.closest(".t"),o=b[k].find(x=>x._id==t.dataset.id);act(bt.dataset.a,o,k)};
-    sortable(g,ids=>{const o=b[k].map(x=>x._id).join();if(ids.join()===o)return;b[k]=ids.map(id=>b[k].find(x=>x._id==id));setDirty(true);catView()})})}
+    g.onclick=e=>{const bt=e.target.closest("button[data-a]");if(!bt){const t=e.target.closest(".t");if(t)selClick(t.dataset.id,e);return}const t=bt.closest(".t"),o=b[k].find(x=>x._id==t.dataset.id);act(bt.dataset.a,o,k)};
+    sortable(g,(ids,dragged)=>{if(dragged&&SEL.has(dragged)&&SEL.size>1){const grp=b[k].map(x=>x._id).filter(id=>SEL.has(id));if(grp.length>1){
+        const rest=ids.filter(id=>!SEL.has(id)||id==dragged),at=rest.indexOf(dragged);rest.splice(at,1,...grp);ids=rest}}
+      const o=b[k].map(x=>x._id).join();if(ids.join()===o)return;b[k]=ids.map(id=>b[k].find(x=>x._id==id));setDirty(true);catView()})})}
+// ---------- تحديد زي سطح المكتب: دوسة، Ctrl، Shift، مربع بالماوس، كيبورد ----------
+let selAnchor=null;
+const selOrder=()=>{const b=st.by[cur];return b?[...b.videos,...b.photos].map(o=>o._id):[]};
+function selUpd(){document.querySelectorAll("#app .t").forEach(t=>t.classList.toggle("sel",SEL.has(t.dataset.id)));
+  const bar=$("selbar");if(bar){bar.hidden=!SEL.size;const n=$("selN");if(n)n.textContent=SEL.size+" محدد"}}
+function selClick(id,e){if(e.shiftKey&&selAnchor){const o=selOrder(),a=o.indexOf(selAnchor),z=o.indexOf(id);if(a>=0&&z>=0){if(!(e.ctrlKey||e.metaKey))SEL.clear();o.slice(Math.min(a,z),Math.max(a,z)+1).forEach(x=>SEL.add(x))}}
+  else if(e.ctrlKey||e.metaKey||e.target.closest(".ck")||matchMedia("(hover:none)").matches){SEL.has(id)?SEL.delete(id):SEL.add(id);selAnchor=id}
+  else{const only=SEL.size==1&&SEL.has(id);SEL.clear();if(!only)SEL.add(id);selAnchor=id}
+  selUpd()}
+// مربع التحديد: اسحب في أي مكان فاضي في صفحة القائمة
+app.addEventListener("pointerdown",e=>{if(!cur||!/^#c\//.test(location.hash)||e.button>0||e.pointerType!="mouse")return;
+  if(e.target.closest(".t,button,a,input,select,textarea,label,.drop,.selbar,.head,.opts,.cved"))return;
+  const sx=e.pageX,sy=e.pageY,base=(e.ctrlKey||e.metaKey||e.shiftKey)?new Set(SEL):new Set();let box=null,raf=0,lx=e.clientX,ly=e.clientY;
+  const tiles=[...document.querySelectorAll("#app .t")];
+  const upd=()=>{raf=0;const x1=Math.min(sx,lx+scrollX),x2=Math.max(sx,lx+scrollX),y1=Math.min(sy,ly+scrollY),y2=Math.max(sy,ly+scrollY);
+    Object.assign(box.style,{left:x1+"px",top:y1+"px",width:x2-x1+"px",height:y2-y1+"px"});
+    SEL=new Set(base);tiles.forEach(t=>{const r=t.getBoundingClientRect(),ax=r.left+scrollX,ay=r.top+scrollY;if(ax<x2&&ax+r.width>x1&&ay<y2&&ay+r.height>y1)SEL.add(t.dataset.id)});selUpd()};
+  const mv=ev=>{lx=ev.clientX;ly=ev.clientY;if(!box){if(Math.hypot(ev.pageX-sx,ev.pageY-sy)<5)return;box=document.createElement("div");box.className="marq";document.body.appendChild(box);document.body.classList.add("noselect")}
+    ev.preventDefault();if(ly<80)scrollBy(0,-20);else if(ly>innerHeight-110)scrollBy(0,20);if(!raf)raf=requestAnimationFrame(upd)};
+  const up=()=>{removeEventListener("pointermove",mv);removeEventListener("pointerup",up);document.body.classList.remove("noselect");
+    if(box){box.remove();if(SEL.size)selAnchor=[...SEL].pop()}else if(!(e.ctrlKey||e.metaKey||e.shiftKey)&&SEL.size){SEL.clear();selUpd()}};
+  addEventListener("pointermove",mv,{passive:false});addEventListener("pointerup",up)});
+addEventListener("keydown",e=>{if(!cur||!/^#c\//.test(location.hash)||e.target.closest("input,textarea,select,[contenteditable]")||document.querySelector(".cved"))return;
+  if((e.key=="Delete"||e.key=="Backspace")&&SEL.size){e.preventDefault();bulk("del")}
+  else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()=="a"){e.preventDefault();bulk("all")}
+  else if(e.key=="Escape"&&SEL.size){SEL.clear();selUpd()}});
 // ترتيب بالسحب (ماوس، وعلى الموبايل: اضغط مطوّل وبعدين اسحب)
 function sortable(g,done,sel,vert){sel=sel||".t";
   g.addEventListener("click",e=>{if(g._dragged){e.preventDefault();e.stopPropagation();g._dragged=false}},true);
@@ -93,6 +121,7 @@ function sortable(g,done,sel,vert){sel=sel||".t";
   g.addEventListener("pointerdown",e=>{const t=e.target.closest(sel);if(!t||t.parentNode!==g||e.target.closest("button,input,textarea,select,label")||e.button>0)return;
     const sx=e.clientX,sy=e.clientY,touch=e.pointerType!="mouse";let timer=0,on=false,fly=null,dx=0,dy=0;
     const begin=()=>{on=true;const r=t.getBoundingClientRect();dx=sx-r.left;dy=sy-r.top;fly=t.cloneNode(true);fly.classList.add("fly");
+      if(t.classList.contains("sel")){const n=g.querySelectorAll(sel+".sel").length;if(n>1){const bd=document.createElement("b");bd.className="flyn";bd.textContent=n;fly.appendChild(bd);g.querySelectorAll(sel+".sel").forEach(x=>{if(x!==t)x.classList.add("ghostT")})}}
       Object.assign(fly.style,{left:r.left+"px",top:r.top+"px",width:r.width+"px",height:r.height+"px"});document.body.appendChild(fly);t.classList.add("ghostT");if(navigator.vibrate)navigator.vibrate(15)};
     if(touch)timer=setTimeout(begin,280);
     const tm=ev=>{if(on)ev.preventDefault()};
@@ -104,7 +133,7 @@ function sortable(g,done,sel,vert){sel=sel||".t";
       const before=vert?ev.clientY<r.top+r.height/2:r.top>t.getBoundingClientRect().bottom||r.bottom<t.getBoundingClientRect().top?(rtl?!mid:mid):(o.compareDocumentPosition(t)&4?true:false);
       g.insertBefore(t,before?o:o.nextSibling)};
     const end=()=>{clearTimeout(timer);removeEventListener("pointermove",mv);removeEventListener("pointerup",end);removeEventListener("pointercancel",end);t.removeEventListener("touchmove",tm);
-      if(on){on=false;g._dragged=true;setTimeout(()=>g._dragged=false,400);fly.remove();t.classList.remove("ghostT");done([...g.children].map(x=>x.dataset.id))}};
+      if(on){on=false;g._dragged=true;setTimeout(()=>g._dragged=false,400);fly.remove();g.querySelectorAll(".ghostT").forEach(x=>x.classList.remove("ghostT"));done([...g.children].map(x=>x.dataset.id),t.dataset.id)}};
     addEventListener("pointermove",mv,{passive:false});addEventListener("pointerup",end);addEventListener("pointercancel",end);t.addEventListener("touchmove",tm,{passive:false})})}
 function act(a,o,k){const b=st.by[cur];
   if(a=="del"){if(!confirm("تحذف العنصر ده؟"))return;const i=b[k].indexOf(o);if(o._div&&b[k][i+1]&&!b[k][i+1]._div)b[k][i+1]._div=true;b[k].splice(i,1);if(b.cover&&o._new&&b.cover.image==o.image)b.cover._files=(o._files||[]).filter(f=>"/"+f.path==o.image||"/"+f.path==o.thumb)}
@@ -141,7 +170,7 @@ function coverEdit(cid){const c=cats.find(x=>x.id==cid),b=st.by[cid];let cv=b.co
     d.remove();setDirty(true);toast("اتضبط الغلاف — دوس نشر");route()};
   draw()}
 // ---------- أغلفة + تحديد متعدد ----------
-let SEL=new Set(),SELMODE=false;
+let SEL=new Set();
 async function makeImg(file,dir,name){const im=await decode(file),big=await enc(canvasOf(im.el,im.w,im.h,MAX_IMG),.85),th=await enc(canvasOf(im.el,im.w,im.h,MAX_TH),.78);
   const ip=`${dir}/${name}.${big.ext}`,tp=`${dir}/t/${name}.${th.ext}`;return {image:"/"+ip,thumb:"/"+tp,_url:URL.createObjectURL(th.blob),_files:[{path:ip,blob:big.blob},{path:tp,blob:th.blob}]}}
 function coverUpload(cid){if(busy)return;choose("image/*",false,async fs=>{const f=fs[0];if(!f)return;
@@ -153,8 +182,8 @@ function posterUpload(o){if(busy)return;choose("image/*",false,async fs=>{const 
     o.image="/"+pp;o.thumb="/"+pp;o._url=URL.createObjectURL(p.blob);o._new=1;o._files=(o._files||[]).filter(x=>"/"+x.path==o.video).concat([{path:pp,blob:p.blob}]);
     setDirty(true);toast("اتغيّر غلاف الفيديو — دوس نشر");catView()}catch(e){toast("ما قدرتش أقرا الصورة دي",1)}})}
 function bulk(a,arg){const b=st.by[cur],ks=["videos","photos"];
-  if(a=="all"){ks.forEach(k=>b[k].forEach(o=>SEL.add(o._id)));return catView()}
-  if(a=="none"){SEL.clear();return catView()}
+  if(a=="all"){ks.forEach(k=>b[k].forEach(o=>SEL.add(o._id)));return selUpd()}
+  if(a=="none"){SEL.clear();return selUpd()}
   if(!SEL.size){toast("حدد عناصر الأول",1);return}
   const n=SEL.size;
   if(a=="del"){if(!confirm(`تحذف ${n} عنصر؟`))return;
