@@ -51,7 +51,7 @@ window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.return
 
 // ---------- الشاشات ----------
 function route(){const h=location.hash,tab=/^#nav/.test(h)?"nav":/^#dl/.test(h)?"dl":/^#set/.test(h)?"set":/^#works/.test(h)?"works":"cats";
-  document.querySelectorAll("#tabs a").forEach(a=>a.classList.toggle("on",a.dataset.t==tab));cur=null;
+  document.querySelectorAll("#tabs a").forEach(a=>a.classList.toggle("on",a.dataset.t==(tab=="works"?"dl":tab)));cur=null;
   if(tab=="works"&&window.MANOWorks)window.MANOWorks(app);else if(tab=="nav")navView();else if(tab=="set")setView();else if(tab=="dl"){const m=h.match(/^#dl\/(.+)/);m?dlEdit(decodeURIComponent(m[1])):dlList()}
   else{const m=h.match(/^#c\/(.+)/);cur=m&&st.by[decodeURIComponent(m[1])]?decodeURIComponent(m[1]):null;cur?catView():homeView()}window.scrollTo(0,0)}
 window.onhashchange=()=>{if(st)route()};
@@ -75,7 +75,7 @@ function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);if
   <div class="drop" id="drop"><b>اسحب الصور والفيديوهات هنا</b><small>أو دوس عشان تختار من جهازك — تقدر تختار كذا ملف مرة واحدة (الفيديوهات الكبيرة بتتضغط تلقائيًا)</small></div>
   <div class="opts"><label><input type="checkbox" id="ng" ${S.newGroup?"checked":""}> مجموعة جديدة (خط ذهبي يفصلها عن اللي قبلها)</label>
     <label><input type="checkbox" id="as" ${S.atStart?"checked":""}> حطهم في أول القائمة</label></div>
-  <p class="hint">🖱 دوس على صورة عشان تحددها · <b>Ctrl</b>+دوسة تضيف/تشيل · <b>Shift</b>+دوسة تحدد من-لحد · اسحب في مكان فاضي عشان تحدد بمربع · اسحب صورة محددة عشان تنقل كل المحدد مع بعض · <b>Delete</b> حذف · <b>Ctrl+A</b> الكل · <b>Esc</b> إلغاء<br>✂ خط ذهبي قبل الصورة · ★ غلاف القائمة · ✕ حذف</p>
+  <p class="hint">🖱 دوس على أي صورة تتحدد (ودوسة تانية تلغيها) · اسحب الماوس على الصور عشان تحدد كذا صورة مرة واحدة · <b>Shift</b>+دوسة تحدد من-لحد · اسحب صورة <b>محددة</b> عشان تنقل كل المحدد مع بعض · <b>Delete</b> حذف · <b>Ctrl+A</b> الكل · <b>Esc</b> إلغاء<br>✂ خط ذهبي قبل الصورة · ★ غلاف القائمة · ✕ حذف</p>
   <h3 class="sub">VIDEO</h3>${b.videos.length?`<div class="grid" id="gv">${b.videos.map((o,i)=>tile(o,i,"v")).join("")}</div>`:`<p class="empty">مفيش فيديوهات في القائمة دي.</p>`}
   <h3 class="sub">PHOTO</h3>${b.photos.length?`<div class="grid" id="gp">${b.photos.map((o,i)=>tile(o,i,"p")).join("")}</div>`:`<p class="empty">مفيش صور في القائمة دي.</p>`}`;
   $("ng").onchange=e=>S.newGroup=e.target.checked;$("as").onchange=e=>S.atStart=e.target.checked;
@@ -85,7 +85,7 @@ function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);if
   dr.ondragover=e=>{e.preventDefault();dr.classList.add("on")};dr.ondragleave=()=>dr.classList.remove("on");
   dr.ondrop=e=>{e.preventDefault();dr.classList.remove("on");addFiles([...e.dataTransfer.files])};
   [["gv","videos"],["gp","photos"]].forEach(([id,k])=>{const g=$(id);if(!g)return;
-    g.onclick=e=>{const bt=e.target.closest("button[data-a]");if(!bt){const t=e.target.closest(".t");if(t)selClick(t.dataset.id,e);return}const t=bt.closest(".t"),o=b[k].find(x=>x._id==t.dataset.id);act(bt.dataset.a,o,k)};
+    g.onclick=e=>{if(app._marq&&Date.now()-app._marq<300)return;const bt=e.target.closest("button[data-a]");if(!bt){const t=e.target.closest(".t");if(t)selClick(t.dataset.id,e);return}const t=bt.closest(".t"),o=b[k].find(x=>x._id==t.dataset.id);act(bt.dataset.a,o,k)};
     sortable(g,(ids,dragged)=>{if(dragged&&SEL.has(dragged)&&SEL.size>1){const grp=b[k].map(x=>x._id).filter(id=>SEL.has(id));if(grp.length>1){
         const rest=ids.filter(id=>!SEL.has(id)||id==dragged),at=rest.indexOf(dragged);rest.splice(at,1,...grp);ids=rest}}
       const o=b[k].map(x=>x._id).join();if(ids.join()===o)return;b[k]=ids.map(id=>b[k].find(x=>x._id==id));setDirty(true);catView()})})}
@@ -95,13 +95,13 @@ const selOrder=()=>{const b=st.by[cur];return b?[...b.videos,...b.photos].map(o=
 function selUpd(){document.querySelectorAll("#app .t").forEach(t=>t.classList.toggle("sel",SEL.has(t.dataset.id)));
   const bar=$("selbar");if(bar){bar.hidden=!SEL.size;const n=$("selN");if(n)n.textContent=SEL.size+" محدد"}}
 function selClick(id,e){if(e.shiftKey&&selAnchor){const o=selOrder(),a=o.indexOf(selAnchor),z=o.indexOf(id);if(a>=0&&z>=0){if(!(e.ctrlKey||e.metaKey))SEL.clear();o.slice(Math.min(a,z),Math.max(a,z)+1).forEach(x=>SEL.add(x))}}
-  else if(e.ctrlKey||e.metaKey||e.target.closest(".ck")||matchMedia("(hover:none)").matches){SEL.has(id)?SEL.delete(id):SEL.add(id);selAnchor=id}
-  else{const only=SEL.size==1&&SEL.has(id);SEL.clear();if(!only)SEL.add(id);selAnchor=id}
+  else{SEL.has(id)?SEL.delete(id):SEL.add(id);selAnchor=id}
   selUpd()}
 // مربع التحديد: اسحب في أي مكان فاضي في صفحة القائمة
 app.addEventListener("pointerdown",e=>{if(!cur||!/^#c\//.test(location.hash)||e.button>0||e.pointerType!="mouse")return;
-  if(e.target.closest(".t,button,a,input,select,textarea,label,.drop,.selbar,.head,.opts,.cved"))return;
-  const sx=e.pageX,sy=e.pageY,base=(e.ctrlKey||e.metaKey||e.shiftKey)?new Set(SEL):new Set();let box=null,raf=0,lx=e.clientX,ly=e.clientY;
+  if(e.target.closest("button,a,input,select,textarea,label,.drop,.selbar,.head,.opts,.cved,.ck"))return;
+  const onT=e.target.closest(".t");if(onT&&SEL.has(onT.dataset.id))return;      // سحب صورة محددة = نقل المحدد
+  const sx=e.pageX,sy=e.pageY,base=(onT||e.ctrlKey||e.metaKey||e.shiftKey)?new Set(SEL):new Set();let box=null,raf=0,lx=e.clientX,ly=e.clientY;
   const tiles=[...document.querySelectorAll("#app .t")];
   const upd=()=>{raf=0;const x1=Math.min(sx,lx+scrollX),x2=Math.max(sx,lx+scrollX),y1=Math.min(sy,ly+scrollY),y2=Math.max(sy,ly+scrollY);
     Object.assign(box.style,{left:x1+"px",top:y1+"px",width:x2-x1+"px",height:y2-y1+"px"});
@@ -109,7 +109,7 @@ app.addEventListener("pointerdown",e=>{if(!cur||!/^#c\//.test(location.hash)||e.
   const mv=ev=>{lx=ev.clientX;ly=ev.clientY;if(!box){if(Math.hypot(ev.pageX-sx,ev.pageY-sy)<5)return;box=document.createElement("div");box.className="marq";document.body.appendChild(box);document.body.classList.add("noselect")}
     ev.preventDefault();if(ly<80)scrollBy(0,-20);else if(ly>innerHeight-110)scrollBy(0,20);if(!raf)raf=requestAnimationFrame(upd)};
   const up=()=>{removeEventListener("pointermove",mv);removeEventListener("pointerup",up);document.body.classList.remove("noselect");
-    if(box){box.remove();if(SEL.size)selAnchor=[...SEL].pop()}else if(!(e.ctrlKey||e.metaKey||e.shiftKey)&&SEL.size){SEL.clear();selUpd()}};
+    if(box){box.remove();if(SEL.size)selAnchor=[...SEL].pop();app._marq=Date.now()}else if(!onT&&!(e.ctrlKey||e.metaKey||e.shiftKey)&&SEL.size){SEL.clear();selUpd()}};
   addEventListener("pointermove",mv,{passive:false});addEventListener("pointerup",up)});
 addEventListener("keydown",e=>{if(!cur||!/^#c\//.test(location.hash)||e.target.closest("input,textarea,select,[contenteditable]")||document.querySelector(".cved"))return;
   if((e.key=="Delete"||e.key=="Backspace")&&SEL.size){e.preventDefault();bulk("del")}
@@ -119,7 +119,7 @@ addEventListener("keydown",e=>{if(!cur||!/^#c\//.test(location.hash)||e.target.c
 function sortable(g,done,sel,vert){sel=sel||".t";
   g.addEventListener("click",e=>{if(g._dragged){e.preventDefault();e.stopPropagation();g._dragged=false}},true);
   g.addEventListener("contextmenu",e=>{if(e.target.closest(sel))e.preventDefault()});
-  g.addEventListener("pointerdown",e=>{const t=e.target.closest(sel);if(!t||t.parentNode!==g||e.target.closest("button,input,textarea,select,label")||e.button>0)return;
+  g.addEventListener("pointerdown",e=>{const t=e.target.closest(sel);if(t&&sel==".t"&&e.pointerType=="mouse"&&!t.classList.contains("sel"))return;if(!t||t.parentNode!==g||e.target.closest("button,input,textarea,select,label")||e.button>0)return;
     const sx=e.clientX,sy=e.clientY,touch=e.pointerType!="mouse";let timer=0,on=false,fly=null,dx=0,dy=0;
     const begin=()=>{on=true;const r=t.getBoundingClientRect();dx=sx-r.left;dy=sy-r.top;fly=t.cloneNode(true);fly.classList.add("fly");
       if(t.classList.contains("sel")){const n=g.querySelectorAll(sel+".sel").length;if(n>1){const bd=document.createElement("b");bd.className="flyn";bd.textContent=n;fly.appendChild(bd);g.querySelectorAll(sel+".sel").forEach(x=>{if(x!==t)x.classList.add("ghostT")})}}
@@ -300,7 +300,8 @@ function mnEdit(){const m=mnObj;if(!m){location.hash="#dl";return}
   <div class="form"><div class="covbox"><img src="https://mano-plugin.pages.dev/images/og.jpg" alt=""><span>رابط MANO بيظهر أول حاجة في قائمة Download في موقعك.<br><small>محتوى صفحة MANO نفسها (المميزات، السعر، الإصدار) بيتعدّل من موقع MANO.</small></span></div>
    <label class="sw" style="font-weight:700"><input type="checkbox" id="m_show" ${m.show===false?"":"checked"}> ظاهر في قائمة Download</label>
    <div class="two"><label>الاسم في القائمة (عربي)<input id="m_ar" value="${esc(m.menu_ar||"")}" placeholder="MANO — إضافة DaVinci Resolve"></label><label>الاسم في القائمة (English)<input id="m_en" dir="ltr" value="${esc(m.menu_en||"")}" placeholder="MANO — DaVinci Resolve plugin"></label></div>
-   <label>رابط موقع MANO<input id="m_url" dir="ltr" value="${esc(m.site_url||"")}" placeholder="https://mano-plugin.pages.dev"></label></div>`;
+   <label>رابط موقع MANO<input id="m_url" dir="ltr" value="${esc(m.site_url||"")}" placeholder="https://mano-plugin.pages.dev"></label>
+   <div class="fl">أعمال الناس<div class="covbox"><a class="gold" href="#works" style="text-decoration:none;padding:10px 26px;font-size:.95rem">🖼 أعمال MANO — مراجعة ونشر</a><span><small>الأعمال اللي الناس بترفعها من موقع MANO: تنشرها أو تخفيها أو تحذفها.</small></span></div></div></div>`;
   $("m_show").onchange=e=>{m.show=e.target.checked;touch()};
   [["m_ar","menu_ar"],["m_en","menu_en"],["m_url","site_url"]].forEach(([id,k])=>$(id).oninput=e=>{m[k]=e.target.value;touch()})}
 function dlEdit(k){if(k=="mano")return mnEdit();const x=dlItems.find(i=>i._k==k);if(!x){location.hash="#dl";return}

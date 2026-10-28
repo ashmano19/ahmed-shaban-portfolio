@@ -19,7 +19,7 @@ async function api(path,opt={}){const t=await token();if(!t){loginView();throw n
   if(!r.ok){const e=new Error("HTTP "+r.status+" "+(await r.text().catch(()=>"")).slice(0,160));throw e}
   return r.status==204?null:r.json().catch(()=>null)}
 
-function loginView(msg){root.innerHTML=`<div class="login"><h2>أعمال MANO</h2><p>${esc(msg||"ادخل بإيميل حساب MANO بتاعك، وهيوصلك كود.")}</p>
+function loginView(msg){root.innerHTML=`<div class="head"><a class="ghost" href="#dl/mano">→ MANO</a></div><div class="login"><h2>أعمال MANO</h2><p>${esc(msg||"ادخل بإيميل حساب MANO بتاعك، وهيوصلك كود.")}</p>
   <div class="form" style="max-width:360px;margin:auto"><input id="mwE" placeholder="email@example.com" dir="ltr" value="${esc(sess&&sess.email||"")}">
   <button class="gold" id="mwS">ابعت الكود</button><div id="mwC" hidden class="form"><input id="mwK" placeholder="الكود" dir="ltr" inputmode="numeric" maxlength="8"><button class="gold" id="mwV">دخول</button></div></div></div>`;
   const E=document.getElementById("mwE"),K=document.getElementById("mwK");
@@ -40,7 +40,7 @@ function card(w){const src=pub(w.path),ig=(w.instagram||"").replace(/^@/,""),d=n
   <small>${d.toLocaleDateString("ar-EG",{day:"numeric",month:"short",year:"numeric"})} · ${w.kind=="video"?"فيديو":"صورة"}${w.approved?" · <em>منشور</em>":""}</small></div>
   <div class="mwb">${w.approved?`<button class="ghost" data-a="hide">إخفاء</button>`:`<button class="gold" data-a="ok">نشر ✓</button>`}<button class="ghost red" data-a="del">حذف</button></div></div>`}
 function view(){const pend=items.filter(w=>!w.approved),pubd=items.filter(w=>w.approved),list=filter=="new"?pend:pubd;
-  root.innerHTML=`<div class="head"><h2>أعمال MANO</h2><button class="ghost" id="mwR">تحديث ↻</button><button class="ghost" id="mwO">خروج من Supabase</button></div>
+  root.innerHTML=`<div class="head"><a class="ghost" href="#dl/mano">→ MANO</a><h2>أعمال MANO</h2><button class="ghost" id="mwR">تحديث ↻</button><button class="ghost" id="mwO">خروج من Supabase</button></div>
   <p class="hint">الأعمال اللي الناس بترفعها من <a href="https://mano-plugin.pages.dev/#mnWorksS" target="_blank">موقع MANO</a>. «نشر» يخليها تظهر في الموقع على طول — مش محتاج زرار النشر اللي تحت.</p>
   <div class="tb" style="margin-bottom:14px"><button data-f="new" style="${filter=="new"?"border-color:#CEA111;color:#CEA111":""}">جديد للمراجعة (${pend.length})</button><button data-f="pub" style="${filter=="pub"?"border-color:#CEA111;color:#CEA111":""}">منشور (${pubd.length})</button></div>
   <div class="mwg">${list.length?list.map(card).join(""):`<p class="empty">${filter=="new"?"مفيش أعمال جديدة 👌":"لسه مفيش أعمال منشورة"}</p>`}</div>`;
