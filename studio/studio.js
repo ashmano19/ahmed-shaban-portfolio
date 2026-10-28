@@ -6,7 +6,7 @@ const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",
 let TOKEN="",base="",cats=[],origCatsDoc={},origCatIds="",st=null,orig=[],cur=null,dirty=false,busy=false;
 // باقي الموقع: القائمة العلوية، الداونلود، الإعدادات
 const NAVD=[{type:"link",label_ar:"أعمالي",label_en:"Portfolio",href:"#gallery",show:true},{type:"link",label_ar:"تواصل معي",label_en:"Contact",href:"#contact",show:true},{type:"downloads",label_ar:"Download",label_en:"Download",show:true}];
-let galBase="",navItems=[],dlItems=[],dlOrig=[],setObj={},conObj={},docs0={},KN=0;const dlFiles=new Map(),dlDocs={};
+let galBase="",navItems=[],dlItems=[],dlOrig=[],setObj={},conObj={},mnObj=null,docs0={},KN=0;const dlFiles=new Map(),dlDocs={};
 const key=()=>"k"+(KN++);
 const S={newGroup:true,atStart:false};
 
@@ -35,7 +35,7 @@ async function start(){app.innerHTML=`<p class="empty">جاري تحميل ال�
     const ref=await gh("/git/ref/heads/"+BR);base=ref.object.sha;
     const raw=p=>gh("/contents/"+p+"?ref="+base,{raw:1,headers:{Accept:"application/vnd.github.raw+json"}});
     const opt=(p,d)=>raw(p).then(JSON.parse).catch(e=>{if(e.status==404)return d;throw e});
-    const [g,c,nv,dl,se,co]=await Promise.all([raw("content/gallery.json"),raw("content/categories.json"),opt("content/nav.json",null),opt("content/downloads.json",{items:[]}),opt("content/settings.json",{}),opt("content/contact.json",{})]);
+    const [g,c,nv,dl,se,co,mn]=await Promise.all([raw("content/gallery.json"),raw("content/categories.json"),opt("content/nav.json",null),opt("content/downloads.json",{items:[]}),opt("content/settings.json",{}),opt("content/contact.json",{}),opt("content/mano.json",null)]);mnObj=mn;
     dlDocs.dl=dl;navItems=((nv&&nv.items)||NAVD).map(x=>Object.assign({},x,{_k:key()}));
     dlItems=(dl.items||[]).map(x=>Object.assign({},x,{_k:key()}));dlOrig=JSON.parse(JSON.stringify(dl.items||[]));setObj=se;conObj=co;docs0=siteDocs();if(!nv)docs0["content/nav.json"]="";
     orig=JSON.parse(g).photos||[];origCatsDoc=JSON.parse(c);cats=origCatsDoc.categories||[];origCatIds=cats.map(x=>x.id).join();st=C.load(orig,cats);galBase=JSON.stringify(C.build(C.load(orig,cats),cats));
@@ -57,17 +57,20 @@ function route(){const h=location.hash,tab=/^#nav/.test(h)?"nav":/^#dl/.test(h)?
 window.onhashchange=()=>{if(st)route()};
 const src=o=>o._url||o.thumb||o.image;
 function homeView(){
-  app.innerHTML=`<div class="head"><h2>اختار القائمة</h2></div><p class="hint">اسحب أي قائمة عشان تغيّر ترتيبها في الموقع (على الموبايل: اضغط مطوّل وبعدين اسحب) — وبعدين دوس نشر</p><div class="cards" id="cards">${cats.map(c=>{const b=st.by[c.id],n=C.counts(b),cv=b.cover||b.photos[0]||b.videos[0],nw=[b.cover,...b.videos,...b.photos].filter(o=>o&&o._new).length;
-    return `<div class="card" data-id="${esc(c.id)}" role="link" tabindex="0">${cv?`<img src="${esc(src(cv))}" data-full="${esc(cv.image||"")}" alt="" draggable="false" decoding="async">`:""}${nw?`<i>${nw} جديد</i>`:""}<div><b>${esc(c.name_ar)}</b><span>${n.p} صورة · ${n.v} فيديو</span></div></div>`}).join("")}</div>`;
+  app.innerHTML=`<div class="head"><h2>اختار القائمة</h2></div><p class="hint">اسحب أي قائمة عشان تغيّر ترتيبها في الموقع (على الموبايل: اضغط مطوّل وبعدين اسحب) — وبعدين دوس نشر</p><div class="cards" id="cards">${cats.map(c=>{const b=st.by[c.id],n=C.counts(b),cv=b.cover||b.photos[0]||b.videos[0],cst=cv&&cv.cover?`object-position:${cv.pos||"50% 50%"};object-fit:${cv.fit||"cover"};transform:scale(${cv.zoom||1});transform-origin:${cv.pos||"50% 50%"}`:"",nw=[b.cover,...b.videos,...b.photos].filter(o=>o&&o._new).length;
+    return `<div class="card" data-id="${esc(c.id)}" role="link" tabindex="0">${cv?`<img src="${esc(src(cv))}" data-full="${esc(cv.image||"")}" alt="" draggable="false" decoding="async" style="${cst}">`:""}${nw?`<i>${nw} جديد</i>`:""}<span class="cvbs"><button class="cvb" data-ce="${esc(c.id)}" title="ضبط مكان وحجم الغلاف">✎ ضبط</button><button class="cvb" data-cv="${esc(c.id)}" title="غيّر غلاف القائمة من جهازك">🖼 غلاف</button></span><div><b>${esc(c.name_ar)}</b><span>${n.p} صورة · ${n.v} فيديو</span></div></div>`}).join("")}</div>`;
   const g=$("cards");g.querySelectorAll("img").forEach(im=>im.onerror=()=>{if(im.dataset.full&&im.src.indexOf(im.dataset.full)<0)im.src=im.dataset.full});
-  g.onclick=e=>{const c=e.target.closest(".card");if(c)location.hash="#c/"+encodeURIComponent(c.dataset.id)};
+  g.onclick=e=>{const cb=e.target.closest("[data-cv]");if(cb){e.stopPropagation();coverUpload(cb.dataset.cv);return}const ce=e.target.closest("[data-ce]");if(ce){e.stopPropagation();coverEdit(ce.dataset.ce);return}const c=e.target.closest(".card");if(c)location.hash="#c/"+encodeURIComponent(c.dataset.id)};
   g.onkeydown=e=>{const c=e.target.closest(".card");if(c&&e.key=="Enter")c.click()};
   sortable(g,ids=>{if(ids.join()===cats.map(c=>c.id).join())return;cats=ids.map(id=>cats.find(c=>c.id==id));setDirty(true);homeView()},".card")}
-function tile(o,i,kind){const d=i>0&&o._div;return `<div class="t${d?" div":""}${o._new?" new":""}" data-id="${o._id}"><img loading="lazy" src="${esc(src(o))}" alt="">${kind=="v"?`<span class="vb">▶ فيديو</span>`:""}
-  <div class="bt">${i>0?`<button data-a="div" title="${d?"إلغاء الخط الذهبي":"بداية مجموعة جديدة (خط ذهبي قبلها)"}">✂</button>`:""}<button data-a="cover" title="اجعلها صورة الغلاف">★</button><button class="x" data-a="del" title="حذف">✕</button></div></div>`}
-function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);
+function tile(o,i,kind){const d=i>0&&o._div,on=SEL.has(o._id);return `<div class="t${d?" div":""}${o._new?" new":""}${SELMODE?" selm":""}${on?" sel":""}" data-id="${o._id}"><img loading="lazy" src="${esc(src(o))}" alt="">${kind=="v"?`<span class="vb">▶ فيديو</span>`:""}${SELMODE?`<span class="ck">${on?"✓":""}</span>`:""}
+  <div class="bt">${kind=="v"?`<button data-a="poster" title="غيّر غلاف الفيديو من جهازك">🖼</button>`:""}${i>0?`<button data-a="div" title="${d?"إلغاء الخط الذهبي":"بداية مجموعة جديدة (خط ذهبي قبلها)"}">✂</button>`:""}<button data-a="cover" title="اجعلها صورة الغلاف">★</button><button class="x" data-a="del" title="حذف">✕</button></div></div>`}
+function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);if(catView._c!==cur){catView._c=cur;SEL.clear();SELMODE=false}
   app.innerHTML=`<div class="head"><a class="ghost" href="#">→ القوائم</a><h2>${esc(c.name_ar)} <small style="font-size:.9rem;color:#CEA111">${n.p} صورة · ${n.v} فيديو</small></h2>
-    <div class="cov">${b.cover?`<img src="${esc(src(b.cover))}" alt="">`:""}<span>صورة الغلاف<br><small>غيّرها بزرار ★</small></span></div></div>
+    <div class="cov">${b.cover?`<img src="${esc(src(b.cover))}" alt="">`:""}<span>صورة الغلاف<br><small>★ من الصور أو</small></span><button class="ghost" id="cvUp">🖼 غلاف من جهازك</button><button class="ghost" id="cvEd">✎ ضبط الغلاف</button></div>
+    <button class="ghost${SELMODE?" on":""}" id="selT">${SELMODE?"إنهاء التحديد":"☑ تحديد"}</button></div>
+  ${SELMODE?`<div class="selbar"><b>${SEL.size} محدد</b><button data-s="all">تحديد الكل</button><button data-s="none">إلغاء التحديد</button><button data-s="top">⇡ للأول</button><button data-s="end">⇣ للآخر</button>
+    <select id="selMv"><option value="">نقل إلى قائمة…</option>${cats.filter(x=>x.id!=cur).map(x=>`<option value="${esc(x.id)}">${esc(x.name_ar)}</option>`).join("")}</select><button data-s="del" class="red">🗑 حذف المحدد</button></div>`:""}
   <div class="drop" id="drop"><b>اسحب الصور والفيديوهات هنا</b><small>أو دوس عشان تختار من جهازك — تقدر تختار كذا ملف مرة واحدة (الفيديوهات الكبيرة بتتضغط تلقائيًا)</small></div>
   <div class="opts"><label><input type="checkbox" id="ng" ${S.newGroup?"checked":""}> مجموعة جديدة (خط ذهبي يفصلها عن اللي قبلها)</label>
     <label><input type="checkbox" id="as" ${S.atStart?"checked":""}> حطهم في أول القائمة</label></div>
@@ -75,11 +78,13 @@ function catView(){const c=cats.find(x=>x.id==cur),b=st.by[cur],n=C.counts(b);
   <h3 class="sub">VIDEO</h3>${b.videos.length?`<div class="grid" id="gv">${b.videos.map((o,i)=>tile(o,i,"v")).join("")}</div>`:`<p class="empty">مفيش فيديوهات في القائمة دي.</p>`}
   <h3 class="sub">PHOTO</h3>${b.photos.length?`<div class="grid" id="gp">${b.photos.map((o,i)=>tile(o,i,"p")).join("")}</div>`:`<p class="empty">مفيش صور في القائمة دي.</p>`}`;
   $("ng").onchange=e=>S.newGroup=e.target.checked;$("as").onchange=e=>S.atStart=e.target.checked;
+  $("cvUp").onclick=()=>coverUpload(cur);$("cvEd").onclick=()=>coverEdit(cur);$("selT").onclick=()=>{SELMODE=!SELMODE;SEL.clear();catView()};
+  if(SELMODE){document.querySelectorAll(".selbar [data-s]").forEach(x=>x.onclick=()=>bulk(x.dataset.s));$("selMv").onchange=e=>{if(e.target.value)bulk("move",e.target.value)}}
   const dr=$("drop");dr.onclick=()=>{pick=null;$("fi").click()};
   dr.ondragover=e=>{e.preventDefault();dr.classList.add("on")};dr.ondragleave=()=>dr.classList.remove("on");
   dr.ondrop=e=>{e.preventDefault();dr.classList.remove("on");addFiles([...e.dataTransfer.files])};
   [["gv","videos"],["gp","photos"]].forEach(([id,k])=>{const g=$(id);if(!g)return;
-    g.onclick=e=>{const bt=e.target.closest("button[data-a]");if(!bt)return;const t=bt.closest(".t"),o=b[k].find(x=>x._id==t.dataset.id);act(bt.dataset.a,o,k)};
+    g.onclick=e=>{const bt=e.target.closest("button[data-a]");if(!bt){const t=e.target.closest(".t");if(SELMODE&&t){SEL.has(t.dataset.id)?SEL.delete(t.dataset.id):SEL.add(t.dataset.id);catView()}return}const t=bt.closest(".t"),o=b[k].find(x=>x._id==t.dataset.id);act(bt.dataset.a,o,k)};
     sortable(g,ids=>{const o=b[k].map(x=>x._id).join();if(ids.join()===o)return;b[k]=ids.map(id=>b[k].find(x=>x._id==id));setDirty(true);catView()})})}
 // ترتيب بالسحب (ماوس، وعلى الموبايل: اضغط مطوّل وبعدين اسحب)
 function sortable(g,done,sel,vert){sel=sel||".t";
@@ -104,9 +109,61 @@ function sortable(g,done,sel,vert){sel=sel||".t";
 function act(a,o,k){const b=st.by[cur];
   if(a=="del"){if(!confirm("تحذف العنصر ده؟"))return;const i=b[k].indexOf(o);if(o._div&&b[k][i+1]&&!b[k][i+1]._div)b[k][i+1]._div=true;b[k].splice(i,1);if(b.cover&&o._new&&b.cover.image==o.image)b.cover._files=(o._files||[]).filter(f=>"/"+f.path==o.image||"/"+f.path==o.thumb)}
   else if(a=="div")o._div=!o._div;
+  else if(a=="poster"){posterUpload(o);return}
   else if(a=="cover"){const c=cats.find(x=>x.id==cur);if(!b.cover)b.cover={_id:"c"+Date.now(),category:cur,title_ar:c.name_ar,title_en:c.name_en,cover:true};
     b.cover.image=o.image;b.cover.thumb=o.thumb||o.image;b.cover._url=o._url;b.cover._files=[];toast("تم تغيير صورة الغلاف")}
   setDirty(true);catView()}
+// ---------- محرر الغلاف: مكان الصورة (اسحب)، تكبير، ملء/احتواء، وحجم الكارت في الموقع ----------
+function coverEdit(cid){const c=cats.find(x=>x.id==cid),b=st.by[cid];let cv=b.cover;
+  if(!cv){const f=b.photos[0]||b.videos[0];if(!f){toast("ضيف صور للقائمة الأول",1);return}
+    cv=b.cover={_id:"c"+Date.now(),category:cid,title_ar:c.name_ar,title_en:c.name_en,cover:true,image:f.image,thumb:f.thumb||f.image,_url:f._url,_files:[]}}
+  const P=(cv.pos||"50% 50%").split(" ").map(v=>parseFloat(v)),S0={x:isNaN(P[0])?50:P[0],y:isNaN(P[1])?50:P[1],z:+cv.zoom||1,fit:cv.fit||"cover",size:cv.size||"normal"},v=Object.assign({},S0);
+  const d=document.createElement("div");d.className="cved";
+  d.innerHTML=`<div class="cvbox"><h3>غلاف «${esc(c.name_ar)}»</h3><p class="hint">اسحب الصورة عشان تختار الجزء اللي يظهر · العجلة أو السلايدر للتكبير</p>
+   <div class="cvstage"><div class="cvcard" id="cvC"><img id="cvI" src="${esc(src(cv))}" alt="" draggable="false"><div><b>${esc(c.name_ar)}</b><span>معاينة زي الموقع</span></div></div></div>
+   <div class="cvrow"><label>تكبير <input type="range" id="cvZ" min="1" max="3" step="0.01"></label><b id="cvZv"></b></div>
+   <div class="cvrow"><span>طريقة العرض</span><label class="sw"><input type="radio" name="cvf" value="cover"> ملء الكارت</label><label class="sw"><input type="radio" name="cvf" value="contain"> الصورة كاملة</label></div>
+   <div class="cvrow"><span>حجم الكارت في الموقع</span><label class="sw"><input type="radio" name="cvs" value="normal"> عادي</label><label class="sw"><input type="radio" name="cvs" value="wide"> عريض</label><label class="sw"><input type="radio" name="cvs" value="big"> كبير</label></div>
+   <div class="cvrow"><button class="ghost" id="cvRe">↺ رجّع الافتراضي</button><span style="flex:1"></span><button class="ghost" id="cvNo">إلغاء</button><button class="gold" id="cvOk">تم</button></div></div>`;
+  document.body.appendChild(d);const C_=d.querySelector("#cvC"),I=d.querySelector("#cvI"),Z=d.querySelector("#cvZ");
+  const draw=()=>{C_.className="cvcard "+v.size;I.style.objectPosition=v.x.toFixed(1)+"% "+v.y.toFixed(1)+"%";I.style.objectFit=v.fit;I.style.transform="scale("+v.z+")";I.style.transformOrigin=v.x+"% "+v.y+"%";
+    Z.value=v.z;d.querySelector("#cvZv").textContent=Math.round(v.z*100)+"%";d.querySelectorAll("[name=cvf]").forEach(r=>r.checked=r.value==v.fit);d.querySelectorAll("[name=cvs]").forEach(r=>r.checked=r.value==v.size)};
+  Z.oninput=()=>{v.z=+Z.value;draw()};d.querySelectorAll("[name=cvf]").forEach(r=>r.onchange=()=>{v.fit=r.value;draw()});d.querySelectorAll("[name=cvs]").forEach(r=>r.onchange=()=>{v.size=r.value;draw()});
+  C_.onwheel=e=>{e.preventDefault();v.z=Math.max(1,Math.min(3,+(v.z*(e.deltaY<0?1.05:1/1.05)).toFixed(3)));draw()};
+  C_.onpointerdown=e=>{e.preventDefault();const r=C_.getBoundingClientRect(),sx=e.clientX,sy=e.clientY,x0=v.x,y0=v.y;C_.setPointerCapture(e.pointerId);
+    C_.onpointermove=ev=>{v.x=Math.max(0,Math.min(100,x0-(ev.clientX-sx)/r.width*100/v.z));v.y=Math.max(0,Math.min(100,y0-(ev.clientY-sy)/r.height*100/v.z));draw()};
+    C_.onpointerup=()=>{C_.onpointermove=null}};
+  d.querySelector("#cvRe").onclick=()=>{Object.assign(v,{x:50,y:50,z:1,fit:"cover",size:"normal"});draw()};
+  d.querySelector("#cvNo").onclick=()=>d.remove();d.onclick=e=>{if(e.target==d)d.remove()};
+  d.querySelector("#cvOk").onclick=()=>{const pos=Math.round(v.x)+"% "+Math.round(v.y)+"%";
+    if(pos=="50% 50%")delete cv.pos;else cv.pos=pos;if(v.z>1.001)cv.zoom=+v.z.toFixed(2);else delete cv.zoom;
+    if(v.fit=="contain")cv.fit="contain";else delete cv.fit;if(v.size!="normal")cv.size=v.size;else delete cv.size;
+    d.remove();setDirty(true);toast("اتضبط الغلاف — دوس نشر");route()};
+  draw()}
+// ---------- أغلفة + تحديد متعدد ----------
+let SEL=new Set(),SELMODE=false;
+async function makeImg(file,dir,name){const im=await decode(file),big=await enc(canvasOf(im.el,im.w,im.h,MAX_IMG),.85),th=await enc(canvasOf(im.el,im.w,im.h,MAX_TH),.78);
+  const ip=`${dir}/${name}.${big.ext}`,tp=`${dir}/t/${name}.${th.ext}`;return {image:"/"+ip,thumb:"/"+tp,_url:URL.createObjectURL(th.blob),_files:[{path:ip,blob:big.blob},{path:tp,blob:th.blob}]}}
+function coverUpload(cid){if(busy)return;choose("image/*",false,async fs=>{const f=fs[0];if(!f)return;
+  try{const c=cats.find(x=>x.id==cid),b=st.by[cid];const r=await makeImg(f,"images/uploads/s/"+cid+"/cover","c"+Date.now().toString(36));
+    if(!b.cover)b.cover={_id:"c"+Date.now(),category:cid,title_ar:c.name_ar,title_en:c.name_en,cover:true};Object.assign(b.cover,r,{_new:1});
+    setDirty(true);toast("اتغيّر غلاف «"+c.name_ar+"» — دوس نشر");route()}catch(e){toast("ما قدرتش أقرا الصورة دي",1)}})}
+function posterUpload(o){if(busy)return;choose("image/*",false,async fs=>{const f=fs[0];if(!f)return;
+  try{const im=await decode(f),p=await enc(canvasOf(im.el,im.w,im.h,720),.8),pp=`images/uploads/s/${cur}/v/p${Date.now().toString(36)}.${p.ext}`;
+    o.image="/"+pp;o.thumb="/"+pp;o._url=URL.createObjectURL(p.blob);o._new=1;o._files=(o._files||[]).filter(x=>"/"+x.path==o.video).concat([{path:pp,blob:p.blob}]);
+    setDirty(true);toast("اتغيّر غلاف الفيديو — دوس نشر");catView()}catch(e){toast("ما قدرتش أقرا الصورة دي",1)}})}
+function bulk(a,arg){const b=st.by[cur],ks=["videos","photos"];
+  if(a=="all"){ks.forEach(k=>b[k].forEach(o=>SEL.add(o._id)));return catView()}
+  if(a=="none"){SEL.clear();return catView()}
+  if(!SEL.size){toast("حدد عناصر الأول",1);return}
+  const n=SEL.size;
+  if(a=="del"){if(!confirm(`تحذف ${n} عنصر؟`))return;
+    ks.forEach(k=>{const keep=[];let carry=false;b[k].forEach(o=>{if(SEL.has(o._id)){if(o._div)carry=true;return}if(carry){o._div=true;carry=false}keep.push(o)});b[k]=keep});toast(`اتحذف ${n} عنصر — دوس نشر`)}
+  else if(a=="top"||a=="end")ks.forEach(k=>{const s1=b[k].filter(o=>SEL.has(o._id)),s2=b[k].filter(o=>!SEL.has(o._id));s1.forEach(o=>o._div=false);b[k]=a=="top"?s1.concat(s2):s2.concat(s1)});
+  else if(a=="move"){const t=cats.find(x=>x.id==arg),tb=st.by[arg];if(!t||!tb)return;
+    ks.forEach(k=>{const mv=b[k].filter(o=>SEL.has(o._id));b[k]=b[k].filter(o=>!SEL.has(o._id));mv.forEach((o,i)=>{o.category=arg;o.title_ar=t.name_ar;o.title_en=t.name_en;o._div=i==0&&tb[k].length>0});tb[k].push(...mv)});
+    toast(`اتنقل ${n} عنصر لـ «${t.name_ar}» — دوس نشر`)}
+  SEL.clear();setDirty(true);catView()}
 $("fi").onchange=e=>{const fs=[...e.target.files];e.target.value="";if(pick){const p=pick;pick=null;p(fs)}else addFiles(fs)};
 let pick=null;function choose(accept,multi,cb){const f=$("fi");f.accept=accept;f.multiple=!!multi;pick=cb;f.click();setTimeout(()=>{f.accept="image/*,video/mp4,video/quicktime,video/webm";f.multiple=true},0)}
 
@@ -158,7 +215,7 @@ function siteDocs(){
   const dl=dlItems.map(x=>{const r=C.clean(x);if(x._ed){const im=[...new Set([r.cover,...C.bodyImgs(r.body)].filter(Boolean))];if(im.length)r.images=im;else delete r.images}return r});
   return {"content/nav.json":JSON.stringify({items:navItems.map(x=>{const r=strip(x);r.show=x.show!==false;return r})},null,2),
     "content/downloads.json":JSON.stringify(Object.assign({},dlDocs.dl||{},{items:dl}),null,2),
-    "content/settings.json":JSON.stringify(setObj,null,2),"content/contact.json":JSON.stringify(conObj,null,2)}}
+    "content/settings.json":JSON.stringify(setObj,null,2),"content/contact.json":JSON.stringify(conObj,null,2),...(mnObj?{"content/mano.json":JSON.stringify(mnObj,null,2)}:{})}}
 function usedDlFiles(){const u=new Set();dlItems.forEach(x=>C.dlPaths(x).forEach(p=>u.add(p.slice(1))));return [...dlFiles.keys()].filter(p=>u.has(p)&&!dlFiles.get(p).done)}
 const dsrc=p=>{const f=p&&dlFiles.get(String(p).replace(/^\//,""));return f?f.url:p};
 const touch=()=>setDirty(true);
@@ -181,15 +238,25 @@ function navView(){
 function dlList(){
   app.innerHTML=`<div class="head"><h2>مشاركات الداونلود</h2><button class="ghost" id="addP">+ مشاركة جديدة</button></div>
   <p class="hint">دي المشاركات اللي بتظهر في قائمة Download فوق. اسحب عشان تغيّر الترتيب · دوس على أي مشاركة عشان تعدّلها</p>
+  ${mnObj?`<h3 class="sub">MANO</h3><div class="cards"><div class="card dcard" id="mnCard" role="link" tabindex="0"><img src="https://mano-plugin.pages.dev/images/og.jpg" alt="" draggable="false">${mnObj.show===false?`<i>مخفي</i>`:""}<div><b>${esc(mnObj.menu_ar||"MANO")}</b><span>${esc((mnObj.site_url||"https://mano-plugin.pages.dev").replace(/^https?:\/\//,""))} · إضافة DaVinci Resolve</span></div></div></div><h3 class="sub">المشاركات</h3>`:""}
   ${dlItems.length?`<div class="cards" id="dcards">${dlItems.map(x=>`<div class="card dcard" data-id="${x._k}" role="link" tabindex="0">${x.cover?`<img src="${esc(dsrc(x.cover))}" alt="" draggable="false">`:`<span class="nocov">بدون غلاف</span>`}<div><b>${esc(x.title||"بدون عنوان")}</b><span>${x.page_url?"صفحة مستقلة "+esc(x.page_url):x.slug?"صفحة تحميل":x.url?"رابط خارجي":"—"}${x.download_url?" · ⬇ فيه تحميل":""}</span></div></div>`).join("")}</div>`:`<p class="empty">لسه مفيش مشاركات. دوس «مشاركة جديدة».</p>`}`;
   $("addP").onclick=()=>{const o={_k:key(),_ed:1,title:"",slug:"",cover:"",body:"",download_url:""};dlItems.unshift(o);touch();location.hash="#dl/"+o._k};
+  if($("mnCard")){$("mnCard").onclick=()=>location.hash="#dl/mano";$("mnCard").onkeydown=e=>{if(e.key=="Enter")location.hash="#dl/mano"}}
   const g=$("dcards");if(!g)return;
   g.querySelectorAll("img").forEach(im=>im.onerror=()=>im.remove());
   g.onclick=e=>{const c=e.target.closest(".card");if(c)location.hash="#dl/"+c.dataset.id};g.onkeydown=e=>{const c=e.target.closest(".card");if(c&&e.key=="Enter")c.click()};
   sortable(g,ids=>{if(ids.join()===dlItems.map(x=>x._k).join())return;dlItems=ids.map(id=>dlItems.find(x=>x._k==id));touch();dlList()},".card")}
 
 // الداونلود: تعديل مشاركة
-function dlEdit(k){const x=dlItems.find(i=>i._k==k);if(!x){location.hash="#dl";return}
+function mnEdit(){const m=mnObj;if(!m){location.hash="#dl";return}
+  app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ الداونلود</a><h2>MANO</h2><a class="ghost" href="${esc(m.site_url||"https://mano-plugin.pages.dev")}" target="_blank" rel="noopener">فتح موقع MANO ↗</a></div>
+  <div class="form"><div class="covbox"><img src="https://mano-plugin.pages.dev/images/og.jpg" alt=""><span>رابط MANO بيظهر أول حاجة في قائمة Download في موقعك.<br><small>محتوى صفحة MANO نفسها (المميزات، السعر، الإصدار) بيتعدّل من موقع MANO.</small></span></div>
+   <label class="sw" style="font-weight:700"><input type="checkbox" id="m_show" ${m.show===false?"":"checked"}> ظاهر في قائمة Download</label>
+   <div class="two"><label>الاسم في القائمة (عربي)<input id="m_ar" value="${esc(m.menu_ar||"")}" placeholder="MANO — إضافة DaVinci Resolve"></label><label>الاسم في القائمة (English)<input id="m_en" dir="ltr" value="${esc(m.menu_en||"")}" placeholder="MANO — DaVinci Resolve plugin"></label></div>
+   <label>رابط موقع MANO<input id="m_url" dir="ltr" value="${esc(m.site_url||"")}" placeholder="https://mano-plugin.pages.dev"></label></div>`;
+  $("m_show").onchange=e=>{m.show=e.target.checked;touch()};
+  [["m_ar","menu_ar"],["m_en","menu_en"],["m_url","site_url"]].forEach(([id,k])=>$(id).oninput=e=>{m[k]=e.target.value;touch()})}
+function dlEdit(k){if(k=="mano")return mnEdit();const x=dlItems.find(i=>i._k==k);if(!x){location.hash="#dl";return}
   app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ كل المشاركات</a><h2>${x.title?esc(x.title):"مشاركة جديدة"}</h2><button class="ghost red" id="delP">حذف المشاركة</button></div>
   <div class="form">
    <label>العنوان<input id="f_title" value="${esc(x.title)}" placeholder="مثلاً: حزمة تأثيرات نصوص عربية"></label>
