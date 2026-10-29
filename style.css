@@ -88,39 +88,3 @@ footer{padding-bottom:84px}
 @media(max-width:700px){.grid.just{--rh:150px;gap:8px}}
 #lbv{aspect-ratio:var(--lar,9/16);height:min(84vh,calc((100vw - 220px) / var(--larn,.5625)));max-width:calc(100vw - 220px)}
 @media(max-width:700px){#lbv{height:min(84vh,calc(100vw / var(--larn,.5625)));max-width:100vw}}
-
-/* Personal avatar: shares the hero's smoothed pointer motion. */
-.hero-avatar{width:clamp(170px,21vw,255px);margin:0 auto 14px;perspective:900px}
-.hero-avatar img{display:block;width:100%;height:auto;filter:drop-shadow(0 12px 28px #0009);transform:rotateY(calc(var(--mx)*12deg)) rotateX(calc(var(--my)*-9deg));transform-origin:50% 65%;will-change:transform}
-@media(max-width:700px){.hero-avatar{width:180px;margin-bottom:12px}.hero-in{margin-top:0!important}.hero{padding-top:110px!important}}
-@media(prefers-reduced-motion:reduce){.hero-avatar img{transform:none;will-change:auto}}
-
-/* Reveal the portrait out of a clean, dark hero. */
-.hero{background:#0f0f0f!important}
-.hero-bg{display:none}
-.hero:before{background:radial-gradient(ellipse at 50% 38%,rgba(206,161,17,.055),transparent 55%)!important}
-.hero-avatar{opacity:0}
-.hero-avatar.is-ready{animation:avatar-appear 1.8s cubic-bezier(.16,1,.3,1) .15s both}
-@keyframes avatar-appear{0%{opacity:0;filter:blur(20px);transform:translateY(24px) scale(.88);clip-path:inset(100% 0 0)}45%{opacity:.65;filter:blur(5px)}100%{opacity:1;filter:blur(0);transform:translateY(0) scale(1);clip-path:inset(0)}}
-@media(prefers-reduced-motion:reduce){.hero-avatar,.hero-avatar.is-ready{opacity:1;animation:none;filter:none;transform:none;clip-path:none}}
-
-/* A subtle portrait behind the brand, without taking layout space. */
-.hero-in{isolation:isolate}
-.hero-avatar{position:absolute;z-index:-1;left:50%;top:50%;width:clamp(260px,34vw,400px);margin:0;transform:translate(-50%,-66%);pointer-events:none}
-.hero-avatar.is-ready{animation:avatar-behind 2s ease-out .15s both}
-.hero-avatar img{filter:grayscale(.2) drop-shadow(0 0 35px rgba(206,161,17,.12))}
-@keyframes avatar-behind{from{opacity:0;filter:blur(18px);clip-path:inset(100% 0 0)}to{opacity:.16;filter:blur(0);clip-path:inset(0)}}
-@media(max-width:700px){.hero-avatar{width:280px;top:46%;margin:0}.hero-in{margin-top:55px!important}.hero{padding-bottom:90px!important}}
-@media(prefers-reduced-motion:reduce){.hero-avatar,.hero-avatar.is-ready{animation:none;opacity:.16;transform:translate(-50%,-66%)}}
-
-/* Split hero: brand on the left, animated portrait on the right. */
-.hero-in{width:min(1100px,88%);min-height:420px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-right:55%;box-sizing:border-box;isolation:isolate}
-.hero-avatar{left:auto;right:0;top:50%;width:clamp(280px,34vw,430px);transform:translateY(-50%);z-index:0}
-.hero-avatar.is-ready{animation:avatar-side-reveal 1.7s ease-out both}
-.hero-avatar img{animation:avatar-float 7s ease-in-out infinite;filter:drop-shadow(0 18px 35px #0008);transform-origin:50% 65%}
-.hero-logo,#tagline,.hero-in>.btn{position:relative;z-index:1}
-.hero-in>.btn{margin:5px 0!important;min-width:150px}
-@keyframes avatar-side-reveal{from{opacity:0;filter:blur(18px)}to{opacity:.85;filter:blur(0)}}
-@keyframes avatar-float{0%,100%{transform:translateY(0) rotateY(-9deg) rotateZ(-2deg)}50%{transform:translateY(-18px) rotateY(9deg) rotateZ(2deg)}}
-@media(max-width:700px){.hero-in{width:90%;padding:0;min-height:0;margin-top:0!important;display:flex;flex-direction:column}.hero-avatar{position:relative;right:auto;left:auto;top:auto;width:min(250px,65vw);transform:none;order:0;margin:0 auto 24px}.hero-logo{order:1}#tagline{order:2}.hero-in>.btn{order:3}.hero{padding-top:105px!important;padding-bottom:55px!important;max-height:none}}
-@media(prefers-reduced-motion:reduce){.hero-avatar.is-ready{animation:none;opacity:.85;transform:translateY(-50%)}.hero-avatar img{animation:none;transform:none}@media(max-width:700px){.hero-avatar.is-ready{transform:none}}}
