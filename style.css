@@ -103,3 +103,12 @@ footer{padding-bottom:84px}
 .hero-avatar.is-ready{animation:avatar-appear 1.8s cubic-bezier(.16,1,.3,1) .15s both}
 @keyframes avatar-appear{0%{opacity:0;filter:blur(20px);transform:translateY(24px) scale(.88);clip-path:inset(100% 0 0)}45%{opacity:.65;filter:blur(5px)}100%{opacity:1;filter:blur(0);transform:translateY(0) scale(1);clip-path:inset(0)}}
 @media(prefers-reduced-motion:reduce){.hero-avatar,.hero-avatar.is-ready{opacity:1;animation:none;filter:none;transform:none;clip-path:none}}
+
+/* A subtle portrait behind the brand, without taking layout space. */
+.hero-in{isolation:isolate}
+.hero-avatar{position:absolute;z-index:-1;left:50%;top:50%;width:clamp(260px,34vw,400px);margin:0;transform:translate(-50%,-66%);pointer-events:none}
+.hero-avatar.is-ready{animation:avatar-behind 2s ease-out .15s both}
+.hero-avatar img{filter:grayscale(.2) drop-shadow(0 0 35px rgba(206,161,17,.12))}
+@keyframes avatar-behind{from{opacity:0;filter:blur(18px);clip-path:inset(100% 0 0)}to{opacity:.16;filter:blur(0);clip-path:inset(0)}}
+@media(max-width:700px){.hero-avatar{width:280px;top:46%;margin:0}.hero-in{margin-top:55px!important}.hero{padding-bottom:90px!important}}
+@media(prefers-reduced-motion:reduce){.hero-avatar,.hero-avatar.is-ready{animation:none;opacity:.16;transform:translate(-50%,-66%)}}
