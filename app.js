@@ -9,7 +9,7 @@ Promise.all(["settings","categories","gallery","contact","downloads","featured",
 function render(){const t=T[L],s=D.s;document.documentElement.lang=L;document.documentElement.dir=L=="ar"?"rtl":"ltr";
 $("lang").textContent=L=="ar"?"EN":"عربي";document.querySelectorAll("[data-i]").forEach(e=>e.textContent=t[e.dataset.i]);
 $("fname").textContent=s["name_"+L];$("tagline").textContent=s["tagline_"+L];document.title=s["name_"+L];
-$("heroBg").style.backgroundImage=`url(${s.hero_image})`;$("yr").textContent="2017";
+$("heroBg").style.backgroundImage="none";$("yr").textContent="2017";
 renderNav();renderBook();
 if(renderMano())return;
 if(renderDl())return;
