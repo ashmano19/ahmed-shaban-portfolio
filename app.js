@@ -16,7 +16,7 @@ if(renderDl())return;
 const m=location.hash.match(/^#\/category\/(.+)/);cat=m?decodeURIComponent(m[1]):null;const cc=D.c.find(c=>c.id==cat);
 if(!cc)cat=null;$("back").hidden=!cat;$("back").textContent=t.back;$("gTitle").textContent=cat?cc["name_"+L]:t.gallery;
 $("cards").innerHTML=cat?"":D.c.map(c=>{const ps=D.g.filter(p=>p.category==c.id);if(!ps.length)return"";const cv=ps.find(p=>p.cover)||ps[0];const it=ps.filter(p=>!p.cover),nv=it.filter(p=>p.video).length,np=it.length-nv;const cp=/^\d{1,3}% \d{1,3}%$/.test(cv.pos||"")?cv.pos:"50% 50%",cz=Math.min(3,Math.max(1,+cv.zoom||1)),cs=cv.size=="wide"||cv.size=="big"?" "+cv.size:"";return `<a class="card${cs}" href="#/category/${c.id}"><img loading="lazy" src="${cv.thumb||cv.image}" alt="" style="object-position:${cp};object-fit:${cv.fit=="contain"?"contain":"cover"};--z:${cz};transform-origin:${cp}"><div><b>${c["name_"+L]}</b><span>${[np?np+" "+t.photos:"",nv?nv+" "+t.videos:""].filter(Boolean).join(" · ")}</span></div></a>`}).join("");
-list=cat?D.g.filter(p=>p.category==cat&&!p.cover):D.f;const mx=cat&&cc.order=="mixed";if(cat&&!mx){const pf=cc.order=="photos";list=pf?[...list.filter(p=>!p.video),...list.filter(p=>p.video)]:[...list.filter(p=>p.video),...list.filter(p=>!p.video)]}$("grid").classList.toggle("feat",!cat);$("grid").classList.remove("reels");$("grid").classList.add("just");
+list=cat?D.g.filter(p=>p.category==cat&&!p.cover):D.f;const visitorOrder=cat?mediaOrderPreference(cat):"",effectiveOrder=visitorOrder||(cc&&cc.order)||"videos",mx=cat&&effectiveOrder=="mixed";if(cat&&!mx){const pf=effectiveOrder=="photos";list=pf?[...list.filter(p=>!p.video),...list.filter(p=>p.video)]:[...list.filter(p=>p.video),...list.filter(p=>!p.video)]}$("grid").classList.toggle("feat",!cat);$("grid").classList.remove("reels");$("grid").classList.add("just");
 const AR=p=>p.w&&p.h?p.w/p.h:(p.video?.5625:.8),JF='<i class="jf"></i>';
 $("grid").innerHTML=list.map((p,i)=>((h=>h?(i?JF:"")+h:"")(cat&&!mx&&(i==0||!!list[i-1].video!=!!p.video)?`<h3 class="gsub">${p.video?"VIDEO":"PHOTO"}</h3>`:(cat&&i>0&&p.group!=null&&list[i-1].group!=null&&p.group!=list[i-1].group?`<hr class="gdiv">`:"")))+`<figure data-i="${i}"${p.video?' class="vid"':""} style="--ar:${AR(p).toFixed(4)}">${p.video&&p.preview?`<video muted loop playsinline autoplay preload="none" poster="${p.thumb||p.image}" data-src="${p.preview}"></video>`:`<img loading="lazy" decoding="async" src="${p.thumb||p.image}" alt="${p["title_"+L]||""}">`}<figcaption>${p["title_"+L]||""}</figcaption></figure>`).join("")+JF;
 // لو صورة لسه بتتنشر (أو النت قطع) نعيد تحميلها تلقائيًا بدل ما تفضل فاضية
@@ -24,7 +24,7 @@ $("grid").querySelectorAll("img").forEach(im=>{let n=0;const base=im.getAttribut
 $("grid").querySelectorAll("figure").forEach(f=>{const p=list[+f.dataset.i];if(p.w&&p.h)return;const fix=(w,h)=>{if(w&&h)f.style.setProperty("--ar",(w/h).toFixed(4))};
   const im=f.querySelector("img");if(im){if(im.complete)fix(im.naturalWidth,im.naturalHeight);else im.addEventListener("load",()=>fix(im.naturalWidth,im.naturalHeight),{once:true})}
   else{const t=new Image();t.onload=()=>fix(t.naturalWidth,t.naturalHeight);t.src=p.thumb||p.image}});
-$("grid").querySelectorAll("figure").forEach(f=>f.onclick=()=>open(+f.dataset.i));vidObs();
+$("grid").querySelectorAll("figure").forEach(f=>f.onclick=()=>open(+f.dataset.i));vidObs();renderMediaOrder(cat,cc);
 const k=D.k,links=[["email","mailto:"+k.email,k.email],["phone","tel:"+k.phone,k.phone],["whatsapp","https://wa.me/"+k.whatsapp,"+"+k.whatsapp],["instagram",k.instagram,"@"],["facebook",k.facebook,"f"],["behance",k.behance,"b"]].filter(x=>x[1]&&!/(undefined|:|\+)$/.test(x[1])&&k[x[0]]);
 $("contactBox").innerHTML=`<div class="cicons">${links.filter(x=>IC[x[0]]).map(([n,h])=>`<a class="ci" href="${esc(h)}" target="_blank" rel="noopener" aria-label="${t[n]}" title="${t[n]}">${IC[n]}</a>`).join("")}</div>`+links.filter(x=>!IC[x[0]]).map(([n,h,v])=>`<a href="${h}" target="_blank"><small>${t[n]}</small><span dir="ltr">${n=="instagram"||n=="facebook"||n=="behance"?h.replace(/https?:\/\/(www\.)?/,""):v}</span></a>`).join("")}
 let VO;function vidObs(){if(VO)VO.disconnect();const vs=$("grid").querySelectorAll("video[data-src]");if(!vs.length)return;
@@ -79,3 +79,16 @@ function renderBook(){const t=T[L],s=D.s||{},wa=String((D.k||{}).whatsapp||"").r
 if(!wa){h.hidden=f.hidden=true;return}
 const lb=s["book_"+L]||t.book,msg=s["book_msg_"+L]||s.book_msg_ar||t.bookMsg,u="https://wa.me/"+wa+"?text="+encodeURIComponent(msg);
 h.hidden=f.hidden=false;h.href=f.href=u;h.textContent=lb;f.innerHTML=IC.whatsapp+"<span>"+esc(lb)+"</span>";f.setAttribute("aria-label",lb+" — "+t.whatsapp)}
+function mediaOrderPreference(id){try{return localStorage.getItem("portfolio-media-order:"+id)||""}catch{return ""}}
+function renderMediaOrder(id,cc){
+ let panel=document.getElementById("mediaOrder");
+ if(!panel){panel=document.createElement("div");panel.id="mediaOrder";panel.className="media-order";panel.setAttribute("role","group");$("grid").before(panel)}
+ const items=id?D.g.filter(p=>p.category==id&&!p.cover):[];
+ panel.hidden=!id||!items.some(p=>p.video)||!items.some(p=>!p.video);
+ if(panel.hidden){panel.replaceChildren();return}
+ const ar=L=="ar",selected=mediaOrderPreference(id)||cc.order||"videos";
+ panel.setAttribute("aria-label",ar?"ترتيب عرض الأعمال":"Media display order");
+ panel.innerHTML='<span>'+(ar?"ترتيب العرض:":"Show first:")+'</span>'+[["photos",ar?"الصور أولًا":"Photos first"],["videos",ar?"الفيديو أولًا":"Videos first"]].map(([value,label])=>'<button type="button" data-order="'+value+'" aria-pressed="'+(selected==value)+'">'+label+'</button>').join("");
+ panel.querySelectorAll("button").forEach(button=>button.onclick=()=>{try{localStorage.setItem("portfolio-media-order:"+id,button.dataset.order)}catch{}render()});
+}
+(function(){const style=document.createElement("style");style.textContent='.media-order{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:16px 0 24px;color:inherit}.media-order[hidden]{display:none}.media-order>span{font-size:14px;opacity:.75}.media-order button{font:inherit;line-height:1.5;padding:9px 17px;border:1px solid #847044;border-radius:999px;background:transparent;color:inherit;cursor:pointer;transition:background .15s,color .15s}.media-order button[aria-pressed="true"]{background:#d7b46a;border-color:#d7b46a;color:#17130d}.media-order button:hover{border-color:#e7ca8c}.media-order button:focus-visible{outline:2px solid #e7ca8c;outline-offset:3px}';document.head.appendChild(style)})();
