@@ -86,9 +86,9 @@ function renderMediaOrder(id,cc){
  const items=id?D.g.filter(p=>p.category==id&&!p.cover):[];
  panel.hidden=!id||!items.some(p=>p.video)||!items.some(p=>!p.video);
  if(panel.hidden){panel.replaceChildren();return}
- const ar=L=="ar",selected=mediaOrderPreference(id)||cc.order||"videos";
+ const ar=L=="ar",selected=mediaOrderPreference(id)||"original";
  panel.setAttribute("aria-label",ar?"ترتيب عرض الأعمال":"Media display order");
- panel.innerHTML='<span>'+(ar?"ترتيب العرض:":"Show first:")+'</span>'+[["photos",ar?"الصور أولًا":"Photos first"],["videos",ar?"الفيديو أولًا":"Videos first"]].map(([value,label])=>'<button type="button" data-order="'+value+'" aria-pressed="'+(selected==value)+'">'+label+'</button>').join("");
- panel.querySelectorAll("button").forEach(button=>button.onclick=()=>{try{localStorage.setItem("portfolio-media-order:"+id,button.dataset.order)}catch{}render()});
+ panel.innerHTML='<span>'+(ar?"ترتيب العرض:":"Show first:")+'</span>'+[["original",ar?"الأصلي":"Original"],["photos",ar?"الصور أولًا":"Photos first"],["videos",ar?"الفيديو أولًا":"Videos first"]].map(([value,label])=>'<button type="button" data-order="'+value+'" aria-pressed="'+(selected==value)+'">'+label+'</button>').join("");
+ panel.querySelectorAll("button").forEach(button=>button.onclick=()=>{try{button.dataset.order=="original"?localStorage.removeItem("portfolio-media-order:"+id):localStorage.setItem("portfolio-media-order:"+id,button.dataset.order)}catch{}render()});
 }
 (function(){const style=document.createElement("style");style.textContent='.media-order{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:16px 0 24px;color:inherit}.media-order[hidden]{display:none}.media-order>span{font-size:14px;opacity:.75}.media-order button{font:inherit;line-height:1.5;padding:9px 17px;border:1px solid #847044;border-radius:999px;background:transparent;color:inherit;cursor:pointer;transition:background .15s,color .15s}.media-order button[aria-pressed="true"]{background:#d7b46a;border-color:#d7b46a;color:#17130d}.media-order button:hover{border-color:#e7ca8c}.media-order button:focus-visible{outline:2px solid #e7ca8c;outline-offset:3px}';document.head.appendChild(style)})();
