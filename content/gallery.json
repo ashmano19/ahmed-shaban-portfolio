@@ -2742,14 +2742,16 @@
       "group": 13
     },
     {
-      "image": "/images/behance/v/gym-reels-6.webp",
+      "image": "/images/uploads/canva-7b69b0d3fcc2ed544e161e783338a280.webp",
       "title_ar": "الرياضه",
       "title_en": "Sports",
       "category": "gym-reels",
       "cover": true,
       "group": 0,
-      "thumb": "/images/behance/v/gym-reels-6.webp",
-      "pos": "58% 41%"
+      "thumb": "/images/uploads/canva-7b69b0d3fcc2ed544e161e783338a280.webp",
+      "pos": "68% 58%",
+      "w": 724,
+      "h": 1280
     },
     {
       "image": "/images/behance/v/gym-reels-6.webp",
@@ -2759,6 +2761,18 @@
       "category": "gym-reels",
       "thumb": "/images/behance/v/gym-reels-6.webp",
       "preview": "/images/behance/vp/gym-reels-6.mp4",
+      "group": 1
+    },
+    {
+      "category": "gym-reels",
+      "title_ar": "الرياضه",
+      "title_en": "Sports",
+      "w": 724,
+      "h": 1280,
+      "image": "/images/uploads/canva-7b69b0d3fcc2ed544e161e783338a280.webp",
+      "thumb": "/images/uploads/canva-7b69b0d3fcc2ed544e161e783338a280.webp",
+      "video": "https://ahmeduea.my.canva.site/ah-sh-ph/_assets/video/7b69b0d3fcc2ed544e161e783338a280.mp4",
+      "preview": "https://ahmeduea.my.canva.site/ah-sh-ph/_assets/video/7b69b0d3fcc2ed544e161e783338a280.mp4",
       "group": 1
     },
     {
@@ -2800,18 +2814,6 @@
       "thumb": "/images/behance/v/gym-reels-5.webp",
       "preview": "/images/behance/vp/gym-reels-5.mp4",
       "group": 1
-    },
-    {
-      "category": "gym-reels",
-      "title_ar": "الرياضه",
-      "title_en": "Sports",
-      "w": 724,
-      "h": 1280,
-      "image": "/images/uploads/canva-7b69b0d3fcc2ed544e161e783338a280.webp",
-      "thumb": "/images/uploads/canva-7b69b0d3fcc2ed544e161e783338a280.webp",
-      "video": "https://ahmeduea.my.canva.site/ah-sh-ph/_assets/video/7b69b0d3fcc2ed544e161e783338a280.mp4",
-      "preview": "https://ahmeduea.my.canva.site/ah-sh-ph/_assets/video/7b69b0d3fcc2ed544e161e783338a280.mp4",
-      "group": 2
     },
     {
       "image": "/images/behance/p8/009.webp",
