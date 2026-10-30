@@ -1,7 +1,7 @@
 {
   "show": true,
   "version": "1.4",
-  "download_url": "https://drive.google.com/drive/folders/1yYNIso8Zlb7wdRVQh79CGoTPyiUfdol1?usp=sharing",
+  "download_url": "",
   "file_size": "",
   "tagline_ar": "إضافة لـ DaVinci Resolve بتجمع قوالب النصوص والـ Glass ومكتبة ملحقات كاملة وأدوات ذكاء اصطناعي، في مكان واحد.",
   "tagline_en": "A DaVinci Resolve plugin that brings text templates, Glass titles, a full add-ons library and AI tools together in one place.",
@@ -137,7 +137,7 @@
   "period_en": "/ month",
   "plan_ar": "اشتراك شهري",
   "plan_en": "Monthly subscription",
-  "subscribe_url": "https://buy.stripe.com/test_cNidR9gvSafE9L3g4BfrW00",
+  "subscribe_url": "",
   "trial_days": 2,
   "flow_ar": [
     "حمّل MANO وثبّته.",
