@@ -5201,6 +5201,18 @@
       "group": 4
     },
     {
+      "category": "events",
+      "title_ar": "مناسبات وحفلات",
+      "title_en": "Events & Parties",
+      "w": 1280,
+      "h": 720,
+      "image": "/images/uploads/s/events/v/mvvja1k1-1.webp",
+      "thumb": "/images/uploads/s/events/v/mvvja1k1-1.webp",
+      "video": "/images/uploads/s/events/v/mvvja1k1-1.mp4",
+      "preview": "/images/uploads/s/events/v/mvvja1k1-1.mp4",
+      "group": 4
+    },
+    {
       "image": "/images/uploads/be-12-events.png",
       "title_ar": "صيف",
       "title_en": "Summer",
