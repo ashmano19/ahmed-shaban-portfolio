@@ -698,6 +698,18 @@
       "group": 3
     },
     {
+      "category": "realestate",
+      "title_ar": "عقارات",
+      "title_en": "Real Estate",
+      "w": 720,
+      "h": 1280,
+      "image": "/images/uploads/s/realestate/v/mvvkhsdt-1.webp",
+      "thumb": "/images/uploads/s/realestate/v/mvvkhsdt-1.webp",
+      "video": "/images/uploads/s/realestate/v/mvvkhsdt-1.mp4",
+      "preview": "/images/uploads/s/realestate/v/mvvkhsdt-1.mp4",
+      "group": 3
+    },
+    {
       "image": "/images/behance/p3/001.webp",
       "thumb": "/images/behance/p3/t/001.webp",
       "title_ar": "عقارات",
