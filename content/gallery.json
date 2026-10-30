@@ -2801,7 +2801,43 @@
       "thumb": "/images/uploads/canva-66657464a9ecc26b415236720598551e.webp",
       "video": "https://ahmeduea.my.canva.site/ah-sh-ph/_assets/video/66657464a9ecc26b415236720598551e.mp4",
       "preview": "https://ahmeduea.my.canva.site/ah-sh-ph/_assets/video/66657464a9ecc26b415236720598551e.mp4",
-      "group": 2
+      "group": 1
+    },
+    {
+      "category": "gym-reels",
+      "title_ar": "الرياضه",
+      "title_en": "Sports",
+      "w": 720,
+      "h": 1280,
+      "image": "/images/uploads/s/gym-reels/v/mvvk2wq0-1.webp",
+      "thumb": "/images/uploads/s/gym-reels/v/mvvk2wq0-1.webp",
+      "video": "/images/uploads/s/gym-reels/v/mvvk2wq0-1.mp4",
+      "preview": "/images/uploads/s/gym-reels/v/mvvk2wq0-1.mp4",
+      "group": 1
+    },
+    {
+      "category": "gym-reels",
+      "title_ar": "الرياضه",
+      "title_en": "Sports",
+      "w": 1080,
+      "h": 1920,
+      "image": "/images/uploads/s/gym-reels/v/mvvk2wq0-2.webp",
+      "thumb": "/images/uploads/s/gym-reels/v/mvvk2wq0-2.webp",
+      "video": "/images/uploads/s/gym-reels/v/mvvk2wq0-2.mp4",
+      "preview": "/images/uploads/s/gym-reels/v/mvvk2wq0-2.mp4",
+      "group": 1
+    },
+    {
+      "category": "gym-reels",
+      "title_ar": "الرياضه",
+      "title_en": "Sports",
+      "w": 1080,
+      "h": 1920,
+      "image": "/images/uploads/s/gym-reels/v/mvvk2wq0-3.webp",
+      "thumb": "/images/uploads/s/gym-reels/v/mvvk2wq0-3.webp",
+      "video": "/images/uploads/s/gym-reels/v/mvvk2wq0-3.mp4",
+      "preview": "/images/uploads/s/gym-reels/v/mvvk2wq0-3.mp4",
+      "group": 1
     },
     {
       "image": "/images/behance/p8/009.webp",
