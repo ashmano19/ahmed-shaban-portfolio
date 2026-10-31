@@ -1310,14 +1310,16 @@
       "group": 5
     },
     {
-      "image": "/images/uploads/s/makeup-reels/cover/cmvvpcgmr.webp",
+      "image": "/images/uploads/s/makeup-reels/mvvpg2xp-2.webp",
       "title_ar": "ريلز مكياج",
       "title_en": "Makeup Reels",
       "category": "makeup-reels",
       "cover": true,
       "group": 0,
-      "thumb": "/images/uploads/s/makeup-reels/cover/t/cmvvpcgmr.webp",
-      "pos": "51% 50%"
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpg2xp-2.webp",
+      "pos": "51% 42%",
+      "w": 2215,
+      "h": 2215
     },
     {
       "category": "makeup-reels",
