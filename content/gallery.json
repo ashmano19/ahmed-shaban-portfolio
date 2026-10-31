@@ -5509,6 +5509,17 @@
       "category": "transfers",
       "title_ar": "الانتقالات",
       "title_en": "Transfers",
+      "cover": true,
+      "image": "/images/uploads/s/transfers/v/mvvoxois-5.webp",
+      "thumb": "/images/uploads/s/transfers/v/mvvoxois-5.webp",
+      "w": 1080,
+      "h": 1920,
+      "group": 0
+    },
+    {
+      "category": "transfers",
+      "title_ar": "الانتقالات",
+      "title_en": "Transfers",
       "w": 1080,
       "h": 1920,
       "image": "/images/uploads/s/transfers/v/mvvoxois-1.webp",
