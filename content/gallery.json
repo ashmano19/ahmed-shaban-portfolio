@@ -1320,6 +1320,30 @@
       "pos": "51% 50%"
     },
     {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 1080,
+      "h": 1920,
+      "image": "/images/uploads/s/makeup-reels/v/mvvpd7c1-1.webp",
+      "thumb": "/images/uploads/s/makeup-reels/v/mvvpd7c1-1.webp",
+      "video": "/images/uploads/s/makeup-reels/v/mvvpd7c1-1.mp4",
+      "preview": "/images/uploads/s/makeup-reels/v/mvvpd7c1-1.mp4",
+      "group": 1
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 1080,
+      "h": 1920,
+      "image": "/images/uploads/s/makeup-reels/v/mvvpd7c1-2.webp",
+      "thumb": "/images/uploads/s/makeup-reels/v/mvvpd7c1-2.webp",
+      "video": "/images/uploads/s/makeup-reels/v/mvvpd7c1-2.mp4",
+      "preview": "/images/uploads/s/makeup-reels/v/mvvpd7c1-2.mp4",
+      "group": 1
+    },
+    {
       "image": "/images/behance/v/makeup-reels-1.webp",
       "video": "https://www-ccv.adobe.io/v1/player/ccv/JukMWjzMCgf/embed?api_key=behance1",
       "title_ar": "ريلز مكياج",
@@ -1423,25 +1447,151 @@
       "category": "makeup-reels",
       "title_ar": "ريلز مكياج",
       "title_en": "Makeup Reels",
-      "w": 1080,
-      "h": 1920,
-      "image": "/images/uploads/s/makeup-reels/v/mvvpd7c1-1.webp",
-      "thumb": "/images/uploads/s/makeup-reels/v/mvvpd7c1-1.webp",
-      "video": "/images/uploads/s/makeup-reels/v/mvvpd7c1-1.mp4",
-      "preview": "/images/uploads/s/makeup-reels/v/mvvpd7c1-1.mp4",
-      "group": 1
+      "w": 1406,
+      "h": 1406,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-1.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-1.webp",
+      "group": 2
     },
     {
       "category": "makeup-reels",
       "title_ar": "ريلز مكياج",
       "title_en": "Makeup Reels",
-      "w": 1080,
-      "h": 1920,
-      "image": "/images/uploads/s/makeup-reels/v/mvvpd7c1-2.webp",
-      "thumb": "/images/uploads/s/makeup-reels/v/mvvpd7c1-2.webp",
-      "video": "/images/uploads/s/makeup-reels/v/mvvpd7c1-2.mp4",
-      "preview": "/images/uploads/s/makeup-reels/v/mvvpd7c1-2.mp4",
-      "group": 1
+      "w": 2215,
+      "h": 2215,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-2.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-2.webp",
+      "group": 2
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 2764,
+      "h": 2764,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-3.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-3.webp",
+      "group": 2
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 2259,
+      "h": 2259,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-4.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-4.webp",
+      "group": 2
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 2966,
+      "h": 2966,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-5.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-5.webp",
+      "group": 2
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 3782,
+      "h": 3782,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-6.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-6.webp",
+      "group": 2
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 2707,
+      "h": 2708,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-7.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-7.webp",
+      "group": 2
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 3538,
+      "h": 3538,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-8.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-8.webp",
+      "group": 2
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 3538,
+      "h": 5306,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-9.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-9.webp",
+      "group": 2
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 2530,
+      "h": 2530,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-10.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-10.webp",
+      "group": 2
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 3310,
+      "h": 3310,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-11.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-11.webp",
+      "group": 2
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 4336,
+      "h": 4336,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-12.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-12.webp",
+      "group": 2
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 2686,
+      "h": 2686,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-13.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-13.webp",
+      "group": 2
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 3763,
+      "h": 3763,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-14.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-14.webp",
+      "group": 2
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 4752,
+      "h": 4752,
+      "image": "/images/uploads/s/makeup-reels/mvvpdoju-15.webp",
+      "thumb": "/images/uploads/s/makeup-reels/t/mvvpdoju-15.webp",
+      "group": 2
     },
     {
       "image": "/images/uploads/s/fashion/mvvp8tpp-27.webp",

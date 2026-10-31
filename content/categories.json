@@ -18,7 +18,8 @@
     {
       "id": "makeup-reels",
       "name_ar": "ريلز مكياج",
-      "name_en": "Makeup Reels"
+      "name_en": "Makeup Reels",
+      "order": "photos"
     },
     {
       "id": "fashion",
