@@ -165,18 +165,6 @@
       "title_en": "Beauty Clinics",
       "w": 720,
       "h": 1280,
-      "image": "/images/uploads/s/beauty/v/mvu1sr0d-22.webp",
-      "thumb": "/images/uploads/s/beauty/v/mvu1sr0d-22.webp",
-      "video": "/images/uploads/s/beauty/v/mvu1sr0d-22.mp4",
-      "preview": "/images/uploads/s/beauty/v/mvu1sr0d-22.mp4",
-      "group": 1
-    },
-    {
-      "category": "beauty",
-      "title_ar": "عيادات التجميل",
-      "title_en": "Beauty Clinics",
-      "w": 720,
-      "h": 1280,
       "image": "/images/uploads/s/beauty/v/mvu1sr0d-12.webp",
       "thumb": "/images/uploads/s/beauty/v/mvu1sr0d-12.webp",
       "video": "/images/uploads/s/beauty/v/mvu1sr0d-12.mp4",
@@ -203,6 +191,18 @@
       "thumb": "/images/uploads/s/beauty/v/mvu1sr0d-15.webp",
       "video": "/images/uploads/s/beauty/v/mvu1sr0d-15.mp4",
       "preview": "/images/uploads/s/beauty/v/mvu1sr0d-15.mp4",
+      "group": 1
+    },
+    {
+      "category": "beauty",
+      "title_ar": "عيادات التجميل",
+      "title_en": "Beauty Clinics",
+      "w": 720,
+      "h": 1280,
+      "image": "/images/uploads/s/beauty/v/mvu1sr0d-21.webp",
+      "thumb": "/images/uploads/s/beauty/v/mvu1sr0d-21.webp",
+      "video": "/images/uploads/s/beauty/v/mvu1sr0d-21.mp4",
+      "preview": "/images/uploads/s/beauty/v/mvu1sr0d-21.mp4",
       "group": 1
     },
     {
@@ -271,10 +271,10 @@
       "title_en": "Beauty Clinics",
       "w": 720,
       "h": 1280,
-      "image": "/images/uploads/s/beauty/v/mvu1sr0d-21.webp",
-      "thumb": "/images/uploads/s/beauty/v/mvu1sr0d-21.webp",
-      "video": "/images/uploads/s/beauty/v/mvu1sr0d-21.mp4",
-      "preview": "/images/uploads/s/beauty/v/mvu1sr0d-21.mp4",
+      "image": "/images/uploads/s/beauty/v/mvu1sr0d-22.webp",
+      "thumb": "/images/uploads/s/beauty/v/mvu1sr0d-22.webp",
+      "video": "/images/uploads/s/beauty/v/mvu1sr0d-22.mp4",
+      "preview": "/images/uploads/s/beauty/v/mvu1sr0d-22.mp4",
       "group": 2
     },
     {
