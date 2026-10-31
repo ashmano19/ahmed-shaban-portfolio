@@ -20,7 +20,7 @@ export async function onRequest({request,env}){
   if(request.method==="PATCH"){
     let data;try{data=await request.json()}catch(_){return json({error:"invalid_json"},400)}
     const id=String(data&&data.id||"").slice(0,100),status=String(data&&data.status||"");
-    if(!id||!["reviewed","approved","rejected"].includes(status))return json({error:"invalid_request"},400);
+    if(!id||!["pending","reviewed","approved","rejected"].includes(status))return json({error:"invalid_request"},400);
     try{
       const result=await env.PROMOTIONS_DB.prepare("UPDATE promotion_requests SET status = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE id = ?").bind(status,id).run();
       if(!result.meta||!result.meta.changes)return json({error:"not_found"},404);
