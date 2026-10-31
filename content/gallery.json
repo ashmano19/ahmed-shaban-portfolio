@@ -2852,6 +2852,18 @@
       "group": 1
     },
     {
+      "category": "gym-reels",
+      "title_ar": "الرياضه",
+      "title_en": "Sports",
+      "w": 1080,
+      "h": 1920,
+      "image": "/images/uploads/s/gym-reels/v/mvvojibp-1.webp",
+      "thumb": "/images/uploads/s/gym-reels/v/mvvojibp-1.webp",
+      "video": "/images/uploads/s/gym-reels/v/mvvojibp-1.mp4",
+      "preview": "/images/uploads/s/gym-reels/v/mvvojibp-1.mp4",
+      "group": 1
+    },
+    {
       "image": "/images/behance/p8/009.webp",
       "title_ar": "تصوير منتجات",
       "title_en": "Products",
