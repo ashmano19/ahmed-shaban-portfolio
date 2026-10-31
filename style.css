@@ -1,3 +1,4 @@
+
 @font-face{font-family:"Zain Swashes";src:url(/fonts/zain-swashes.woff2) format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200F}
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:"Zain Swashes",Cairo,sans-serif;font-synthesis-weight:none;background:#0f0f0f;color:#eee;line-height:1.8}
 a{color:inherit;text-decoration:none}
@@ -88,3 +89,32 @@ footer{padding-bottom:84px}
 @media(max-width:700px){.grid.just{--rh:150px;gap:8px}}
 #lbv{aspect-ratio:var(--lar,9/16);height:min(84vh,calc((100vw - 220px) / var(--larn,.5625)));max-width:calc(100vw - 220px)}
 @media(max-width:700px){#lbv{height:min(84vh,calc(100vw / var(--larn,.5625)));max-width:100vw}}
+
+/* Burgundy palette sampled from the supplied reference */
+:root{--accent-burgundy:#7f313e;--accent-wine:#9f5564;--accent-rose:#c67586;--accent-soft:#d5a0aa;--accent-glow:rgba(127,49,62,.3)}
+body{background:#080607}
+.nav{background:rgba(8,6,7,.82)}
+.hero:before{background:linear-gradient(#0005,#080607)}
+.nav nav a:hover,#lang,.btn,.back{color:var(--accent-soft);border-color:var(--accent-wine)}
+#lang:hover,.btn:hover,.filters button.on{background:linear-gradient(110deg,#330915 0%,#7f313e 52%,#9f5564 100%);border-color:var(--accent-rose);color:#fff5f7}
+.filters button{background:#171013;border-color:#38242b;color:#d9c9ce}
+.filters button.on{color:#fff5f7}
+.contact a{background:#171013;border-color:#39252c}
+.contact a:hover{border-color:var(--accent-rose)}
+.contact small,.card span,.back,.gsub,.ddm a.dd-mano{color:var(--accent-soft)}
+.gsub{border-color:rgba(198,117,134,.3)}
+.grid figure,.card{background:#151012}
+.grid hr.gdiv{background:linear-gradient(90deg,transparent,rgba(159,85,100,.6),transparent)}
+.lb button:hover{background:linear-gradient(110deg,#330915 0%,#7f313e 52%,#9f5564 100%);border-color:var(--accent-rose);color:#fff5f7}
+.card b,#gallery:has(#back:not([hidden])) #gTitle{color:#efcbd2;background:linear-gradient(105deg,#9f5564 0%,#c67586 32%,#e7c1c8 44%,#7f313e 50%,#e7c1c8 56%,#9f5564 68%,#9f5564 100%) var(--gx) 0/260% 100% no-repeat;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45)) drop-shadow(0 0 3px rgba(198,117,134,.28)) drop-shadow(0 0 9px rgba(127,49,62,.18))}
+.card:hover b,.card:focus-visible b{animation-duration:4.2s,3s;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45)) drop-shadow(0 0 4px rgba(213,160,170,.55)) drop-shadow(0 0 14px rgba(127,49,62,.3))}
+.contact a.ci{background:#171013;border-color:rgba(198,117,134,.32);color:var(--accent-soft)}
+.contact a.ci:hover,.contact a.ci:focus-visible{border-color:var(--accent-rose);background:#211419;box-shadow:0 0 16px rgba(127,49,62,.28),0 0 34px rgba(127,49,62,.16)}
+.contact a.ci:hover svg,.contact a.ci:focus-visible svg{filter:drop-shadow(0 0 6px rgba(198,117,134,.58))}
+.hero-in .btn-book,.bookf{background:linear-gradient(110deg,#330915 0%,#7f313e 52%,#9f5564 100%);color:#fff5f7;border-color:#c67586;box-shadow:0 6px 24px rgba(127,49,62,.28);transition:box-shadow .3s ease,filter .3s ease,transform .3s ease}
+.hero-in .btn-book:hover,.hero-in .btn-book:focus-visible{background:linear-gradient(110deg,#330915 0%,#7f313e 52%,#9f5564 100%);color:#fff5f7;filter:brightness(1.08);box-shadow:0 8px 32px rgba(127,49,62,.4)}
+.bookf:hover,.bookf:focus-visible{box-shadow:0 12px 34px rgba(0,0,0,.6),0 0 28px rgba(127,49,62,.36)}
+.btn,#lang,.filters button,.contact a,.back,.lb button{transition:color .32s ease,background-color .32s ease,border-color .32s ease,box-shadow .32s ease,filter .32s ease,transform .32s ease}
+@keyframes gpulse{0%,100%{filter:drop-shadow(0 1px 2px rgba(0,0,0,.45)) drop-shadow(0 0 3px rgba(198,117,134,.25)) drop-shadow(0 0 8px rgba(127,49,62,.14))}50%{filter:drop-shadow(0 1px 2px rgba(0,0,0,.45)) drop-shadow(0 0 5px rgba(198,117,134,.48)) drop-shadow(0 0 14px rgba(127,49,62,.27))}}
+@keyframes gpulseH{0%,100%{filter:drop-shadow(0 1px 2px rgba(0,0,0,.45)) drop-shadow(0 0 4px rgba(198,117,134,.44)) drop-shadow(0 0 12px rgba(127,49,62,.28))}50%{filter:drop-shadow(0 1px 2px rgba(0,0,0,.45)) drop-shadow(0 0 5px rgba(213,160,170,.62)) drop-shadow(0 0 20px rgba(127,49,62,.44)) drop-shadow(0 0 30px rgba(127,49,62,.24))}}
+footer{border-top-color:#2b1c21}
