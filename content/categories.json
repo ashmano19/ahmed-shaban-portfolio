@@ -61,6 +61,11 @@
       "id": "tamer-hosny",
       "name_ar": "تامر حسني",
       "name_en": "Tamer Hosny"
+    },
+    {
+      "id": "transfers",
+      "name_ar": "الانتقالات",
+      "name_en": "Transfers"
     }
   ]
 }
