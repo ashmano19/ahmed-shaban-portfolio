@@ -90,3 +90,5 @@ footer{padding-bottom:84px}
 #lbv{aspect-ratio:var(--lar,9/16);height:min(84vh,calc((100vw - 220px) / var(--larn,.5625)));max-width:calc(100vw - 220px)}
 @media(max-width:700px){#lbv{height:min(84vh,calc(100vw / var(--larn,.5625)));max-width:100vw}}
 
+
+.grid.just figure img,.grid.just figure video{object-fit:contain}
