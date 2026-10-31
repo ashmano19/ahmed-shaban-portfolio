@@ -710,6 +710,30 @@
       "group": 3
     },
     {
+      "category": "realestate",
+      "title_ar": "عقارات",
+      "title_en": "Real Estate",
+      "w": 1280,
+      "h": 720,
+      "image": "/images/uploads/s/realestate/v/mvvp0fc5-1.webp",
+      "thumb": "/images/uploads/s/realestate/v/mvvp0fc5-1.webp",
+      "video": "/images/uploads/s/realestate/v/mvvp0fc5-1.mp4",
+      "preview": "/images/uploads/s/realestate/v/mvvp0fc5-1.mp4",
+      "group": 3
+    },
+    {
+      "category": "realestate",
+      "title_ar": "عقارات",
+      "title_en": "Real Estate",
+      "w": 1280,
+      "h": 720,
+      "image": "/images/uploads/s/realestate/v/mvvp0fc5-2.webp",
+      "thumb": "/images/uploads/s/realestate/v/mvvp0fc5-2.webp",
+      "video": "/images/uploads/s/realestate/v/mvvp0fc5-2.mp4",
+      "preview": "/images/uploads/s/realestate/v/mvvp0fc5-2.mp4",
+      "group": 3
+    },
+    {
       "image": "/images/behance/p3/001.webp",
       "thumb": "/images/behance/p3/t/001.webp",
       "title_ar": "عقارات",
