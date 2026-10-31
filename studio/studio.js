@@ -53,9 +53,9 @@ const countNew=()=>allItems().filter(o=>o._new).length+usedDlFiles().length;
 window.addEventListener("beforeunload",e=>{if(dirty||adding||busy){e.preventDefault();e.returnValue=""}});
 
 // ---------- الشاشات ----------
-function route(){app.oninput=app.onchange=app.onclick=null;const h=location.hash,tab=/^#nav/.test(h)?"nav":/^#dl/.test(h)?"dl":/^#set/.test(h)?"set":/^#works/.test(h)?"works":"cats";
+function route(){app.oninput=app.onchange=app.onclick=null;const h=location.hash,tab=/^#nav/.test(h)?"nav":/^#dl/.test(h)?"dl":/^#set/.test(h)?"set":/^#works/.test(h)?"works":/^#promo/.test(h)?"promo":"cats";
   document.querySelectorAll("#tabs a").forEach(a=>a.classList.toggle("on",a.dataset.t==(tab=="works"?"dl":tab)));cur=null;
-  if(tab=="works"&&window.MANOWorks)window.MANOWorks(app);else if(tab=="nav")navView();else if(tab=="set")setView();else if(tab=="dl"){const m=h.match(/^#dl\/(.+)/);m?dlEdit(decodeURIComponent(m[1])):dlList()}
+  if(tab=="works"&&window.MANOWorks)window.MANOWorks(app);else if(tab=="promo"&&window.MANOPromotionReview)window.MANOPromotionReview(app,TOKEN||savedToken());else if(tab=="nav")navView();else if(tab=="set")setView();else if(tab=="dl"){const m=h.match(/^#dl\/(.+)/);m?dlEdit(decodeURIComponent(m[1])):dlList()}
   else{const m=h.match(/^#c\/(.+)/);cur=m&&st.by[decodeURIComponent(m[1])]?decodeURIComponent(m[1]):null;cur?catView():homeView()}window.scrollTo(0,0)}
 window.onhashchange=()=>{if(st)route()};
 const src=o=>o._url||o.thumb||o.image;
@@ -405,6 +405,7 @@ const MNL={show:"ظاهر في قائمة Download",menu_ar:"الاسم في ا�
  icon:"أيقونة",title_ar:"العنوان (عربي)",title_en:"العنوان (English)",desc_ar:"الوصف (عربي)",desc_en:"الوصف (English)",image:"الصورة (مسار في موقع MANO)",caption_ar:"الاسم (عربي)",caption_en:"الاسم (English)",
  q_ar:"السؤال (عربي)",q_en:"السؤال (English)",a_ar:"الإجابة (عربي)",a_en:"الإجابة (English)",mp4:"فيديو mp4",webm:"فيديو webm",poster:"صورة الغلاف"};
 const MNTPL={features:{icon:"✦",title_ar:"",title_en:"",desc_ar:"",desc_en:""},shots:{image:"images/",caption_ar:"",caption_en:"",desc_ar:"",desc_en:""},videos:{mp4:"",webm:"",poster:"",caption_ar:"",caption_en:"",desc_ar:"",desc_en:""},faq:{q_ar:"",q_en:"",a_ar:"",a_en:""}};
+let reviewBadgeTimer=0;function refreshReviewBadges(){const w=app.querySelector("#worksBadge"),p=app.querySelector("#promoBadge");if(!w&&!p){clearTimeout(reviewBadgeTimer);return}clearTimeout(reviewBadgeTimer);const t=TOKEN||savedToken();if(t&&p)fetch("/api/promotion-requests",{headers:{Authorization:"Bearer "+t},cache:"no-store"}).then(r=>r.ok?r.json():null).then(d=>{if(p.isConnected&&d)p.hidden=!(+d.pending>0)}).catch(()=>{});if(w&&window.MANOWorksBadge)window.MANOWorksBadge().then(n=>{if(w.isConnected&&n!=null)w.hidden=!(n>0)}).catch(()=>{});reviewBadgeTimer=setTimeout(refreshReviewBadges,60000)}
 function mnEdit(){const m=mnObj;if(!m){location.hash="#dl";return}
   const long=k=>/^(desc|tagline|cta_text|a)_/.test(k),ltr=k=>/_en$|url|^(mp4|webm|poster|image|version|whatsapp|file_size)$/.test(k);
   const fld=(k,v,path)=>{const lb=esc(MNL[k]||k),p=esc(path);
@@ -421,9 +422,9 @@ function mnEdit(){const m=mnObj;if(!m){location.hash="#dl";return}
   const groups=MNG.concat(other.length?[["أخرى",other]]:[]);
   app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ الداونلود</a><h2>MANO</h2><a class="ghost" href="${esc(m.site_url||"https://mano-plugin.pages.dev")}" target="_blank" rel="noopener">فتح موقع MANO ↗</a></div>
   <p class="hint">كل بيانات صفحة MANO. أي تعديل هنا + نشر = يظهر في موقع MANO خلال دقيقة (الصفحة بتقرا البيانات من موقعك).</p>
-  <div class="form"><div class="fl">أعمال الناس<div class="covbox"><a class="gold" href="#works" style="text-decoration:none;padding:10px 26px;font-size:.95rem">🖼 أعمال MANO — مراجعة ونشر</a><span><small>الأعمال اللي الناس بترفعها من موقع MANO.</small></span></div></div>
+  <div class="form"><div class="fl">أعمال الناس<div class="covbox"><a class="gold" href="#works" style="text-decoration:none;padding:10px 20px;font-size:.92rem">🖼 أعمال MANO — مراجعة ونشر<span class="review-dot" id="worksBadge" hidden></span></a><a class="ghost" href="#promo" style="text-decoration:none;padding:8px 16px;font-size:.9rem">📋 إدارة مراجعة الفيديوهات<span class="review-dot" id="promoBadge" hidden></span></a><span><small>أعمال المعرض وطلبات الاستخدام المجاني من المبدعين.</small></span></div></div>
   ${groups.map(([t,ks])=>`<details class="mng"${t=="القائمة في موقعك"||t=="الأساسيات"?" open":""}><summary>${esc(t)}</summary><div class="form">${ks.some(k=>Array.isArray(m[k])&&m[k].some(x=>x&&typeof x=="object")||MNTPL[k])?ks.map(list).join(""):pair(ks.filter(k=>k in m||!["videos","portfolio_url"].includes(k)),m,"")}</div></details>`).join("")}</div>`;
-  const open=[...app.querySelectorAll("details.mng")].map(d=>d.open);
+  refreshReviewBadges();const open=[...app.querySelectorAll("details.mng")].map(d=>d.open);
   const setp=(path,val)=>{const ps=path.split(".");let o=m;for(let i=0;i<ps.length-1;i++)o=o[ps[i]];o[ps[ps.length-1]]=val;touch()};
   app.oninput=app.onchange=e=>{const el=e.target,p=el.dataset.p;if(!p)return;
     setp(p,el.type=="checkbox"?el.checked:el.dataset.t=="lines"?el.value.split("\n").map(x=>x.trim()).filter(Boolean):el.dataset.t=="num"?(+el.value||0):el.value)};
