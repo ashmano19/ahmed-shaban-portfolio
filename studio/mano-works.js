@@ -59,5 +59,6 @@ const css=document.createElement("style");css.textContent=`.mwg{display:grid;gri
 .mwc img,.mwc video{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;background:#000}.mwi{padding:10px 12px;display:flex;flex-direction:column;gap:2px;flex:1}
 .mwi span{font-size:.88rem;opacity:.85}.mwi small{font-size:.78rem;opacity:.6}.mwi em{color:#CEA111;font-style:normal}
 .mwb{display:flex;gap:8px;padding:0 12px 12px}.mwb .gold{padding:6px 18px;font-size:.92rem}.mwb button{flex:1}`;document.head.appendChild(css);
+window.MANOWorksBadge=async function(){if(!sess)return null;try{const t=await token();if(!t)return null;const r=await fetch(SB+"/rest/v1/showcase?select=id&approved=eq.false&limit=500",{headers:{apikey:KEY,Authorization:"Bearer "+t},cache:"no-store"});if(!r.ok)return null;const x=await r.json().catch(()=>null);return Array.isArray(x)?x.length:null}catch(_){return null}};
 window.MANOWorks=function(el){root=el;sess?load():loginView()};
 })();
