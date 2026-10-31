@@ -18,5 +18,6 @@ root.querySelectorAll("[data-filter]").forEach(b=>{b.classList.toggle("on",b.dat
 document.getElementById("prRefresh").onclick=load;
 root.querySelectorAll("[data-status]").forEach(b=>b.onclick=async()=>{const c=b.closest(".prcard"),x=items.find(v=>String(v.id)===c.dataset.id);if(!x)return;b.disabled=true;try{const r=await fetch("/api/promotion-requests",{method:"PATCH",headers,body:JSON.stringify({id:x.id,status:b.dataset.status})});if(!r.ok)throw Error();x.status=b.dataset.status;draw()}catch(_){b.disabled=false;alert("تعذر تحديث الحالة. حدّث الصفحة وحاول مرة أخرى.")}})};
 async function load(){root.innerHTML=`<p class="empty">جاري تحميل الطلبات…</p>`;try{await get();draw()}catch(e){root.innerHTML=`<div class="head"><a class="ghost" href="#dl/mano">→ MANO</a><h2>إدارة مراجعة فيديوهات MANO</h2><button class="ghost" id="prRetry">إعادة المحاولة</button></div><p class="empty">تعذر تحميل الطلبات. تأكد من تسجيل الدخول ثم أعد المحاولة.</p>`;const b=document.getElementById("prRetry");if(b)b.onclick=load}}
+load();
 };
 })();
