@@ -1420,6 +1420,30 @@
       "group": 1
     },
     {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 1080,
+      "h": 1920,
+      "image": "/images/uploads/s/makeup-reels/v/mvvpd7c1-1.webp",
+      "thumb": "/images/uploads/s/makeup-reels/v/mvvpd7c1-1.webp",
+      "video": "/images/uploads/s/makeup-reels/v/mvvpd7c1-1.mp4",
+      "preview": "/images/uploads/s/makeup-reels/v/mvvpd7c1-1.mp4",
+      "group": 1
+    },
+    {
+      "category": "makeup-reels",
+      "title_ar": "ريلز مكياج",
+      "title_en": "Makeup Reels",
+      "w": 1080,
+      "h": 1920,
+      "image": "/images/uploads/s/makeup-reels/v/mvvpd7c1-2.webp",
+      "thumb": "/images/uploads/s/makeup-reels/v/mvvpd7c1-2.webp",
+      "video": "/images/uploads/s/makeup-reels/v/mvvpd7c1-2.mp4",
+      "preview": "/images/uploads/s/makeup-reels/v/mvvpd7c1-2.mp4",
+      "group": 1
+    },
+    {
       "image": "/images/uploads/s/fashion/mvvp8tpp-27.webp",
       "title_ar": "تصوير أزياء وموديلز",
       "title_en": "Fashion & Model Photography",
