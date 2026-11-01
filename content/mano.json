@@ -229,48 +229,11 @@
       "a_en": "The current installer is for DaVinci Resolve on Windows."
     }
   ],
-  "site_url": "https://manostudio.stream/",
+  "site_url": "https://manostudio.stream",
   "whatsapp": "971504046867",
   "instagram": "https://www.instagram.com/ahmed_sh_ph/",
   "author_ar": "أحمد شعبان",
   "author_en": "Ahmed Shaban",
   "portfolio_url": "https://ahmed-sh-ph.pages.dev",
-  "videos": [
-    {
-      "mp4": "videos/launcher.mp4",
-      "webm": "videos/launcher.webm",
-      "poster": "videos/launcher.webp",
-      "caption_ar": "الشاشة الرئيسية",
-      "caption_en": "Launcher",
-      "desc_ar": "كل الأدوات في شاشة واحدة بحركة خفيفة",
-      "desc_en": "Every tool on one screen, with subtle motion"
-    },
-    {
-      "mp4": "videos/addons.mp4",
-      "webm": "videos/addons.webm",
-      "poster": "videos/addons.webp",
-      "caption_ar": "مكتبة الملحقات",
-      "caption_en": "Add-ons library",
-      "desc_ar": "افتح القسم وشوف العناصر قبل ما تضيفها",
-      "desc_en": "Open a pack and preview items before adding"
-    },
-    {
-      "mp4": "videos/bgr.mp4",
-      "webm": "videos/bgr.webm",
-      "poster": "videos/bgr.webp",
-      "caption_ar": "إزالة الخلفية",
-      "caption_en": "Background removal",
-      "desc_ar": "صورة أو فيديو ← شفاف في ثواني",
-      "desc_en": "Image or video to transparent in seconds"
-    },
-    {
-      "mp4": "videos/face.mp4",
-      "webm": "videos/face.webm",
-      "poster": "videos/face.webp",
-      "caption_ar": "تنعيم الوجه",
-      "caption_en": "Face smoothing",
-      "desc_ar": "إعدادات جاهزة وتحكم كامل",
-      "desc_en": "Presets and fine control"
-    }
-  ]
+  "videos": []
 }
