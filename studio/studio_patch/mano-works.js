@@ -13,13 +13,22 @@ async function auth(path,body){const r=await fetch(SB+"/auth/v1/"+path,{method:"
 function keep(d){save({access:d.access_token,refresh:d.refresh_token,exp:Date.now()+((d.expires_in||3600)-60)*1000,email:(d.user&&d.user.email)||(sess&&sess.email)||""})}
 async function token(){if(!sess)return null;if(Date.now()<sess.exp)return sess.access;
   try{keep(await auth("token?grant_type=refresh_token",{refresh_token:sess.refresh}));return sess.access}catch(e){save(null);return null}}
-async function api(path,opt={}){const t=await token();if(!t){loginView();throw new Error("login")}
+// owner shortcut: the Studio's GitHub login is enough (manostudio.stream checks it and uses the service key) — no email code
+const PROXY="https://manostudio.stream/api/works-admin";let proxyOK=null;
+const gh=()=>{try{return (typeof TOKEN!="undefined"&&TOKEN)||(typeof savedToken=="function"&&savedToken())||""}catch(_){return ""}};
+async function viaProxy(path,opt){const tk=gh();if(!tk||proxyOK===false)return undefined;
+  const r=await fetch(PROXY,{method:"POST",headers:{Authorization:"token "+tk,"Content-Type":"application/json"},body:JSON.stringify({method:opt.method||"GET",path,body:opt.body,headers:opt.headers||{}})});
+  if(r.status==503||r.status==403){proxyOK=false;return undefined}proxyOK=true;
+  if(!r.ok)throw new Error("HTTP "+r.status+" "+(await r.text().catch(()=>"")).slice(0,160));
+  return r.status==204?null:r.json().catch(()=>null)}
+async function api(path,opt={}){const viaP=await viaProxy(path,opt);if(viaP!==undefined)return viaP;
+  const t=await token();if(!t){loginView();throw new Error("login")}
   const r=await fetch(SB+path,Object.assign({},opt,{headers:Object.assign({apikey:KEY,Authorization:"Bearer "+t},opt.headers||{})}));
   if(r.status==401){save(null);loginView("انتهت الجلسة، ادخل تاني.");throw new Error("401")}
   if(!r.ok){const e=new Error("HTTP "+r.status+" "+(await r.text().catch(()=>"")).slice(0,160));throw e}
   return r.status==204?null:r.json().catch(()=>null)}
 
-function loginView(msg){root.innerHTML=`<div class="login"><h2>أعمال MANO</h2><p>${esc(msg||"ادخل بإيميل حساب MANO بتاعك، وهيوصلك كود.")}</p>
+function loginView(msg){root.innerHTML=`<div class="head"><a class="ghost" href="#dl/mano">→ MANO</a></div><div class="login"><h2>أعمال MANO</h2><p>${esc(msg||"ادخل بإيميل حساب MANO بتاعك، وهيوصلك كود.")}</p>
   <div class="form" style="max-width:360px;margin:auto"><input id="mwE" placeholder="email@example.com" dir="ltr" value="${esc(sess&&sess.email||"")}">
   <button class="gold" id="mwS">ابعت الكود</button><div id="mwC" hidden class="form"><input id="mwK" placeholder="الكود" dir="ltr" inputmode="numeric" maxlength="8"><button class="gold" id="mwV">دخول</button></div></div></div>`;
   const E=document.getElementById("mwE"),K=document.getElementById("mwK");
@@ -40,7 +49,7 @@ function card(w){const src=pub(w.path),ig=(w.instagram||"").replace(/^@/,""),d=n
   <small>${d.toLocaleDateString("ar-EG",{day:"numeric",month:"short",year:"numeric"})} · ${w.kind=="video"?"فيديو":"صورة"}${w.approved?" · <em>منشور</em>":""}</small></div>
   <div class="mwb">${w.approved?`<button class="ghost" data-a="hide">إخفاء</button>`:`<button class="gold" data-a="ok">نشر ✓</button>`}<button class="ghost red" data-a="del">حذف</button></div></div>`}
 function view(){const pend=items.filter(w=>!w.approved),pubd=items.filter(w=>w.approved),list=filter=="new"?pend:pubd;
-  root.innerHTML=`<div class="head"><h2>أعمال MANO</h2><button class="ghost" id="mwR">تحديث ↻</button><button class="ghost" id="mwO">خروج من Supabase</button></div>
+  root.innerHTML=`<div class="head"><a class="ghost" href="#dl/mano">→ MANO</a><h2>أعمال MANO</h2><button class="ghost" id="mwR">تحديث ↻</button><button class="ghost" id="mwO">خروج من Supabase</button></div>
   <p class="hint">الأعمال اللي الناس بترفعها من <a href="https://mano-plugin.pages.dev/#mnWorksS" target="_blank">موقع MANO</a>. «نشر» يخليها تظهر في الموقع على طول — مش محتاج زرار النشر اللي تحت.</p>
   <div class="tb" style="margin-bottom:14px"><button data-f="new" style="${filter=="new"?"border-color:#CEA111;color:#CEA111":""}">جديد للمراجعة (${pend.length})</button><button data-f="pub" style="${filter=="pub"?"border-color:#CEA111;color:#CEA111":""}">منشور (${pubd.length})</button></div>
   <div class="mwg">${list.length?list.map(card).join(""):`<p class="empty">${filter=="new"?"مفيش أعمال جديدة 👌":"لسه مفيش أعمال منشورة"}</p>`}</div>`;
@@ -59,5 +68,6 @@ const css=document.createElement("style");css.textContent=`.mwg{display:grid;gri
 .mwc img,.mwc video{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;background:#000}.mwi{padding:10px 12px;display:flex;flex-direction:column;gap:2px;flex:1}
 .mwi span{font-size:.88rem;opacity:.85}.mwi small{font-size:.78rem;opacity:.6}.mwi em{color:#CEA111;font-style:normal}
 .mwb{display:flex;gap:8px;padding:0 12px 12px}.mwb .gold{padding:6px 18px;font-size:.92rem}.mwb button{flex:1}`;document.head.appendChild(css);
-window.MANOWorks=function(el){root=el;sess?load():loginView()};
+window.MANOWorksBadge=async function(){if(gh()&&proxyOK!==false){try{const x=await viaProxy("/rest/v1/showcase?select=id&approved=eq.false&limit=500",{});if(Array.isArray(x))return x.length}catch(_){}}if(!sess)return null;try{const t=await token();if(!t)return null;const r=await fetch(SB+"/rest/v1/showcase?select=id&approved=eq.false&limit=500",{headers:{apikey:KEY,Authorization:"Bearer "+t},cache:"no-store"});if(!r.ok)return null;const x=await r.json().catch(()=>null);return Array.isArray(x)?x.length:null}catch(_){return null}};
+window.MANOWorks=function(el){root=el;(sess||gh())?load():loginView()};
 })();

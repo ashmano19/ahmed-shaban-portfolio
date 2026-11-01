@@ -13,7 +13,16 @@ async function auth(path,body){const r=await fetch(SB+"/auth/v1/"+path,{method:"
 function keep(d){save({access:d.access_token,refresh:d.refresh_token,exp:Date.now()+((d.expires_in||3600)-60)*1000,email:(d.user&&d.user.email)||(sess&&sess.email)||""})}
 async function token(){if(!sess)return null;if(Date.now()<sess.exp)return sess.access;
   try{keep(await auth("token?grant_type=refresh_token",{refresh_token:sess.refresh}));return sess.access}catch(e){save(null);return null}}
-async function api(path,opt={}){const t=await token();if(!t){loginView();throw new Error("login")}
+// owner shortcut: the Studio's GitHub login is enough (manostudio.stream checks it and uses the service key) — no email code
+const PROXY="https://manostudio.stream/api/works-admin";let proxyOK=null;
+const gh=()=>{try{return (typeof TOKEN!="undefined"&&TOKEN)||(typeof savedToken=="function"&&savedToken())||""}catch(_){return ""}};
+async function viaProxy(path,opt){const tk=gh();if(!tk||proxyOK===false)return undefined;
+  const r=await fetch(PROXY,{method:"POST",headers:{Authorization:"token "+tk,"Content-Type":"application/json"},body:JSON.stringify({method:opt.method||"GET",path,body:opt.body,headers:opt.headers||{}})});
+  if(r.status==503||r.status==403){proxyOK=false;return undefined}proxyOK=true;
+  if(!r.ok)throw new Error("HTTP "+r.status+" "+(await r.text().catch(()=>"")).slice(0,160));
+  return r.status==204?null:r.json().catch(()=>null)}
+async function api(path,opt={}){const viaP=await viaProxy(path,opt);if(viaP!==undefined)return viaP;
+  const t=await token();if(!t){loginView();throw new Error("login")}
   const r=await fetch(SB+path,Object.assign({},opt,{headers:Object.assign({apikey:KEY,Authorization:"Bearer "+t},opt.headers||{})}));
   if(r.status==401){save(null);loginView("انتهت الجلسة، ادخل تاني.");throw new Error("401")}
   if(!r.ok){const e=new Error("HTTP "+r.status+" "+(await r.text().catch(()=>"")).slice(0,160));throw e}
@@ -59,6 +68,6 @@ const css=document.createElement("style");css.textContent=`.mwg{display:grid;gri
 .mwc img,.mwc video{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;background:#000}.mwi{padding:10px 12px;display:flex;flex-direction:column;gap:2px;flex:1}
 .mwi span{font-size:.88rem;opacity:.85}.mwi small{font-size:.78rem;opacity:.6}.mwi em{color:#CEA111;font-style:normal}
 .mwb{display:flex;gap:8px;padding:0 12px 12px}.mwb .gold{padding:6px 18px;font-size:.92rem}.mwb button{flex:1}`;document.head.appendChild(css);
-window.MANOWorksBadge=async function(){if(!sess)return null;try{const t=await token();if(!t)return null;const r=await fetch(SB+"/rest/v1/showcase?select=id&approved=eq.false&limit=500",{headers:{apikey:KEY,Authorization:"Bearer "+t},cache:"no-store"});if(!r.ok)return null;const x=await r.json().catch(()=>null);return Array.isArray(x)?x.length:null}catch(_){return null}};
-window.MANOWorks=function(el){root=el;sess?load():loginView()};
+window.MANOWorksBadge=async function(){if(gh()&&proxyOK!==false){try{const x=await viaProxy("/rest/v1/showcase?select=id&approved=eq.false&limit=500",{});if(Array.isArray(x))return x.length}catch(_){}}if(!sess)return null;try{const t=await token();if(!t)return null;const r=await fetch(SB+"/rest/v1/showcase?select=id&approved=eq.false&limit=500",{headers:{apikey:KEY,Authorization:"Bearer "+t},cache:"no-store"});if(!r.ok)return null;const x=await r.json().catch(()=>null);return Array.isArray(x)?x.length:null}catch(_){return null}};
+window.MANOWorks=function(el){root=el;(sess||gh())?load():loginView()};
 })();
