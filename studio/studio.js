@@ -414,7 +414,7 @@ async function mnStats(){const box=$("mnStatsBody");if(!box)return;box.style.opa
   try{const r=await fetch("https://api.github.com/repos/ashmano19/mano-library/releases?per_page=100",{headers:H});if(!r.ok)throw 0;
     const rel=(await r.json()).filter(x=>/^mano-v/.test(x.tag_name)).map(x=>({v:x.tag_name.replace("mano-v",""),c:x.assets.filter(a=>/\.zip$/i.test(a.name)).reduce((a,b)=>a+b.download_count,0)}));
     const tot=rel.reduce((a,b)=>a+b.c,0);
-    dl=`<div style="display:flex;gap:10px;flex-wrap:wrap">${tile("إجمالي التحميلات",n(tot),"من GitHub")}${rel.map(x=>tile("الإصدار "+esc(x.v),n(x.c))).join("")}</div>`}
+    dl=`<div style="display:flex;gap:10px;flex-wrap:wrap">${tile("إجمالي التحميلات",n(tot),"من GitHub")}</div>`}
   catch(_){dl=`<small style="color:#e0806a">ما قدرت أجيب عدد التحميلات من GitHub.</small>`}
   try{const r=await fetch(site+"/api/stats",{headers:H});const d=await r.json();if(!r.ok)throw d.error||r.status;
     const days=(d.daily||[]),mx=Math.max(1,...days.map(x=>x.visitors));
