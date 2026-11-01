@@ -447,11 +447,30 @@ function mnEdit(){const m=mnObj;if(!m){location.hash="#dl";return}
     return `<div class="rows">${arr.map((o,i)=>`<div class="mnitem"><div class="mnbar"><b>${i+1}</b><span style="flex:1"></span><button class="xs" data-mv="${k}:${i}:-1" title="فوق">↑</button><button class="xs" data-mv="${k}:${i}:1" title="تحت">↓</button><button class="x" data-rm="${k}:${i}" title="حذف">✕</button></div>${pair(keys,o,k+"."+i+".")}</div>`).join("")}</div><button class="ghost" data-add="${k}">+ إضافة</button>`};
   const used=new Set([].concat(...MNG.map(g=>g[1])));const other=Object.keys(m).filter(k=>!used.has(k)&&k!="cms_url");
   const groups=MNG.concat(other.length?[["أخرى",other]]:[]);
-  app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ الداونلود</a><h2>MANO</h2><a class="ghost" href="https://manostudio.stream" target="_blank" rel="noopener">فتح موقع MANO ↗</a></div>
+  app.innerHTML=`<style>/* MANO page wears the MANO site palette: wine black, rose glow, gold */
+.mnx{--w0:#090406;--w1:#1a0a10;--w2:#2a0f1a;--rose:#e5577e;--gold:#e8b43b;--gold-l:#ffd45b;--txt:#f6ecd2;margin:-6px -10px 0;padding:6px 10px 10px;border-radius:22px;
+ background:radial-gradient(900px 380px at 90% -10%,#5a1a2f66,transparent 60%),radial-gradient(700px 300px at 0% 100%,#e8b43b14,transparent 60%),var(--w0)}
+.mnx .head h2{color:var(--gold-l)}.mnx .ghost{border-color:#e8b43b66;color:var(--gold-l)}
+.mnx #mnStats{border-color:#e5577e44!important;background:linear-gradient(160deg,#21101a,#0d0608)!important;box-shadow:0 20px 50px #0008,inset 0 1px #ffffff10}
+.mnx .mx-hero{border-color:#e5577e55;background:radial-gradient(420px 150px at 90% 0,#e5577e2e,transparent 70%),linear-gradient(135deg,#24101a,#0e0709)}
+.mnx .mx-k{background:linear-gradient(180deg,#2a0f1a99,#14080c);border-color:#e5577e2a}.mnx .mx-k:hover{border-color:#ffd45b88}
+.mnx .mx-chart{background:#0e0609;border-color:#e5577e22}.mnx .mx-bars i{background:linear-gradient(#ffd45b,#e5577e);box-shadow:0 0 16px #e5577e44}
+.mnx details.mng{border-color:#e5577e2a;background:linear-gradient(180deg,#1a0a1066,#0d060899)}.mnx details.mng summary{color:var(--gold-l)}
+.mnx-acts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}@media(max-width:700px){.mnx-acts{grid-template-columns:1fr}}
+.mnx-act{position:relative;display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:18px;text-decoration:none;color:var(--txt);overflow:hidden;
+ border:1px solid #e5577e3a;background:linear-gradient(150deg,#2a0f1a,#12070b);box-shadow:0 12px 30px #0008,inset 0 1px #ffffff12;transition:transform .25s cubic-bezier(.2,.8,.2,1),border-color .25s,box-shadow .25s}
+.mnx-act:hover{transform:translateY(-3px);border-color:#ffd45b99;box-shadow:0 18px 40px #000a,0 0 30px #e5577e33}
+.mnx-act:after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,#ffffff1c 50%,transparent 65%);transform:translateX(-120%);transition:transform .7s}
+.mnx-act:hover:after{transform:translateX(120%)}
+.mnx-act .ic{width:46px;height:46px;border-radius:14px;flex:none;display:grid;place-items:center;font-size:20px;background:linear-gradient(#ffe28a,#e8b43b);color:#1a0a04;box-shadow:0 6px 18px #e8b43b44}
+.mnx-act.rose .ic{background:linear-gradient(#ff8fae,#e5577e);box-shadow:0 6px 18px #e5577e55;color:#fff}
+.mnx-act b{display:block;font-size:1rem;color:var(--gold-l)}.mnx-act.rose b{color:#ffb3c6}.mnx-act small{display:block;opacity:.7;font-size:.8rem;margin-top:2px}
+.mnx-act .go{margin-inline-start:auto;font-size:18px;opacity:.6;transition:.25s}.mnx-act:hover .go{opacity:1;transform:translateX(-4px)}
+.mnx-act .review-dot{position:absolute;top:10px;inset-inline-start:10px}</style><div class="mnx"><div class="head"><a class="ghost" href="#dl">→ الداونلود</a><h2>MANO</h2><a class="ghost" href="https://manostudio.stream" target="_blank" rel="noopener">فتح موقع MANO ↗</a></div>
   <p class="hint">كل بيانات صفحة MANO. أي تعديل هنا + نشر = يظهر في موقع MANO خلال دقيقة (الصفحة بتقرا البيانات من موقعك).</p>
   <div id="mnStats" style="margin:14px 0 18px;padding:16px 18px;border:1px solid #c9a23a55;border-radius:14px;background:linear-gradient(160deg,#1c1a14,#121212)"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px"><b style="color:#e8b43b">📊 إحصائيات MANO</b><button type="button" class="ghost" id="mnStatsGo" style="padding:4px 14px">تحديث ↻</button></div><div id="mnStatsBody" style="opacity:.7">جاري التحميل…</div></div>
-  <div class="form"><div class="fl">أعمال الناس<div class="covbox"><a class="gold" href="#works" style="text-decoration:none;padding:10px 20px;font-size:.92rem">🖼 أعمال MANO — مراجعة ونشر<span class="review-dot" id="worksBadge" hidden></span></a><a class="ghost" href="#promo" style="text-decoration:none;padding:8px 16px;font-size:.9rem">📋 إدارة مراجعة الفيديوهات<span class="review-dot" id="promoBadge" hidden></span></a><span><small>أعمال المعرض وطلبات الاستخدام المجاني من المبدعين.</small></span></div></div>
-  ${groups.map(([t,ks])=>`<details class="mng"${t=="القائمة في موقعك"||t=="الأساسيات"?" open":""}><summary>${esc(t)}</summary><div class="form">${ks.some(k=>Array.isArray(m[k])&&m[k].some(x=>x&&typeof x=="object")||MNTPL[k])?ks.map(list).join(""):pair(ks.filter(k=>k in m||!["videos","portfolio_url"].includes(k)),m,"")}</div></details>`).join("")}</div>`;
+  <div class="form"><div class="fl">أعمال الناس <small style="opacity:.6;font-weight:400">أعمال المعرض وطلبات الاستخدام المجاني من المبدعين.</small><div class="mnx-acts"><a class="mnx-act" href="#works"><span class="ic">🖼</span><span><b>أعمال MANO</b><small>مراجعة الأعمال ونشرها في المعرض</small></span><span class="go">←</span><span class="review-dot" id="worksBadge" hidden></span></a><a class="mnx-act rose" href="#promo"><span class="ic">🎬</span><span><b>مراجعة الفيديوهات</b><small>طلبات «اعمل فيديو وخذ MANO مجانًا»</small></span><span class="go">←</span><span class="review-dot" id="promoBadge" hidden></span></a></div></div>
+  ${groups.map(([t,ks])=>`<details class="mng" open><summary>${esc(t)}</summary><div class="form">${ks.some(k=>Array.isArray(m[k])&&m[k].some(x=>x&&typeof x=="object")||MNTPL[k])?ks.map(list).join(""):pair(ks.filter(k=>k in m||!["videos","portfolio_url"].includes(k)),m,"")}</div></details>`).join("")}</div></div>`;
   refreshReviewBadges();const open=[...app.querySelectorAll("details.mng")].map(d=>d.open);mnStats();$("mnStatsGo").onclick=mnStats;
   const setp=(path,val)=>{const ps=path.split(".");let o=m;for(let i=0;i<ps.length-1;i++)o=o[ps[i]];o[ps[ps.length-1]]=val;touch()};
   app.oninput=app.onchange=e=>{const el=e.target,p=el.dataset.p;if(!p)return;
