@@ -391,7 +391,7 @@ function dlList(){
 
 // الداونلود: تعديل مشاركة
 // MANO: كل بيانات صفحة MANO (موقع mano-plugin بيقراها من content/mano.json هنا)
-const MNG=[["القائمة في موقعك",["show","menu_ar","menu_en","site_url"]],["الأساسيات",["version","download_url","file_size","subscribe_url","trial_days"]],
+const MNG=[["القائمة في موقعك",["show","menu_ar","menu_en","site_url"]],["الأساسيات",["trial_days"]],
  ["أول الصفحة",["badge_ar","badge_en","hero_title_ar","hero_title_en","hero_accent_ar","hero_accent_en","tagline_ar","tagline_en"]],
  ["الاشتراك",["plan_ar","plan_en","price_ar","price_en","period_ar","period_en"]],["آخر الصفحة",["cta_title_ar","cta_title_en","cta_accent_ar","cta_accent_en","cta_text_ar","cta_text_en"]],
  ["قوائم قصيرة (كل سطر عنصر)",["chips_ar","chips_en","flow_ar","flow_en","steps_ar","steps_en"]],["المميزات",["features"]],["لقطات من جوه الأداة",["shots"]],["فيديوهات",["videos"]],["أسئلة",["faq"]],
