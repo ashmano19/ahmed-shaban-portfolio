@@ -408,20 +408,31 @@ const MNTPL={features:{icon:"✦",title_ar:"",title_en:"",desc_ar:"",desc_en:""}
 let reviewBadgeTimer=0;function refreshReviewBadges(){const w=app.querySelector("#worksBadge"),p=app.querySelector("#promoBadge");if(!w&&!p){clearTimeout(reviewBadgeTimer);return}clearTimeout(reviewBadgeTimer);const t=TOKEN||savedToken();if(t&&p)fetch("/api/promotion-requests",{headers:{Authorization:"Bearer "+t},cache:"no-store"}).then(r=>r.ok?r.json():null).then(d=>{if(p.isConnected&&d)p.hidden=!(+d.pending>0)}).catch(()=>{});if(w&&window.MANOWorksBadge)window.MANOWorksBadge().then(n=>{if(w.isConnected&&n!=null)w.hidden=!(n>0)}).catch(()=>{});reviewBadgeTimer=setTimeout(refreshReviewBadges,60000)}
 // إحصائيات MANO: التحميلات من GitHub (كل إصدار) + زوار موقع MANO (من /api/stats، للمالك بس)
 async function mnStats(){const box=$("mnStatsBody");if(!box)return;box.style.opacity=".7";box.textContent="جاري التحميل…";
-  const H=TOKEN?{Authorization:"token "+TOKEN}:{},n=v=>Number(v||0).toLocaleString("ar-EG"),site=((mnObj&&mnObj.site_url)||"https://mano-plugin.pages.dev").replace(/\/+$/,"");
-  const tile=(t,v,sub)=>`<div style="flex:1;min-width:120px;padding:10px 12px;border-radius:11px;background:#0f0f0f;border:1px solid #ffffff14"><small style="opacity:.65">${t}</small><div style="font-size:1.45rem;font-weight:700;color:#ffd45b">${v}</div>${sub?`<small style="opacity:.55">${sub}</small>`:""}</div>`;
+  const H=TOKEN?{Authorization:"token "+TOKEN}:{},n=v=>Number(v||0).toLocaleString("ar-EG"),site="https://manostudio.stream";   // stats always come from the live MANO Studio site
+  const ic={dl:'<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',day:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+    wk:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',mo:'<path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/>',all:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>'};
+  const svg=k=>`<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ic[k]}</svg>`;
+  const css=`<style>.mx{display:grid;gap:12px}.mx-hero{position:relative;overflow:hidden;display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:16px;border:1px solid #e8b43b55;background:radial-gradient(400px 140px at 90% 0,#e8b43b26,transparent 70%),linear-gradient(135deg,#1a140a,#0e0d0b)}
+.mx-hero b{font-size:2.3rem;line-height:1;color:#ffd45b;font-weight:800}.mx-hero small{display:block;opacity:.7;margin-top:6px}.mx-ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;flex:none;color:#1a1204;background:linear-gradient(#ffe28a,#e8b43b);box-shadow:0 6px 20px #e8b43b44}
+.mx-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}@media(max-width:760px){.mx-grid{grid-template-columns:1fr 1fr}}
+.mx-k{padding:14px;border-radius:14px;background:linear-gradient(180deg,#ffffff0a,#ffffff03);border:1px solid #ffffff14;transition:.2s}.mx-k:hover{border-color:#e8b43b66;transform:translateY(-2px)}
+.mx-k .mx-ic{width:30px;height:30px;border-radius:9px;color:#ffd45b;background:#e8b43b1a;box-shadow:none}.mx-k b{display:block;font-size:1.6rem;color:#ffd45b;margin:10px 0 2px;font-weight:800}.mx-k small{opacity:.6;font-size:.8rem}.mx-k span{font-size:.82rem;opacity:.85}
+.mx-chart{padding:14px 16px 10px;border-radius:14px;background:#0d0c0a;border:1px solid #ffffff12}.mx-chart h4{margin:0 0 10px;font-size:.85rem;opacity:.75;display:flex;justify-content:space-between}
+.mx-bars{display:flex;align-items:flex-end;gap:6px;height:120px}.mx-bars div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.mx-bars i{width:100%;border-radius:6px 6px 2px 2px;background:linear-gradient(#ffd45b,#a07a2c);box-shadow:0 0 14px #e8b43b33;transform-origin:bottom;animation:mxUp .8s cubic-bezier(.2,.8,.2,1) both}.mx-bars em{font-style:normal;font-size:.68rem;opacity:.55}.mx-bars small{font-size:.7rem;color:#ffd45b}
+@keyframes mxUp{from{transform:scaleY(0)}}.mx-bars div:hover i{filter:brightness(1.2)}</style>`;
   let dl="",vis="";
   try{const r=await fetch("https://api.github.com/repos/ashmano19/mano-library/releases?per_page=100",{headers:H});if(!r.ok)throw 0;
-    const rel=(await r.json()).filter(x=>/^mano-v/.test(x.tag_name)).map(x=>({v:x.tag_name.replace("mano-v",""),c:x.assets.filter(a=>/\.zip$/i.test(a.name)).reduce((a,b)=>a+b.download_count,0)}));
-    const tot=rel.reduce((a,b)=>a+b.c,0);
-    dl=`<div style="display:flex;gap:10px;flex-wrap:wrap">${tile("إجمالي التحميلات",n(tot),"من GitHub")}</div>`}
+    const tot=(await r.json()).filter(x=>/^mano-v/.test(x.tag_name)).reduce((a,x)=>a+x.assets.filter(a=>/\.zip$/i.test(a.name)).reduce((s,b)=>s+b.download_count,0),0);
+    dl=`<div class="mx-hero"><span class="mx-ic">${svg("dl")}</span><div><b>${n(tot)}</b><small>إجمالي التحميلات · من GitHub</small></div></div>`}
   catch(_){dl=`<small style="color:#e0806a">ما قدرت أجيب عدد التحميلات من GitHub.</small>`}
   try{const r=await fetch(site+"/api/stats",{headers:H});const d=await r.json();if(!r.ok)throw d.error||r.status;
     const days=(d.daily||[]),mx=Math.max(1,...days.map(x=>x.visitors));
-    vis=`<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">${tile("زوار اليوم",n(d.today.visitors),n(d.today.views)+" مشاهدة")}${tile("آخر 7 أيام",n(d.d7.visitors),n(d.d7.views)+" مشاهدة")}${tile("آخر 30 يوم",n(d.d30.visitors),n(d.d30.views)+" مشاهدة")}${tile("من البداية",n(d.all.visitors),d.since?"من "+esc(d.since):"")}</div>`
-      +(days.length?`<div style="display:flex;align-items:flex-end;gap:4px;height:64px;margin-top:12px" title="زوار آخر 14 يوم">${days.map(x=>`<i title="${esc(x.day)}: ${x.visitors}" style="flex:1;min-width:6px;height:${Math.max(4,Math.round(x.visitors/mx*60))}px;border-radius:4px 4px 0 0;background:linear-gradient(#ffd45b,#a07a2c)"></i>`).join("")}</div>`:"")}
-  catch(e){vis=`<small style="display:block;margin-top:10px;color:#e0806a">عدد الزوار مش متاح الحين${e===403||e=="forbidden"?" (الحساب مش حساب المالك)":""}.</small>`}
-  box.style.opacity="1";box.innerHTML=dl+vis}
+    const k=(ico,t,v,sub)=>`<div class="mx-k"><span class="mx-ic">${svg(ico)}</span><b>${v}</b><span>${t}</span><br><small>${sub||""}</small></div>`;
+    vis=`<div class="mx-grid">${k("day","زوار اليوم",n(d.today.visitors),n(d.today.views)+" مشاهدة")}${k("wk","آخر 7 أيام",n(d.d7.visitors),n(d.d7.views)+" مشاهدة")}${k("mo","آخر 30 يوم",n(d.d30.visitors),n(d.d30.views)+" مشاهدة")}${k("all","من البداية",n(d.all.visitors),d.since?"من "+esc(d.since):"")}</div>`
+      +(days.length?`<div class="mx-chart"><h4><span>الزوار يوميًا</span><span>آخر ${n(days.length)} يوم</span></h4><div class="mx-bars">${days.map((x,i)=>`<div title="${esc(x.day)} · ${x.visitors} زائر · ${x.views} مشاهدة"><small>${n(x.visitors)}</small><i style="height:${Math.max(4,Math.round(x.visitors/mx*90))}px;animation-delay:${i*40}ms"></i><em>${esc(String(x.day).slice(5))}</em></div>`).join("")}</div></div>`:"")}
+  catch(e){vis=`<small style="display:block;color:#e0806a">عدد الزوار مش متاح الحين${e===403||e=="forbidden"?" (الحساب مش حساب المالك)":""}.</small>`}
+  box.style.opacity="1";box.innerHTML=css+`<div class="mx">${dl}${vis}</div>`}
 function mnEdit(){const m=mnObj;if(!m){location.hash="#dl";return}
   const long=k=>/^(desc|tagline|cta_text|a)_/.test(k),ltr=k=>/_en$|url|^(mp4|webm|poster|image|version|whatsapp|file_size)$/.test(k);
   const fld=(k,v,path)=>{const lb=esc(MNL[k]||k),p=esc(path);
@@ -436,7 +447,7 @@ function mnEdit(){const m=mnObj;if(!m){location.hash="#dl";return}
     return `<div class="rows">${arr.map((o,i)=>`<div class="mnitem"><div class="mnbar"><b>${i+1}</b><span style="flex:1"></span><button class="xs" data-mv="${k}:${i}:-1" title="فوق">↑</button><button class="xs" data-mv="${k}:${i}:1" title="تحت">↓</button><button class="x" data-rm="${k}:${i}" title="حذف">✕</button></div>${pair(keys,o,k+"."+i+".")}</div>`).join("")}</div><button class="ghost" data-add="${k}">+ إضافة</button>`};
   const used=new Set([].concat(...MNG.map(g=>g[1])));const other=Object.keys(m).filter(k=>!used.has(k)&&k!="cms_url");
   const groups=MNG.concat(other.length?[["أخرى",other]]:[]);
-  app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ الداونلود</a><h2>MANO</h2><a class="ghost" href="${esc(m.site_url||"https://mano-plugin.pages.dev")}" target="_blank" rel="noopener">فتح موقع MANO ↗</a></div>
+  app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ الداونلود</a><h2>MANO</h2><a class="ghost" href="https://manostudio.stream" target="_blank" rel="noopener">فتح موقع MANO ↗</a></div>
   <p class="hint">كل بيانات صفحة MANO. أي تعديل هنا + نشر = يظهر في موقع MANO خلال دقيقة (الصفحة بتقرا البيانات من موقعك).</p>
   <div id="mnStats" style="margin:14px 0 18px;padding:16px 18px;border:1px solid #c9a23a55;border-radius:14px;background:linear-gradient(160deg,#1c1a14,#121212)"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px"><b style="color:#e8b43b">📊 إحصائيات MANO</b><button type="button" class="ghost" id="mnStatsGo" style="padding:4px 14px">تحديث ↻</button></div><div id="mnStatsBody" style="opacity:.7">جاري التحميل…</div></div>
   <div class="form"><div class="fl">أعمال الناس<div class="covbox"><a class="gold" href="#works" style="text-decoration:none;padding:10px 20px;font-size:.92rem">🖼 أعمال MANO — مراجعة ونشر<span class="review-dot" id="worksBadge" hidden></span></a><a class="ghost" href="#promo" style="text-decoration:none;padding:8px 16px;font-size:.9rem">📋 إدارة مراجعة الفيديوهات<span class="review-dot" id="promoBadge" hidden></span></a><span><small>أعمال المعرض وطلبات الاستخدام المجاني من المبدعين.</small></span></div></div>
