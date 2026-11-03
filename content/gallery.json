@@ -6016,6 +6016,18 @@
       "category": "events",
       "title_ar": "مناسبات وحفلات",
       "title_en": "Events & Parties",
+      "w": 1280,
+      "h": 720,
+      "image": "/images/uploads/s/events/v/mw0218hm-2.webp",
+      "thumb": "/images/uploads/s/events/v/mw0218hm-2.webp",
+      "video": "/images/uploads/s/events/v/mw0218hm-2.mp4",
+      "preview": "/images/uploads/s/events/v/mw0218hm-2.mp4",
+      "group": 3
+    },
+    {
+      "category": "events",
+      "title_ar": "مناسبات وحفلات",
+      "title_en": "Events & Parties",
       "image": "/images/uploads/s/events/mvslrb0d-1.webp",
       "thumb": "/images/uploads/s/events/t/mvslrb0d-1.webp",
       "group": 4
