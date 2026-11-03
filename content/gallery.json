@@ -6018,18 +6018,6 @@
       "title_en": "Events & Parties",
       "w": 1280,
       "h": 720,
-      "image": "/images/uploads/s/events/v/mw027knb-1.webp",
-      "thumb": "/images/uploads/s/events/v/mw027knb-1.webp",
-      "video": "/images/uploads/s/events/v/mw027knb-1.mp4",
-      "preview": "/images/uploads/s/events/v/mw027knb-1.mp4",
-      "group": 4
-    },
-    {
-      "category": "events",
-      "title_ar": "مناسبات وحفلات",
-      "title_en": "Events & Parties",
-      "w": 1280,
-      "h": 720,
       "image": "/images/uploads/s/events/v/mw027knb-2.webp",
       "thumb": "/images/uploads/s/events/v/mw027knb-2.webp",
       "video": "/images/uploads/s/events/v/mw027knb-2.mp4",
@@ -6419,6 +6407,18 @@
       "video": "/images/uploads/s/transfers/v/mvvoxois-6.mp4",
       "preview": "/images/uploads/s/transfers/v/mvvoxois-6.mp4",
       "group": 1
+    },
+    {
+      "category": "transfers",
+      "title_ar": "الانتقالات",
+      "title_en": "Transfers",
+      "w": 1280,
+      "h": 720,
+      "image": "/images/uploads/s/events/v/mw027knb-1.webp",
+      "thumb": "/images/uploads/s/events/v/mw027knb-1.webp",
+      "video": "/images/uploads/s/events/v/mw027knb-1.mp4",
+      "preview": "/images/uploads/s/events/v/mw027knb-1.mp4",
+      "group": 2
     }
   ]
 }
