@@ -427,7 +427,7 @@ async function mnStats(){const box=$("mnStatsBody");if(!box)return;box.style.opa
     for(const x of rel){const k=/^mano-v/.test(x.tag_name)?"davinci":/^mano-premiere/.test(x.tag_name)?"premiere":/^mano-studio/.test(x.tag_name)?"studio":"";
       if(k)gh[k]+=x.assets.filter(a=>/\.(zip|exe|dmg)$/i.test(a.name)).reduce((s,b)=>s+b.download_count,0)}
     const tot=rel.filter(x=>/^mano-v/.test(x.tag_name)).reduce((a,x)=>a+x.assets.filter(a=>/\.zip$/i.test(a.name)).reduce((s,b)=>s+b.download_count,0),0);
-    dl=`<div class="mx-hero"><span class="mx-ic">${svg("dl")}</span><div><b>${n(tot)}</b><small>إجمالي تحميلات GitHub (بيتصفّر لما الملف يتحدّث)</small></div></div>`}
+    dl=""}
   catch(_){dl=`<small style="color:#e0806a">ما قدرت أجيب عدد التحميلات من GitHub.</small>`}
   try{const r=await fetch(site+"/api/stats",{headers:H});const d=await r.json();if(!r.ok)throw d.error||r.status;
     const days=(d.daily||[]),mx=Math.max(1,...days.map(x=>x.visitors));
