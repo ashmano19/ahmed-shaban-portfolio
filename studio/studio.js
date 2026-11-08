@@ -424,12 +424,14 @@ async function mnStats(){const box=$("mnStatsBody");if(!box)return;box.style.opa
   let dl="",vis="";
   try{const r=await fetch("https://api.github.com/repos/ashmano19/mano-library/releases?per_page=100",{headers:H});if(!r.ok)throw 0;
     const tot=(await r.json()).filter(x=>/^mano-v/.test(x.tag_name)).reduce((a,x)=>a+x.assets.filter(a=>/\.zip$/i.test(a.name)).reduce((s,b)=>s+b.download_count,0),0);
-    dl=`<div class="mx-hero"><span class="mx-ic">${svg("dl")}</span><div><b>${n(tot)}</b><small>إجمالي التحميلات · من GitHub</small></div></div>`}
+    dl=`<div class="mx-hero"><span class="mx-ic">${svg("dl")}</span><div><b>${n(tot)}</b><small>إجمالي تحميلات GitHub (بيتصفّر لما الملف يتحدّث)</small></div></div>`}
   catch(_){dl=`<small style="color:#e0806a">ما قدرت أجيب عدد التحميلات من GitHub.</small>`}
   try{const r=await fetch(site+"/api/stats",{headers:H});const d=await r.json();if(!r.ok)throw d.error||r.status;
     const days=(d.daily||[]),mx=Math.max(1,...days.map(x=>x.visitors));
     const k=(ico,t,v,sub)=>`<div class="mx-k"><span class="mx-ic">${svg(ico)}</span><b>${v}</b><span>${t}</span><br><small>${sub||""}</small></div>`;
-    vis=`<div class="mx-grid">${k("day","زوار اليوم",n(d.today.visitors),n(d.today.views)+" مشاهدة")}${k("wk","آخر 7 أيام",n(d.d7.visitors),n(d.d7.views)+" مشاهدة")}${k("mo","آخر 30 يوم",n(d.d30.visitors),n(d.d30.views)+" مشاهدة")}${k("all","من البداية",n(d.all.visitors),d.since?"من "+esc(d.since):"")}</div>`
+    const D=d.downloads;
+    const per=D?`<div class="mx-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))">${[["davinci","DaVinci Resolve"],["premiere","Premiere Pro"],["studio","MANO Studio"]].map(([key,lab])=>`<div class="mx-k"><span class="mx-ic">${svg("dl")}</span><b>${n(D.all[key])}</b><span>تحميلات ${lab}</span><br><small>اليوم ${n(D.today[key])} · آخر 7 أيام ${n(D.d7[key])}</small></div>`).join("")}</div><small style="opacity:.55">عدّاد MANO للتحميلات${D.since?" من "+esc(D.since):" (بيبدأ من أول تحميل)"}</small>`:"";
+    vis=per+`<div class="mx-grid">${k("day","زوار اليوم",n(d.today.visitors),n(d.today.views)+" مشاهدة")}${k("wk","آخر 7 أيام",n(d.d7.visitors),n(d.d7.views)+" مشاهدة")}${k("mo","آخر 30 يوم",n(d.d30.visitors),n(d.d30.views)+" مشاهدة")}${k("all","من البداية",n(d.all.visitors),d.since?"من "+esc(d.since):"")}</div>`
       +(days.length?`<div class="mx-chart"><h4><span>الزوار يوميًا</span><span>آخر ${n(days.length)} يوم</span></h4><div class="mx-bars">${days.map((x,i)=>`<div title="${esc(x.day)} · ${x.visitors} زائر · ${x.views} مشاهدة"><small>${n(x.visitors)}</small><i style="height:${Math.max(4,Math.round(x.visitors/mx*90))}px;animation-delay:${i*40}ms"></i><em>${esc(String(x.day).slice(5))}</em></div>`).join("")}</div></div>`:"")}
   catch(e){vis=`<small style="display:block;color:#e0806a">عدد الزوار مش متاح الحين${e===403||e=="forbidden"?" (الحساب مش حساب المالك)":""}.</small>`}
   box.style.opacity="1";box.innerHTML=css+`<div class="mx">${dl}${vis}</div>`}
