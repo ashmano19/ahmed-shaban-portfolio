@@ -421,16 +421,19 @@ async function mnStats(){const box=$("mnStatsBody");if(!box)return;box.style.opa
 .mx-bars{display:flex;align-items:flex-end;gap:6px;height:120px}.mx-bars div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
 .mx-bars i{width:100%;border-radius:6px 6px 2px 2px;background:linear-gradient(#ffd45b,#a07a2c);box-shadow:0 0 14px #e8b43b33;transform-origin:bottom;animation:mxUp .8s cubic-bezier(.2,.8,.2,1) both}.mx-bars em{font-style:normal;font-size:.68rem;opacity:.55}.mx-bars small{font-size:.7rem;color:#ffd45b}
 @keyframes mxUp{from{transform:scaleY(0)}}.mx-bars div:hover i{filter:brightness(1.2)}</style>`;
-  let dl="",vis="";
+  let dl="",vis="",gh={davinci:0,premiere:0,studio:0};
   try{const r=await fetch("https://api.github.com/repos/ashmano19/mano-library/releases?per_page=100",{headers:H});if(!r.ok)throw 0;
-    const tot=(await r.json()).filter(x=>/^mano-v/.test(x.tag_name)).reduce((a,x)=>a+x.assets.filter(a=>/\.zip$/i.test(a.name)).reduce((s,b)=>s+b.download_count,0),0);
+    const rel=await r.json();
+    for(const x of rel){const k=/^mano-v/.test(x.tag_name)?"davinci":/^mano-premiere/.test(x.tag_name)?"premiere":/^mano-studio/.test(x.tag_name)?"studio":"";
+      if(k)gh[k]+=x.assets.filter(a=>/\.(zip|exe|dmg)$/i.test(a.name)).reduce((s,b)=>s+b.download_count,0)}
+    const tot=rel.filter(x=>/^mano-v/.test(x.tag_name)).reduce((a,x)=>a+x.assets.filter(a=>/\.zip$/i.test(a.name)).reduce((s,b)=>s+b.download_count,0),0);
     dl=`<div class="mx-hero"><span class="mx-ic">${svg("dl")}</span><div><b>${n(tot)}</b><small>إجمالي تحميلات GitHub (بيتصفّر لما الملف يتحدّث)</small></div></div>`}
   catch(_){dl=`<small style="color:#e0806a">ما قدرت أجيب عدد التحميلات من GitHub.</small>`}
   try{const r=await fetch(site+"/api/stats",{headers:H});const d=await r.json();if(!r.ok)throw d.error||r.status;
     const days=(d.daily||[]),mx=Math.max(1,...days.map(x=>x.visitors));
     const k=(ico,t,v,sub)=>`<div class="mx-k"><span class="mx-ic">${svg(ico)}</span><b>${v}</b><span>${t}</span><br><small>${sub||""}</small></div>`;
     const D=d.downloads;
-    const per=D?`<div class="mx-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))">${[["davinci","DaVinci Resolve"],["premiere","Premiere Pro"],["studio","MANO Studio"]].map(([key,lab])=>`<div class="mx-k"><span class="mx-ic">${svg("dl")}</span><b>${n(D.all[key])}</b><span>تحميلات ${lab}</span><br><small>اليوم ${n(D.today[key])} · آخر 7 أيام ${n(D.d7[key])}</small></div>`).join("")}</div><small style="opacity:.55">عدّاد MANO للتحميلات${D.since?" من "+esc(D.since):" (بيبدأ من أول تحميل)"}</small>`:"";
+    const per=D?`<div class="mx-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))">${[["davinci","DaVinci Resolve"],["premiere","Premiere Pro"],["studio","MANO Studio"]].map(([key,lab])=>`<div class="mx-k"><span class="mx-ic">${svg("dl")}</span><b>${n(Math.max(gh[key],D.all[key]))}</b><span>تحميلات ${lab} · من البداية</span><br><small>اليوم ${n(D.today[key])} · آخر 7 أيام ${n(D.d7[key])}</small></div>`).join("")}</div><small style="opacity:.55">عدّاد MANO للتحميلات${D.since?" من "+esc(D.since):" (بيبدأ من أول تحميل)"}</small>`:"";
     vis=per+`<div class="mx-grid">${k("day","زوار اليوم",n(d.today.visitors),n(d.today.views)+" مشاهدة")}${k("wk","آخر 7 أيام",n(d.d7.visitors),n(d.d7.views)+" مشاهدة")}${k("mo","آخر 30 يوم",n(d.d30.visitors),n(d.d30.views)+" مشاهدة")}${k("all","من البداية",n(d.all.visitors),d.since?"من "+esc(d.since):"")}</div>`
       +(days.length?`<div class="mx-chart"><h4><span>الزوار يوميًا</span><span>آخر ${n(days.length)} يوم</span></h4><div class="mx-bars">${days.map((x,i)=>`<div title="${esc(x.day)} · ${x.visitors} زائر · ${x.views} مشاهدة"><small>${n(x.visitors)}</small><i style="height:${Math.max(4,Math.round(x.visitors/mx*90))}px;animation-delay:${i*40}ms"></i><em>${esc(String(x.day).slice(5))}</em></div>`).join("")}</div></div>`:"")}
   catch(e){vis=`<small style="display:block;color:#e0806a">عدد الزوار مش متاح الحين${e===403||e=="forbidden"?" (الحساب مش حساب المالك)":""}.</small>`}
