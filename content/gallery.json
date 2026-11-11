@@ -5856,10 +5856,12 @@
       "category": "events",
       "title_ar": "مناسبات وحفلات",
       "title_en": "Events & Parties",
-      "image": "/images/uploads/s/events/v/mvsl6eay-1.webp",
-      "thumb": "/images/uploads/s/events/v/mvsl6eay-1.webp",
-      "video": "/images/uploads/s/events/v/mvsl6eay-1.mp4",
-      "preview": "/images/uploads/s/events/v/mvsl6eay-1.mp4",
+      "w": 720,
+      "h": 1280,
+      "image": "/images/uploads/s/events/v/mwcb24ms-1.webp",
+      "thumb": "/images/uploads/s/events/v/mwcb24ms-1.webp",
+      "video": "/images/uploads/s/events/v/mwcb24ms-1.mp4",
+      "preview": "/images/uploads/s/events/v/mwcb24ms-1.mp4",
       "group": 1
     },
     {
@@ -5872,6 +5874,28 @@
       "thumb": "/images/uploads/s/events/v/mwcayiqp-1.webp",
       "video": "/images/uploads/s/events/v/mwcayiqp-1.mp4",
       "preview": "/images/uploads/s/events/v/mwcayiqp-1.mp4",
+      "group": 1
+    },
+    {
+      "category": "events",
+      "title_ar": "مناسبات وحفلات",
+      "title_en": "Events & Parties",
+      "image": "/images/uploads/s/events/v/mvsl6eay-1.webp",
+      "thumb": "/images/uploads/s/events/v/mvsl6eay-1.webp",
+      "video": "/images/uploads/s/events/v/mvsl6eay-1.mp4",
+      "preview": "/images/uploads/s/events/v/mvsl6eay-1.mp4",
+      "group": 1
+    },
+    {
+      "category": "events",
+      "title_ar": "مناسبات وحفلات",
+      "title_en": "Events & Parties",
+      "w": 720,
+      "h": 1280,
+      "image": "/images/uploads/s/events/v/mwcayiqp-2.webp",
+      "thumb": "/images/uploads/s/events/v/mwcayiqp-2.webp",
+      "video": "/images/uploads/s/events/v/mwcayiqp-2.mp4",
+      "preview": "/images/uploads/s/events/v/mwcayiqp-2.mp4",
       "group": 1
     },
     {
@@ -5926,30 +5950,6 @@
       "thumb": "/images/uploads/s/events/v/mvsn2cki-2.webp",
       "video": "/images/uploads/s/events/v/mvsn2cki-2.mp4",
       "preview": "/images/uploads/s/events/v/mvsn2cki-2.mp4",
-      "group": 1
-    },
-    {
-      "category": "events",
-      "title_ar": "مناسبات وحفلات",
-      "title_en": "Events & Parties",
-      "w": 720,
-      "h": 1280,
-      "image": "/images/uploads/s/events/v/mwcayiqp-2.webp",
-      "thumb": "/images/uploads/s/events/v/mwcayiqp-2.webp",
-      "video": "/images/uploads/s/events/v/mwcayiqp-2.mp4",
-      "preview": "/images/uploads/s/events/v/mwcayiqp-2.mp4",
-      "group": 1
-    },
-    {
-      "category": "events",
-      "title_ar": "مناسبات وحفلات",
-      "title_en": "Events & Parties",
-      "w": 720,
-      "h": 1280,
-      "image": "/images/uploads/s/events/v/mwcb24ms-1.webp",
-      "thumb": "/images/uploads/s/events/v/mwcb24ms-1.webp",
-      "video": "/images/uploads/s/events/v/mwcb24ms-1.mp4",
-      "preview": "/images/uploads/s/events/v/mwcb24ms-1.mp4",
       "group": 1
     },
     {
