@@ -6088,14 +6088,6 @@
       "category": "events",
       "title_ar": "مناسبات وحفلات",
       "title_en": "Events & Parties",
-      "image": "/images/uploads/s/events/mvslrb0d-1.webp",
-      "thumb": "/images/uploads/s/events/t/mvslrb0d-1.webp",
-      "group": 5
-    },
-    {
-      "category": "events",
-      "title_ar": "مناسبات وحفلات",
-      "title_en": "Events & Parties",
       "image": "/images/uploads/s/events/mvslrem0-1.webp",
       "thumb": "/images/uploads/s/events/t/mvslrem0-1.webp",
       "group": 5
@@ -6114,6 +6106,14 @@
       "title_en": "Events & Parties",
       "image": "/images/uploads/s/events/mvslueu3-1.webp",
       "thumb": "/images/uploads/s/events/t/mvslueu3-1.webp",
+      "group": 5
+    },
+    {
+      "category": "events",
+      "title_ar": "مناسبات وحفلات",
+      "title_en": "Events & Parties",
+      "image": "/images/uploads/s/events/mvslrb0d-1.webp",
+      "thumb": "/images/uploads/s/events/t/mvslrb0d-1.webp",
       "group": 5
     },
     {
