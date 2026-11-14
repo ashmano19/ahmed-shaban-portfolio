@@ -486,10 +486,50 @@ function mnEdit(){const m=mnObj;if(!m){location.hash="#dl";return}
     if(a){const k=a.dataset.add;m[k]=m[k]||[];m[k].push(JSON.parse(JSON.stringify(MNTPL[k]||{})));touch();redraw()}
     else if(r){const [k,i]=r.dataset.rm.split(":");if(!confirm("تحذف العنصر ده؟"))return;m[k].splice(+i,1);touch();redraw()}
     else if(v){const [k,i,d]=v.dataset.mv.split(":"),a_=m[k],j=+i+ +d;if(j<0||j>=a_.length)return;[a_[+i],a_[j]]=[a_[j],a_[+i]];touch();redraw()}}}
+// إحصائيات O Caption: من موقعها نفسه (/api/caption?e=stats، للمالك بس) — زوار، تحميلات، فتح الأداة، الإعلانات
+async function ocStats(){const box=$("ocStatsBody");if(!box)return;box.style.opacity=".7";box.textContent="جاري التحميل…";
+  const H=TOKEN?{Authorization:"token "+TOKEN}:{},n=v=>Number(v||0).toLocaleString("ar-EG"),site=((ocObj&&ocObj.site_url)||"https://o-caption.pages.dev").replace(/\/$/,"");
+  const ic={dl:'<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',app:'<rect x="3" y="4" width="18" height="14" rx="3"/><path d="M8 21h8M12 18v3"/>',ad:'<path d="M3 11v2a2 2 0 0 0 2 2h2l5 4V5L7 9H5a2 2 0 0 0-2 2z"/><path d="M16 9a4 4 0 0 1 0 6"/>',
+    day:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+    wk:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>',mo:'<path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/>',all:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>'};
+  const svg=k=>`<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ic[k]}</svg>`;
+  const css=`<style>.ox{display:grid;gap:12px}.ox-top{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}@media(max-width:860px){.ox-top{grid-template-columns:1fr}}
+.ox-ed{position:relative;padding:16px;border-radius:16px;overflow:hidden;border:1px solid #ffffff14;transition:.2s;
+  background:radial-gradient(120% 90% at 100% 0,color-mix(in srgb,var(--c) 18%,transparent),transparent 60%),linear-gradient(180deg,#1a1436cc,#0f0b20)}
+.ox-ed:hover{border-color:var(--c);transform:translateY(-2px)}.ox-h{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:700;color:#e6defc}
+.ox-h i{width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}.ox-big{font-size:2.3rem;line-height:1.1;font-weight:800;margin:10px 0 2px;color:#fff}
+.ox-sub{opacity:.65;font-size:.8rem}.ox-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.ox-pair div{padding:10px 12px;border-radius:12px;background:#ffffff08;border:1px solid #ffffff12}
+.ox-pair b{display:block;font-size:1.25rem;color:var(--c);font-weight:800}.ox-pair small{opacity:.6;font-size:.75rem}
+.ox-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}@media(max-width:760px){.ox-grid{grid-template-columns:1fr 1fr}}
+.ox-k{padding:14px;border-radius:14px;background:linear-gradient(180deg,#ffffff0a,#ffffff03);border:1px solid #a993ff2e;transition:.2s}.ox-k:hover{border-color:#a993ff88;transform:translateY(-2px)}
+.ox-ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#c9b8ff;background:#7a5cff22}.ox-k b{display:block;font-size:1.6rem;color:#c9b8ff;margin:10px 0 2px;font-weight:800}
+.ox-k small{opacity:.6;font-size:.8rem}.ox-k span{font-size:.82rem;opacity:.85}
+.ox-chart{padding:14px 16px 10px;border-radius:14px;background:#0b0818;border:1px solid #ffffff12}.ox-chart h4{margin:0 0 10px;font-size:.85rem;opacity:.75;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.ox-leg{display:flex;gap:12px;font-weight:400}.ox-leg i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-inline-end:5px;vertical-align:middle}
+.ox-bars{display:flex;align-items:flex-end;gap:6px;height:130px}.ox-bars div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.ox-col{display:flex;gap:2px;align-items:flex-end;width:100%;justify-content:center}.ox-col i{flex:1;max-width:10px;border-radius:4px 4px 1px 1px;transform-origin:bottom;animation:oxUp .8s cubic-bezier(.2,.8,.2,1) both}
+.ox-bars em{font-style:normal;font-size:.68rem;opacity:.55}@keyframes oxUp{from{transform:scaleY(0)}}</style>`;
+  try{const r=await fetch(site+"/api/caption?e=stats",{headers:H,cache:"no-store"});const d=await r.json();if(!r.ok)throw d.error||r.status;
+    const A={view:0,click:0};(d.ads||[]).forEach(x=>{A[x.kind]=(A[x.kind]||0)+x.n});
+    const ed=(c,t,big,bs,a,al,b,bl)=>`<div class="ox-ed" style="--c:${c}"><div class="ox-h"><i></i>${t}</div><div class="ox-big">${big}</div><div class="ox-sub">${bs}</div>
+      <div class="ox-pair"><div><b>${a}</b><small>${al}</small></div><div><b>${b}</b><small>${bl}</small></div></div></div>`;
+    const top=`<div class="ox-top">${ed("#ffb02e","التحميلات",n(d.all.downloads),"إجمالي التحميلات",n(d.today.downloads),"النهارده",n(d.d7.downloads),"آخر 7 أيام")}
+      ${ed("#2fd08a","فتح الأداة",n(d.all.users),"أجهزة فتحت O Caption",n(d.today.users),"النهارده",n(d.d7.users),"آخر 7 أيام")}
+      ${ed("#a993ff","الإعلانات (30 يوم)",n(A.view),"مشاهدات بنرات الرعاة",n(A.click),"ضغطات",A.view?(100*A.click/A.view).toFixed(1)+"%":"–","نسبة الضغط")}</div>`;
+    const k=(ico,t,v,sub)=>`<div class="ox-k"><span class="ox-ic">${svg(ico)}</span><b>${v}</b><span>${t}</span><br><small>${sub||""}</small></div>`;
+    const grid=`<div class="ox-grid">${k("day","زوار اليوم",n(d.today.visitors),n(d.today.views)+" مشاهدة")}${k("wk","آخر 7 أيام",n(d.d7.visitors),n(d.d7.views)+" مشاهدة")}${k("mo","آخر 30 يوم",n(d.d30.visitors),n(d.d30.views)+" مشاهدة")}${k("all","من البداية",n(d.all.visitors),n(d.all.opens)+" مرة فتح للأداة")}</div>`;
+    const days=d.daily||[],mx=Math.max(1,...days.map(x=>Math.max(x.visitors,x.downloads,x.users)));
+    const bar=(v,c,i)=>`<i style="height:${Math.max(3,Math.round(v/mx*100))}px;background:${c};animation-delay:${i*40}ms"></i>`;
+    const chart=days.length?`<div class="ox-chart"><h4><span>كل يوم (آخر ${n(days.length)} يوم)</span><span class="ox-leg"><span><i style="background:#a993ff"></i>زوار</span><span><i style="background:#ffb02e"></i>تحميلات</span><span><i style="background:#2fd08a"></i>فتح الأداة</span></span></h4>
+      <div class="ox-bars">${days.map((x,i)=>`<div title="${esc(x.day)} · ${x.visitors} زائر · ${x.downloads} تحميل · ${x.users} فتح"><span class="ox-col">${bar(x.visitors,"#a993ff",i)}${bar(x.downloads,"#ffb02e",i)}${bar(x.users,"#2fd08a",i)}</span><em>${esc(String(x.day).slice(5))}</em></div>`).join("")}</div></div>`:"";
+    box.style.opacity="1";box.innerHTML=css+`<div class="ox">${top}${grid}${chart}</div>`}
+  catch(e){box.style.opacity="1";box.innerHTML=`<small style="display:block;color:#e0806a">الإحصائيات مش متاحة الحين${e===403||e=="forbidden"?" (الحساب مش حساب المالك)":""}.</small>`}}
+
 // O Caption: its own site (o-caption.pages.dev), shown next to MANO in the Download menu
 function ocEdit(){const o=ocObj;if(!o){location.hash="#dl";return}const site=o.site_url||"https://o-caption.pages.dev";
   app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ الداونلود</a><h2>O Caption</h2><a class="ghost" href="${esc(site)}" target="_blank" rel="noopener">فتح موقع O Caption ↗</a></div>
   <p class="hint">أداة الكابشن المجانية. أي تعديل هنا + نشر = يظهر في قائمة Download خلال دقيقة.</p>
+  <div id="ocStats" style="margin:14px 0 18px;padding:16px 18px;border:1px solid #a993ff55;border-radius:14px;background:linear-gradient(160deg,#17122e,#0e0b1c)"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px"><b style="color:#c9b8ff">📊 إحصائيات O Caption</b><button type="button" class="ghost" id="ocStatsGo" style="padding:4px 14px">تحديث ↻</button></div><div id="ocStatsBody" style="opacity:.7">جاري التحميل…</div></div>
   <div class="mnx"><div class="mnitem" style="padding:16px">
     <label class="sw" style="font-weight:700"><input type="checkbox" id="ocShow" ${o.show!==false?"checked":""}> ظاهر في قائمة Download</label>
     <div class="two"><label>الاسم في القائمة (عربي)<input id="ocAr" value="${esc(o.menu_ar||"")}"></label><label>الاسم في القائمة (English)<input id="ocEn" dir="ltr" value="${esc(o.menu_en||"")}"></label></div>
@@ -497,7 +537,8 @@ function ocEdit(){const o=ocObj;if(!o){location.hash="#dl";return}const site=o.s
     <p class="hint" style="margin-top:12px">📊 الإحصائيات (زوار، تحميلات، فتح الأداة، الإعلانات): <a href="${esc(site.replace(/\/$/,""))}/stats" target="_blank" rel="noopener">${esc(site.replace(/^https?:\/\//,"").replace(/\/$/,""))}/stats ↗</a></p>
   </div></div>`;
   const up=()=>{o.show=$("ocShow").checked;o.menu_ar=$("ocAr").value.trim();o.menu_en=$("ocEn").value.trim();o.site_url=$("ocUrl").value.trim()||"https://o-caption.pages.dev";touch()};
-  ["ocShow","ocAr","ocEn","ocUrl"].forEach(id=>{$(id).oninput=up;$(id).onchange=up})}
+  ["ocShow","ocAr","ocEn","ocUrl"].forEach(id=>{$(id).oninput=up;$(id).onchange=up})
+  $("ocStatsGo").onclick=ocStats;ocStats()}
 function dlEdit(k){if(k=="mano")return mnEdit();if(k=="ocaption")return ocEdit();const x=dlItems.find(i=>i._k==k);if(!x){location.hash="#dl";return}
   app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ كل المشاركات</a><h2>${x.title?esc(x.title):"مشاركة جديدة"}</h2><button class="ghost red" id="delP">حذف المشاركة</button></div>
   <div class="form">
