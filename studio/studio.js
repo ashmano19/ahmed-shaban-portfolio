@@ -554,7 +554,7 @@ async function hfStats(){const box=$("hfStatsBody");if(!box)return;box.style.opa
   try{const r=await fetch(site+"/api/horoof?e=stats",{headers:H,cache:"no-store"});const d=await r.json();if(!r.ok)throw d.error||r.status;
     const k=(t,v,sub)=>`<div class="hx-k"><span>${t}</span><b>${v}</b><small>${sub||""}</small></div>`;
     const top=`<div class="hx-top">${k("زوار اليوم",n(d.today.visitors),n(d.today.uses)+" استخدام")}${k("آخر 7 أيام",n(d.d7.visitors),n(d.d7.uses)+" استخدام")}${k("آخر 30 يوم",n(d.d30.visitors),n(d.d30.uses)+" استخدام")}${k("من البداية",n(d.all.visitors),n(d.all.uses)+" استخدام")}</div>`;
-    const TN={fix:"تصليح العربي",zakhrafa:"زخرفة",fonts:"خطوط عربية"},PN={home:"الرئيسية",fix:"تصليح العربي",zakhrafa:"زخرفة",fonts:"خطوط عربية",about:"من نحن",privacy:"الخصوصية"};
+    const TN={fix:"تصليح العربي",zakhrafa:"زخرفة",fonts:"خطوط عربية",finder:"تعرّف على الخط"},PN={home:"الرئيسية",fix:"تصليح العربي",zakhrafa:"زخرفة",fonts:"خطوط عربية",finder:"تعرّف على الخط",about:"من نحن",privacy:"الخصوصية"};
     const f=(l,key,v)=>(l||[]).find(x=>x[key]==v)||{};
     const tools=`<div class="hx-box"><h4>الأدوات (آخر 30 يوم)</h4><table class="hx-t"><tr><th>الأداة</th><th>استخدام</th></tr>${Object.keys(TN).map(t=>`<tr><td>${TN[t]}</td><td>${n(f(d.d30.tools,"tool",t).n)}</td></tr>`).join("")}</table></div>`;
     const pages=`<div class="hx-box"><h4>الصفحات (آخر 30 يوم)</h4><table class="hx-t"><tr><th>الصفحة</th><th>زوار</th><th>مشاهدات</th></tr>${Object.keys(PN).map(p=>{const x=f(d.d30.pages,"page",p);return `<tr><td>${PN[p]}</td><td>${n(x.visitors)}</td><td>${n(x.views)}</td></tr>`}).join("")}</table></div>`;
