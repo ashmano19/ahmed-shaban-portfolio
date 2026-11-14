@@ -6,7 +6,7 @@ const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",
 let TOKEN="",base="",cats=[],origCatsDoc={},origCatIds="",st=null,orig=[],cur=null,dirty=false,busy=false;
 // باقي الموقع: القائمة العلوية، الداونلود، الإعدادات
 const NAVD=[{type:"link",label_ar:"أعمالي",label_en:"Portfolio",href:"#gallery",show:true},{type:"link",label_ar:"تواصل معي",label_en:"Contact",href:"#contact",show:true},{type:"downloads",label_ar:"Download",label_en:"Download",show:true}];
-let galBase="",navItems=[],dlItems=[],dlOrig=[],setObj={},conObj={},mnObj=null,docs0={},KN=0;const dlFiles=new Map(),dlDocs={};
+let galBase="",navItems=[],dlItems=[],dlOrig=[],setObj={},conObj={},mnObj=null,ocObj=null,docs0={},KN=0;const dlFiles=new Map(),dlDocs={};
 const key=()=>"k"+(KN++);
 const S={up:"last",autoPub:true};try{S.up=localStorage.studioUp||"last";S.autoPub=localStorage.studioAutoPub!="0"}catch(_){}
 // المجموعات: كل مجموعة بتبدأ بعنصر عليه _div (أو أول عنصر)
@@ -38,7 +38,7 @@ async function start(){app.innerHTML=`<p class="empty">جاري تحميل ال�
     const ref=await gh("/git/ref/heads/"+BR);base=ref.object.sha;
     const raw=p=>gh("/contents/"+p+"?ref="+base,{raw:1,headers:{Accept:"application/vnd.github.raw+json"}});
     const opt=(p,d)=>raw(p).then(JSON.parse).catch(e=>{if(e.status==404)return d;throw e});
-    const [g,c,nv,dl,se,co,mn]=await Promise.all([raw("content/gallery.json"),raw("content/categories.json"),opt("content/nav.json",null),opt("content/downloads.json",{items:[]}),opt("content/settings.json",{}),opt("content/contact.json",{}),opt("content/mano.json",null)]);mnObj=mn;
+    const [g,c,nv,dl,se,co,mn]=await Promise.all([raw("content/gallery.json"),raw("content/categories.json"),opt("content/nav.json",null),opt("content/downloads.json",{items:[]}),opt("content/settings.json",{}),opt("content/contact.json",{}),opt("content/mano.json",null)]);mnObj=mn;ocObj=await opt("content/ocaption.json",null);
     dlDocs.dl=dl;navItems=((nv&&nv.items)||NAVD).map(x=>Object.assign({},x,{_k:key()}));
     dlItems=(dl.items||[]).map(x=>Object.assign({},x,{_k:key()}));dlOrig=JSON.parse(JSON.stringify(dl.items||[]));setObj=se;conObj=co;docs0=siteDocs();if(!nv)docs0["content/nav.json"]="";
     orig=JSON.parse(g).photos||[];origCatsDoc=JSON.parse(c);cats=origCatsDoc.categories||[];origCatIds=JSON.stringify(cats);st=C.load(orig,cats);galBase=JSON.stringify(C.build(C.load(orig,cats),cats));
@@ -357,7 +357,7 @@ function siteDocs(){
   const dl=dlItems.map(x=>{const r=C.clean(x);if(x._ed){const im=[...new Set([r.cover,...C.bodyImgs(r.body)].filter(Boolean))];if(im.length)r.images=im;else delete r.images}return r});
   return {"content/nav.json":JSON.stringify({items:navItems.map(x=>{const r=strip(x);r.show=x.show!==false;return r})},null,2),
     "content/downloads.json":JSON.stringify(Object.assign({},dlDocs.dl||{},{items:dl}),null,2),
-    "content/settings.json":JSON.stringify(setObj,null,2),"content/contact.json":JSON.stringify(conObj,null,2),...(mnObj?{"content/mano.json":JSON.stringify(mnObj,null,2)}:{})}}
+    "content/settings.json":JSON.stringify(setObj,null,2),"content/contact.json":JSON.stringify(conObj,null,2),...(mnObj?{"content/mano.json":JSON.stringify(mnObj,null,2)}:{}),...(ocObj?{"content/ocaption.json":JSON.stringify(ocObj,null,2)}:{})}}
 function usedDlFiles(){const u=new Set();dlItems.forEach(x=>C.dlPaths(x).forEach(p=>u.add(p.slice(1))));return [...dlFiles.keys()].filter(p=>u.has(p)&&!dlFiles.get(p).done)}
 const dsrc=p=>{const f=p&&dlFiles.get(String(p).replace(/^\//,""));return f?f.url:p};
 const touch=()=>setDirty(true);
@@ -384,6 +384,7 @@ function dlList(){
   ${dlItems.length?`<div class="cards" id="dcards">${dlItems.map(x=>`<div class="card dcard" data-id="${x._k}" role="link" tabindex="0">${x.cover?`<img src="${esc(dsrc(x.cover))}" alt="" draggable="false">`:`<span class="nocov">بدون غلاف</span>`}<div><b>${esc(x.title||"بدون عنوان")}</b><span>${x.page_url?"صفحة مستقلة "+esc(x.page_url):x.slug?"صفحة تحميل":x.url?"رابط خارجي":"—"}${x.download_url?" · ⬇ فيه تحميل":""}</span></div></div>`).join("")}</div>`:`<p class="empty">لسه مفيش مشاركات. دوس «مشاركة جديدة».</p>`}`;
   $("addP").onclick=()=>{const o={_k:key(),_ed:1,title:"",slug:"",cover:"",body:"",download_url:""};dlItems.unshift(o);touch();location.hash="#dl/"+o._k};
   if($("mnCard")){$("mnCard").onclick=()=>location.hash="#dl/mano";$("mnCard").onkeydown=e=>{if(e.key=="Enter")location.hash="#dl/mano"}}
+  if(mnObj&&ocObj){const box=$("mnCard").parentNode,d=document.createElement("div");d.className="card dcard";d.id="ocCard";d.tabIndex=0;d.setAttribute("role","link");d.innerHTML=`<img src="https://o-caption.pages.dev/app-style.webp" alt="" draggable="false">${ocObj.show===false?"<i>مخفي</i>":""}<div><b>${esc(ocObj.menu_ar||"O Caption")}</b><span>${esc((ocObj.site_url||"https://o-caption.pages.dev").replace(/^https?:\/\//,""))} · كابشن مجاني لدافنشي</span></div>`;box.appendChild(d);d.onclick=()=>location.hash="#dl/ocaption";d.onkeydown=e=>{if(e.key=="Enter")location.hash="#dl/ocaption"}}
   const g=$("dcards");if(!g)return;
   g.querySelectorAll("img").forEach(im=>im.onerror=()=>im.remove());
   g.onclick=e=>{const c=e.target.closest(".card");if(c)location.hash="#dl/"+c.dataset.id};g.onkeydown=e=>{const c=e.target.closest(".card");if(c&&e.key=="Enter")c.click()};
@@ -485,7 +486,7 @@ function mnEdit(){const m=mnObj;if(!m){location.hash="#dl";return}
     if(a){const k=a.dataset.add;m[k]=m[k]||[];m[k].push(JSON.parse(JSON.stringify(MNTPL[k]||{})));touch();redraw()}
     else if(r){const [k,i]=r.dataset.rm.split(":");if(!confirm("تحذف العنصر ده؟"))return;m[k].splice(+i,1);touch();redraw()}
     else if(v){const [k,i,d]=v.dataset.mv.split(":"),a_=m[k],j=+i+ +d;if(j<0||j>=a_.length)return;[a_[+i],a_[j]]=[a_[j],a_[+i]];touch();redraw()}}}
-function dlEdit(k){if(k=="mano")return mnEdit();const x=dlItems.find(i=>i._k==k);if(!x){location.hash="#dl";return}
+function dlEdit(k){if(k=="mano")return mnEdit();if(k=="ocaption")return ocEdit();const x=dlItems.find(i=>i._k==k);if(!x){location.hash="#dl";return}
   app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ كل المشاركات</a><h2>${x.title?esc(x.title):"مشاركة جديدة"}</h2><button class="ghost red" id="delP">حذف المشاركة</button></div>
   <div class="form">
    <label>العنوان<input id="f_title" value="${esc(x.title)}" placeholder="مثلاً: حزمة تأثيرات نصوص عربية"></label>
@@ -561,3 +562,16 @@ $("pub").onclick=async()=>{if(busy||!dirty)return;
 
 TOKEN=savedToken();TOKEN?start():loginView();
 })();
+
+// O Caption: its own site (o-caption.pages.dev), shown next to MANO in the Download menu
+function ocEdit(){const o=ocObj;if(!o){location.hash="#dl";return}const site=o.site_url||"https://o-caption.pages.dev";
+  app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ الداونلود</a><h2>O Caption</h2><a class="ghost" href="${esc(site)}" target="_blank" rel="noopener">فتح موقع O Caption ↗</a></div>
+  <p class="hint">أداة الكابشن المجانية. أي تعديل هنا + نشر = يظهر في قائمة Download خلال دقيقة.</p>
+  <div class="mnx"><div class="mnitem" style="padding:16px">
+    <label class="sw" style="font-weight:700"><input type="checkbox" id="ocShow" ${o.show!==false?"checked":""}> ظاهر في قائمة Download</label>
+    <div class="two"><label>الاسم في القائمة (عربي)<input id="ocAr" value="${esc(o.menu_ar||"")}"></label><label>الاسم في القائمة (English)<input id="ocEn" dir="ltr" value="${esc(o.menu_en||"")}"></label></div>
+    <label>رابط موقع O Caption<input id="ocUrl" dir="ltr" value="${esc(site)}"></label>
+    <p class="hint" style="margin-top:12px">📊 الإحصائيات (زوار، تحميلات، فتح الأداة، الإعلانات): <a href="${esc(site.replace(/\/$/,""))}/stats" target="_blank" rel="noopener">${esc(site.replace(/^https?:\/\//,"").replace(/\/$/,""))}/stats ↗</a></p>
+  </div></div>`;
+  const up=()=>{o.show=$("ocShow").checked;o.menu_ar=$("ocAr").value.trim();o.menu_en=$("ocEn").value.trim();o.site_url=$("ocUrl").value.trim()||"https://o-caption.pages.dev";touch()};
+  ["ocShow","ocAr","ocEn","ocUrl"].forEach(id=>{$(id).oninput=up;$(id).onchange=up})}
