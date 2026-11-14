@@ -16,8 +16,8 @@
     },
     {
       "type": "downloads",
-      "label_ar": "Download",
-      "label_en": "Download",
+      "label_ar": "SaaS",
+      "label_en": "SaaS",
       "show": true
     }
   ]
