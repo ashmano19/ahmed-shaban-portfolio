@@ -1,7 +1,7 @@
 {
   "items": [
     {
-      "title": "O Caption — كابشن عربي مجاني لدافنشي ريزولف",
+      "title": "O Caption ",
       "slug": "o-caption",
       "cover": "/images/uploads/s/dl/mwfvpoo08hn.webp",
       "body": "أداة مجانية من MANO STUDIO لدافنشي ريزولف: تفرّغ كلامك كلمة كلمة على جهازك، تراجع النص، تختار قالب وحركة، وينزل الكابشن على التايم لاين جاهز للتعديل.\n13 قالب بسيط و16 قالب من MANO مجاناً — عربي وإنجليزي.",
@@ -9,7 +9,8 @@
       "url": "https://o-caption.pages.dev/",
       "images": [
         "/images/uploads/s/dl/mwfvpoo08hn.webp"
-      ]
+      ],
+      "page_url": "https://o-caption.pages.dev/"
     }
   ]
 }
