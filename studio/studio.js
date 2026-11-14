@@ -6,7 +6,7 @@ const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",
 let TOKEN="",base="",cats=[],origCatsDoc={},origCatIds="",st=null,orig=[],cur=null,dirty=false,busy=false;
 // باقي الموقع: القائمة العلوية، الداونلود، الإعدادات
 const NAVD=[{type:"link",label_ar:"أعمالي",label_en:"Portfolio",href:"#gallery",show:true},{type:"link",label_ar:"تواصل معي",label_en:"Contact",href:"#contact",show:true},{type:"downloads",label_ar:"Download",label_en:"Download",show:true}];
-let galBase="",navItems=[],dlItems=[],dlOrig=[],setObj={},conObj={},mnObj=null,ocObj=null,docs0={},KN=0;const dlFiles=new Map(),dlDocs={};
+let galBase="",navItems=[],dlItems=[],dlOrig=[],setObj={},conObj={},mnObj=null,ocObj=null,hfObj=null,docs0={},KN=0;const dlFiles=new Map(),dlDocs={};
 const key=()=>"k"+(KN++);
 const S={up:"last",autoPub:true};try{S.up=localStorage.studioUp||"last";S.autoPub=localStorage.studioAutoPub!="0"}catch(_){}
 // المجموعات: كل مجموعة بتبدأ بعنصر عليه _div (أو أول عنصر)
@@ -38,7 +38,7 @@ async function start(){app.innerHTML=`<p class="empty">جاري تحميل ال�
     const ref=await gh("/git/ref/heads/"+BR);base=ref.object.sha;
     const raw=p=>gh("/contents/"+p+"?ref="+base,{raw:1,headers:{Accept:"application/vnd.github.raw+json"}});
     const opt=(p,d)=>raw(p).then(JSON.parse).catch(e=>{if(e.status==404)return d;throw e});
-    const [g,c,nv,dl,se,co,mn]=await Promise.all([raw("content/gallery.json"),raw("content/categories.json"),opt("content/nav.json",null),opt("content/downloads.json",{items:[]}),opt("content/settings.json",{}),opt("content/contact.json",{}),opt("content/mano.json",null)]);mnObj=mn;ocObj=await opt("content/ocaption.json",null);
+    const [g,c,nv,dl,se,co,mn]=await Promise.all([raw("content/gallery.json"),raw("content/categories.json"),opt("content/nav.json",null),opt("content/downloads.json",{items:[]}),opt("content/settings.json",{}),opt("content/contact.json",{}),opt("content/mano.json",null)]);mnObj=mn;ocObj=await opt("content/ocaption.json",null);hfObj=await opt("content/horoof.json",null);
     dlDocs.dl=dl;navItems=((nv&&nv.items)||NAVD).map(x=>Object.assign({},x,{_k:key()}));
     dlItems=(dl.items||[]).map(x=>Object.assign({},x,{_k:key()}));dlOrig=JSON.parse(JSON.stringify(dl.items||[]));setObj=se;conObj=co;docs0=siteDocs();if(!nv)docs0["content/nav.json"]="";
     orig=JSON.parse(g).photos||[];origCatsDoc=JSON.parse(c);cats=origCatsDoc.categories||[];origCatIds=JSON.stringify(cats);st=C.load(orig,cats);galBase=JSON.stringify(C.build(C.load(orig,cats),cats));
@@ -357,7 +357,7 @@ function siteDocs(){
   const dl=dlItems.map(x=>{const r=C.clean(x);if(x._ed){const im=[...new Set([r.cover,...C.bodyImgs(r.body)].filter(Boolean))];if(im.length)r.images=im;else delete r.images}return r});
   return {"content/nav.json":JSON.stringify({items:navItems.map(x=>{const r=strip(x);r.show=x.show!==false;return r})},null,2),
     "content/downloads.json":JSON.stringify(Object.assign({},dlDocs.dl||{},{items:dl}),null,2),
-    "content/settings.json":JSON.stringify(setObj,null,2),"content/contact.json":JSON.stringify(conObj,null,2),...(mnObj?{"content/mano.json":JSON.stringify(mnObj,null,2)}:{}),...(ocObj?{"content/ocaption.json":JSON.stringify(ocObj,null,2)}:{})}}
+    "content/settings.json":JSON.stringify(setObj,null,2),"content/contact.json":JSON.stringify(conObj,null,2),...(mnObj?{"content/mano.json":JSON.stringify(mnObj,null,2)}:{}),...(ocObj?{"content/ocaption.json":JSON.stringify(ocObj,null,2)}:{}),...(hfObj?{"content/horoof.json":JSON.stringify(hfObj,null,2)}:{})}}
 function usedDlFiles(){const u=new Set();dlItems.forEach(x=>C.dlPaths(x).forEach(p=>u.add(p.slice(1))));return [...dlFiles.keys()].filter(p=>u.has(p)&&!dlFiles.get(p).done)}
 const dsrc=p=>{const f=p&&dlFiles.get(String(p).replace(/^\//,""));return f?f.url:p};
 const touch=()=>setDirty(true);
@@ -385,6 +385,7 @@ function dlList(){
   $("addP").onclick=()=>{const o={_k:key(),_ed:1,title:"",slug:"",cover:"",body:"",download_url:""};dlItems.unshift(o);touch();location.hash="#dl/"+o._k};
   if($("mnCard")){$("mnCard").onclick=()=>location.hash="#dl/mano";$("mnCard").onkeydown=e=>{if(e.key=="Enter")location.hash="#dl/mano"}}
   if(mnObj&&ocObj){const box=$("mnCard").parentNode,d=document.createElement("div");d.className="card dcard";d.id="ocCard";d.tabIndex=0;d.setAttribute("role","link");d.innerHTML=`<img src="https://o-caption.pages.dev/app-style.webp" alt="" draggable="false">${ocObj.show===false?"<i>مخفي</i>":""}<div><b>${esc(ocObj.menu_ar||"O Caption")}</b><span>${esc((ocObj.site_url||"https://o-caption.pages.dev").replace(/^https?:\/\//,""))} · كابشن مجاني لدافنشي</span></div>`;box.appendChild(d);d.onclick=()=>location.hash="#dl/ocaption";d.onkeydown=e=>{if(e.key=="Enter")location.hash="#dl/ocaption"}}
+  if(mnObj&&hfObj){const box=$("mnCard").parentNode,d=document.createElement("div");d.className="card dcard";d.id="hfCard";d.tabIndex=0;d.setAttribute("role","link");d.innerHTML=`<img src="${esc((hfObj.site_url||"https://horoof.manostudio.stream").replace(/\/$/,""))}/card.svg" alt="" draggable="false">${hfObj.show===false?"<i>مخفي</i>":""}<div><b>${esc(hfObj.menu_ar||"حروف")}</b><span>${esc((hfObj.site_url||"").replace(/^https?:\/\//,""))} · أدوات النص العربي</span></div>`;box.appendChild(d);d.onclick=()=>location.hash="#dl/horoof";d.onkeydown=e=>{if(e.key=="Enter")location.hash="#dl/horoof"}}
   const g=$("dcards");if(!g)return;
   g.querySelectorAll("img").forEach(im=>im.onerror=()=>im.remove());
   g.onclick=e=>{const c=e.target.closest(".card");if(c)location.hash="#dl/"+c.dataset.id};g.onkeydown=e=>{const c=e.target.closest(".card");if(c&&e.key=="Enter")c.click()};
@@ -539,7 +540,42 @@ function ocEdit(){const o=ocObj;if(!o){location.hash="#dl";return}const site=o.s
   const up=()=>{o.show=$("ocShow").checked;o.menu_ar=$("ocAr").value.trim();o.menu_en=$("ocEn").value.trim();o.site_url=$("ocUrl").value.trim()||"https://o-caption.pages.dev";touch()};
   ["ocShow","ocAr","ocEn","ocUrl"].forEach(id=>{$(id).oninput=up;$(id).onchange=up})
   $("ocStatsGo").onclick=ocStats;ocStats()}
-function dlEdit(k){if(k=="mano")return mnEdit();if(k=="ocaption")return ocEdit();const x=dlItems.find(i=>i._k==k);if(!x){location.hash="#dl";return}
+// حروف: أدوات النص العربي (horoof.manostudio.stream) — بطاقة جنب MANO و O Caption، وإحصائياتها من موقعها (/api/horoof?e=stats، للمالك بس)
+async function hfStats(){const box=$("hfStatsBody");if(!box)return;box.style.opacity=".7";box.textContent="جاري التحميل…";
+  const H=TOKEN?{Authorization:"token "+TOKEN}:{},n=v=>Number(v||0).toLocaleString("ar-EG"),site=((hfObj&&hfObj.site_url)||"https://horoof.manostudio.stream").replace(/\/$/,"");
+  const css=`<style>.hx{display:grid;gap:12px}.hx-top{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}@media(max-width:760px){.hx-top{grid-template-columns:1fr 1fr}}
+.hx-k{padding:14px;border-radius:14px;background:linear-gradient(180deg,#ffffff0a,#ffffff03);border:1px solid #ffb02e33}.hx-k b{display:block;font-size:1.6rem;color:#ffd27a;margin:4px 0 2px;font-weight:800}
+.hx-k span{font-size:.82rem;opacity:.85}.hx-k small{display:block;opacity:.6;font-size:.78rem}
+.hx-t{width:100%;border-collapse:collapse;font-size:.88rem}.hx-t td,.hx-t th{padding:7px 8px;border-bottom:1px solid #ffffff12;text-align:start}.hx-t th{opacity:.65;font-weight:600}
+.hx-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:760px){.hx-two{grid-template-columns:1fr}}
+.hx-box{padding:12px 14px;border-radius:14px;background:#0b0818;border:1px solid #ffffff12}.hx-box h4{margin:0 0 6px;font-size:.85rem;opacity:.75}
+.hx-bars{display:flex;align-items:flex-end;gap:6px;height:120px}.hx-bars div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.hx-col{display:flex;gap:2px;align-items:flex-end;width:100%;justify-content:center}.hx-col i{flex:1;max-width:10px;border-radius:4px 4px 1px 1px}.hx-bars em{font-style:normal;font-size:.68rem;opacity:.55}</style>`;
+  try{const r=await fetch(site+"/api/horoof?e=stats",{headers:H,cache:"no-store"});const d=await r.json();if(!r.ok)throw d.error||r.status;
+    const k=(t,v,sub)=>`<div class="hx-k"><span>${t}</span><b>${v}</b><small>${sub||""}</small></div>`;
+    const top=`<div class="hx-top">${k("زوار اليوم",n(d.today.visitors),n(d.today.uses)+" استخدام")}${k("آخر 7 أيام",n(d.d7.visitors),n(d.d7.uses)+" استخدام")}${k("آخر 30 يوم",n(d.d30.visitors),n(d.d30.uses)+" استخدام")}${k("من البداية",n(d.all.visitors),n(d.all.uses)+" استخدام")}</div>`;
+    const TN={fix:"تصليح العربي",zakhrafa:"زخرفة",fonts:"خطوط عربية"},PN={home:"الرئيسية",fix:"تصليح العربي",zakhrafa:"زخرفة",fonts:"خطوط عربية",about:"من نحن",privacy:"الخصوصية"};
+    const f=(l,key,v)=>(l||[]).find(x=>x[key]==v)||{};
+    const tools=`<div class="hx-box"><h4>الأدوات (آخر 30 يوم)</h4><table class="hx-t"><tr><th>الأداة</th><th>استخدام</th></tr>${Object.keys(TN).map(t=>`<tr><td>${TN[t]}</td><td>${n(f(d.d30.tools,"tool",t).n)}</td></tr>`).join("")}</table></div>`;
+    const pages=`<div class="hx-box"><h4>الصفحات (آخر 30 يوم)</h4><table class="hx-t"><tr><th>الصفحة</th><th>زوار</th><th>مشاهدات</th></tr>${Object.keys(PN).map(p=>{const x=f(d.d30.pages,"page",p);return `<tr><td>${PN[p]}</td><td>${n(x.visitors)}</td><td>${n(x.views)}</td></tr>`}).join("")}</table></div>`;
+    const days=d.daily||[],mx=Math.max(1,...days.map(x=>Math.max(x.visitors,x.uses)));
+    const bar=(v,c)=>`<i style="height:${Math.max(3,Math.round(v/mx*100))}px;background:${c}"></i>`;
+    const chart=days.length?`<div class="hx-box"><h4>كل يوم: <span style="color:#a993ff">زوار</span> · <span style="color:#ffb02e">استخدام</span></h4><div class="hx-bars">${days.map(x=>`<div title="${esc(x.day)} · ${x.visitors} زائر · ${x.uses} استخدام"><span class="hx-col">${bar(x.visitors,"#a993ff")}${bar(x.uses,"#ffb02e")}</span><em>${esc(String(x.day).slice(5))}</em></div>`).join("")}</div></div>`:"";
+    box.style.opacity="1";box.innerHTML=css+`<div class="hx">${top}<div class="hx-two">${tools}${pages}</div>${chart}</div>`}
+  catch(e){box.style.opacity="1";box.innerHTML=`<small style="display:block;color:#e0806a">الإحصائيات مش متاحة الحين${e===403||e=="forbidden"?" (الحساب مش حساب المالك)":""}.</small>`}}
+function hfEdit(){const o=hfObj;if(!o){location.hash="#dl";return}const site=o.site_url||"https://horoof.manostudio.stream";
+  app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ الداونلود</a><h2>حروف</h2><a class="ghost" href="${esc(site)}" target="_blank" rel="noopener">فتح موقع حروف ↗</a></div>
+  <p class="hint">موقع أدوات النص العربي المجانية. أي تعديل هنا + نشر = يظهر في قائمة Download خلال دقيقة.</p>
+  <div style="margin:14px 0 18px;padding:16px 18px;border:1px solid #ffb02e55;border-radius:14px;background:linear-gradient(160deg,#1e1608,#0e0b1c)"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px"><b style="color:#ffd27a">📊 إحصائيات حروف</b><button type="button" class="ghost" id="hfStatsGo" style="padding:4px 14px">تحديث ↻</button></div><div id="hfStatsBody" style="opacity:.7">جاري التحميل…</div></div>
+  <div class="mnx"><div class="mnitem" style="padding:16px">
+    <label class="sw" style="font-weight:700"><input type="checkbox" id="hfShow" ${o.show!==false?"checked":""}> ظاهر في قائمة Download</label>
+    <div class="two"><label>الاسم في القائمة (عربي)<input id="hfAr" value="${esc(o.menu_ar||"")}"></label><label>الاسم في القائمة (English)<input id="hfEn" dir="ltr" value="${esc(o.menu_en||"")}"></label></div>
+    <label>رابط موقع حروف<input id="hfUrl" dir="ltr" value="${esc(site)}"></label>
+  </div></div>`;
+  const up=()=>{o.show=$("hfShow").checked;o.menu_ar=$("hfAr").value.trim();o.menu_en=$("hfEn").value.trim();o.site_url=$("hfUrl").value.trim()||"https://horoof.manostudio.stream";touch()};
+  ["hfShow","hfAr","hfEn","hfUrl"].forEach(id=>{$(id).oninput=up;$(id).onchange=up})
+  $("hfStatsGo").onclick=hfStats;hfStats()}
+function dlEdit(k){if(k=="mano")return mnEdit();if(k=="ocaption")return ocEdit();if(k=="horoof")return hfEdit();const x=dlItems.find(i=>i._k==k);if(!x){location.hash="#dl";return}
   app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ كل المشاركات</a><h2>${x.title?esc(x.title):"مشاركة جديدة"}</h2><button class="ghost red" id="delP">حذف المشاركة</button></div>
   <div class="form">
    <label>العنوان<input id="f_title" value="${esc(x.title)}" placeholder="مثلاً: حزمة تأثيرات نصوص عربية"></label>
