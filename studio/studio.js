@@ -486,6 +486,18 @@ function mnEdit(){const m=mnObj;if(!m){location.hash="#dl";return}
     if(a){const k=a.dataset.add;m[k]=m[k]||[];m[k].push(JSON.parse(JSON.stringify(MNTPL[k]||{})));touch();redraw()}
     else if(r){const [k,i]=r.dataset.rm.split(":");if(!confirm("تحذف العنصر ده؟"))return;m[k].splice(+i,1);touch();redraw()}
     else if(v){const [k,i,d]=v.dataset.mv.split(":"),a_=m[k],j=+i+ +d;if(j<0||j>=a_.length)return;[a_[+i],a_[j]]=[a_[j],a_[+i]];touch();redraw()}}}
+// O Caption: its own site (o-caption.pages.dev), shown next to MANO in the Download menu
+function ocEdit(){const o=ocObj;if(!o){location.hash="#dl";return}const site=o.site_url||"https://o-caption.pages.dev";
+  app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ الداونلود</a><h2>O Caption</h2><a class="ghost" href="${esc(site)}" target="_blank" rel="noopener">فتح موقع O Caption ↗</a></div>
+  <p class="hint">أداة الكابشن المجانية. أي تعديل هنا + نشر = يظهر في قائمة Download خلال دقيقة.</p>
+  <div class="mnx"><div class="mnitem" style="padding:16px">
+    <label class="sw" style="font-weight:700"><input type="checkbox" id="ocShow" ${o.show!==false?"checked":""}> ظاهر في قائمة Download</label>
+    <div class="two"><label>الاسم في القائمة (عربي)<input id="ocAr" value="${esc(o.menu_ar||"")}"></label><label>الاسم في القائمة (English)<input id="ocEn" dir="ltr" value="${esc(o.menu_en||"")}"></label></div>
+    <label>رابط موقع O Caption<input id="ocUrl" dir="ltr" value="${esc(site)}"></label>
+    <p class="hint" style="margin-top:12px">📊 الإحصائيات (زوار، تحميلات، فتح الأداة، الإعلانات): <a href="${esc(site.replace(/\/$/,""))}/stats" target="_blank" rel="noopener">${esc(site.replace(/^https?:\/\//,"").replace(/\/$/,""))}/stats ↗</a></p>
+  </div></div>`;
+  const up=()=>{o.show=$("ocShow").checked;o.menu_ar=$("ocAr").value.trim();o.menu_en=$("ocEn").value.trim();o.site_url=$("ocUrl").value.trim()||"https://o-caption.pages.dev";touch()};
+  ["ocShow","ocAr","ocEn","ocUrl"].forEach(id=>{$(id).oninput=up;$(id).onchange=up})}
 function dlEdit(k){if(k=="mano")return mnEdit();if(k=="ocaption")return ocEdit();const x=dlItems.find(i=>i._k==k);if(!x){location.hash="#dl";return}
   app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ كل المشاركات</a><h2>${x.title?esc(x.title):"مشاركة جديدة"}</h2><button class="ghost red" id="delP">حذف المشاركة</button></div>
   <div class="form">
@@ -562,16 +574,3 @@ $("pub").onclick=async()=>{if(busy||!dirty)return;
 
 TOKEN=savedToken();TOKEN?start():loginView();
 })();
-
-// O Caption: its own site (o-caption.pages.dev), shown next to MANO in the Download menu
-function ocEdit(){const o=ocObj;if(!o){location.hash="#dl";return}const site=o.site_url||"https://o-caption.pages.dev";
-  app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ الداونلود</a><h2>O Caption</h2><a class="ghost" href="${esc(site)}" target="_blank" rel="noopener">فتح موقع O Caption ↗</a></div>
-  <p class="hint">أداة الكابشن المجانية. أي تعديل هنا + نشر = يظهر في قائمة Download خلال دقيقة.</p>
-  <div class="mnx"><div class="mnitem" style="padding:16px">
-    <label class="sw" style="font-weight:700"><input type="checkbox" id="ocShow" ${o.show!==false?"checked":""}> ظاهر في قائمة Download</label>
-    <div class="two"><label>الاسم في القائمة (عربي)<input id="ocAr" value="${esc(o.menu_ar||"")}"></label><label>الاسم في القائمة (English)<input id="ocEn" dir="ltr" value="${esc(o.menu_en||"")}"></label></div>
-    <label>رابط موقع O Caption<input id="ocUrl" dir="ltr" value="${esc(site)}"></label>
-    <p class="hint" style="margin-top:12px">📊 الإحصائيات (زوار، تحميلات، فتح الأداة، الإعلانات): <a href="${esc(site.replace(/\/$/,""))}/stats" target="_blank" rel="noopener">${esc(site.replace(/^https?:\/\//,"").replace(/\/$/,""))}/stats ↗</a></p>
-  </div></div>`;
-  const up=()=>{o.show=$("ocShow").checked;o.menu_ar=$("ocAr").value.trim();o.menu_en=$("ocEn").value.trim();o.site_url=$("ocUrl").value.trim()||"https://o-caption.pages.dev";touch()};
-  ["ocShow","ocAr","ocEn","ocUrl"].forEach(id=>{$(id).oninput=up;$(id).onchange=up})}
