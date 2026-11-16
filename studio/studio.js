@@ -6,7 +6,7 @@ const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",
 let TOKEN="",base="",cats=[],origCatsDoc={},origCatIds="",st=null,orig=[],cur=null,dirty=false,busy=false;
 // باقي الموقع: القائمة العلوية، الداونلود، الإعدادات
 const NAVD=[{type:"link",label_ar:"أعمالي",label_en:"Portfolio",href:"#gallery",show:true},{type:"link",label_ar:"تواصل معي",label_en:"Contact",href:"#contact",show:true},{type:"downloads",label_ar:"Download",label_en:"Download",show:true}];
-let galBase="",navItems=[],dlItems=[],dlOrig=[],setObj={},conObj={},mnObj=null,ocObj=null,hfObj=null,docs0={},KN=0;const dlFiles=new Map(),dlDocs={};
+let galBase="",navItems=[],dlItems=[],dlOrig=[],setObj={},conObj={},mnObj=null,ocObj=null,hfObj=null,rpObj=null,docs0={},KN=0;const dlFiles=new Map(),dlDocs={};
 const key=()=>"k"+(KN++);
 const S={up:"last",autoPub:true};try{S.up=localStorage.studioUp||"last";S.autoPub=localStorage.studioAutoPub!="0"}catch(_){}
 // المجموعات: كل مجموعة بتبدأ بعنصر عليه _div (أو أول عنصر)
@@ -38,7 +38,7 @@ async function start(){app.innerHTML=`<p class="empty">جاري تحميل ال�
     const ref=await gh("/git/ref/heads/"+BR);base=ref.object.sha;
     const raw=p=>gh("/contents/"+p+"?ref="+base,{raw:1,headers:{Accept:"application/vnd.github.raw+json"}});
     const opt=(p,d)=>raw(p).then(JSON.parse).catch(e=>{if(e.status==404)return d;throw e});
-    const [g,c,nv,dl,se,co,mn]=await Promise.all([raw("content/gallery.json"),raw("content/categories.json"),opt("content/nav.json",null),opt("content/downloads.json",{items:[]}),opt("content/settings.json",{}),opt("content/contact.json",{}),opt("content/mano.json",null)]);mnObj=mn;ocObj=await opt("content/ocaption.json",null);hfObj=await opt("content/horoof.json",null);
+    const [g,c,nv,dl,se,co,mn]=await Promise.all([raw("content/gallery.json"),raw("content/categories.json"),opt("content/nav.json",null),opt("content/downloads.json",{items:[]}),opt("content/settings.json",{}),opt("content/contact.json",{}),opt("content/mano.json",null)]);mnObj=mn;ocObj=await opt("content/ocaption.json",null);hfObj=await opt("content/horoof.json",null);rpObj=await opt("content/replaro.json",null);
     dlDocs.dl=dl;navItems=((nv&&nv.items)||NAVD).map(x=>Object.assign({},x,{_k:key()}));
     dlItems=(dl.items||[]).map(x=>Object.assign({},x,{_k:key()}));dlOrig=JSON.parse(JSON.stringify(dl.items||[]));setObj=se;conObj=co;docs0=siteDocs();if(!nv)docs0["content/nav.json"]="";
     orig=JSON.parse(g).photos||[];origCatsDoc=JSON.parse(c);cats=origCatsDoc.categories||[];origCatIds=JSON.stringify(cats);st=C.load(orig,cats);galBase=JSON.stringify(C.build(C.load(orig,cats),cats));
@@ -357,7 +357,7 @@ function siteDocs(){
   const dl=dlItems.map(x=>{const r=C.clean(x);if(x._ed){const im=[...new Set([r.cover,...C.bodyImgs(r.body)].filter(Boolean))];if(im.length)r.images=im;else delete r.images}return r});
   return {"content/nav.json":JSON.stringify({items:navItems.map(x=>{const r=strip(x);r.show=x.show!==false;return r})},null,2),
     "content/downloads.json":JSON.stringify(Object.assign({},dlDocs.dl||{},{items:dl}),null,2),
-    "content/settings.json":JSON.stringify(setObj,null,2),"content/contact.json":JSON.stringify(conObj,null,2),...(mnObj?{"content/mano.json":JSON.stringify(mnObj,null,2)}:{}),...(ocObj?{"content/ocaption.json":JSON.stringify(ocObj,null,2)}:{}),...(hfObj?{"content/horoof.json":JSON.stringify(hfObj,null,2)}:{})}}
+    "content/settings.json":JSON.stringify(setObj,null,2),"content/contact.json":JSON.stringify(conObj,null,2),...(mnObj?{"content/mano.json":JSON.stringify(mnObj,null,2)}:{}),...(ocObj?{"content/ocaption.json":JSON.stringify(ocObj,null,2)}:{}),...(hfObj?{"content/horoof.json":JSON.stringify(hfObj,null,2)}:{}),...(rpObj?{"content/replaro.json":JSON.stringify(rpObj,null,2)}:{})}}
 function usedDlFiles(){const u=new Set();dlItems.forEach(x=>C.dlPaths(x).forEach(p=>u.add(p.slice(1))));return [...dlFiles.keys()].filter(p=>u.has(p)&&!dlFiles.get(p).done)}
 const dsrc=p=>{const f=p&&dlFiles.get(String(p).replace(/^\//,""));return f?f.url:p};
 const touch=()=>setDirty(true);
@@ -386,6 +386,7 @@ function dlList(){
   if($("mnCard")){$("mnCard").onclick=()=>location.hash="#dl/mano";$("mnCard").onkeydown=e=>{if(e.key=="Enter")location.hash="#dl/mano"}}
   if(mnObj&&ocObj){const box=$("mnCard").parentNode,d=document.createElement("div");d.className="card dcard";d.id="ocCard";d.tabIndex=0;d.setAttribute("role","link");d.innerHTML=`<img src="https://o-caption.pages.dev/app-style.webp" alt="" draggable="false">${ocObj.show===false?"<i>مخفي</i>":""}<div><b>${esc(ocObj.menu_ar||"O Caption")}</b><span>${esc((ocObj.site_url||"https://o-caption.pages.dev").replace(/^https?:\/\//,""))} · كابشن مجاني لدافنشي</span></div>`;box.appendChild(d);d.onclick=()=>location.hash="#dl/ocaption";d.onkeydown=e=>{if(e.key=="Enter")location.hash="#dl/ocaption"}}
   if(mnObj&&hfObj){const box=$("mnCard").parentNode,d=document.createElement("div");d.className="card dcard";d.id="hfCard";d.tabIndex=0;d.setAttribute("role","link");d.innerHTML=`<img src="${esc((hfObj.site_url||"https://horoof.manostudio.stream").replace(/\/$/,""))}/card.svg" alt="" draggable="false">${hfObj.show===false?"<i>مخفي</i>":""}<div><b>${esc(hfObj.menu_ar||"حروف")}</b><span>${esc((hfObj.site_url||"").replace(/^https?:\/\//,""))} · أدوات النص العربي</span></div>`;box.appendChild(d);d.onclick=()=>location.hash="#dl/horoof";d.onkeydown=e=>{if(e.key=="Enter")location.hash="#dl/horoof"}}
+  if(mnObj&&rpObj){const box=$("mnCard").parentNode,d=document.createElement("div");d.className="card dcard";d.id="rpCard";d.tabIndex=0;d.setAttribute("role","link");d.innerHTML=`<img src="/images/replaro-card.png" alt="" draggable="false">${rpObj.show===false?"<i>مخفي</i>":""}<div><b>${esc(rpObj.menu_ar||"Replaro")}</b><span>${esc((rpObj.site_url||"").replace(/^https?:\/\//,""))} · رد تلقائي على تعليقات إنستقرام</span></div>`;box.appendChild(d);d.onclick=()=>location.hash="#dl/replaro";d.onkeydown=e=>{if(e.key=="Enter")location.hash="#dl/replaro"}}
   const g=$("dcards");if(!g)return;
   g.querySelectorAll("img").forEach(im=>im.onerror=()=>im.remove());
   g.onclick=e=>{const c=e.target.closest(".card");if(c)location.hash="#dl/"+c.dataset.id};g.onkeydown=e=>{const c=e.target.closest(".card");if(c&&e.key=="Enter")c.click()};
@@ -575,7 +576,37 @@ function hfEdit(){const o=hfObj;if(!o){location.hash="#dl";return}const site=o.s
   const up=()=>{o.show=$("hfShow").checked;o.menu_ar=$("hfAr").value.trim();o.menu_en=$("hfEn").value.trim();o.site_url=$("hfUrl").value.trim()||"https://horoof.manostudio.stream";touch()};
   ["hfShow","hfAr","hfEn","hfUrl"].forEach(id=>{$(id).oninput=up;$(id).onchange=up})
   $("hfStatsGo").onclick=hfStats;hfStats()}
-function dlEdit(k){if(k=="mano")return mnEdit();if(k=="ocaption")return ocEdit();if(k=="horoof")return hfEdit();const x=dlItems.find(i=>i._k==k);if(!x){location.hash="#dl";return}
+// Replaro: رد تلقائي على تعليقات إنستقرام — بطاقة جنب MANO و O Caption و حروف، وإحصائياتها من موقعها (/api/stats، للمالك بس)
+async function rpStats(){const box=$("rpStatsBody");if(!box)return;box.style.opacity=".7";box.textContent="جاري التحميل…";
+  const H=TOKEN?{Authorization:"token "+TOKEN}:{},n=v=>Number(v||0).toLocaleString("ar-EG"),site=((rpObj&&rpObj.site_url)||"https://replaro.manostudio.stream").replace(/\/$/,"");
+  const css=`<style>.hx{display:grid;gap:12px}.hx-top{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}@media(max-width:760px){.hx-top{grid-template-columns:1fr 1fr}}
+.hx-k{padding:14px;border-radius:14px;background:linear-gradient(180deg,#ffffff0a,#ffffff03);border:1px solid #ffb02e33}.hx-k b{display:block;font-size:1.6rem;color:#ffd27a;margin:4px 0 2px;font-weight:800}
+.hx-k span{font-size:.82rem;opacity:.85}.hx-k small{display:block;opacity:.6;font-size:.78rem}
+.hx-box{padding:12px 14px;border-radius:14px;background:#0b0818;border:1px solid #ffffff12}.hx-box h4{margin:0 0 6px;font-size:.85rem;opacity:.75}
+.hx-bars{display:flex;align-items:flex-end;gap:6px;height:120px}.hx-bars div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.hx-col{display:flex;gap:2px;align-items:flex-end;width:100%;justify-content:center}.hx-col i{flex:1;max-width:10px;border-radius:4px 4px 1px 1px}.hx-bars em{font-style:normal;font-size:.68rem;opacity:.55}</style>`;
+  try{const r=await fetch(site+"/api/stats",{headers:H,cache:"no-store"});const d=await r.json();if(!r.ok)throw d.error||r.status;
+    const k=(t,v,sub)=>`<div class="hx-k"><span>${t}</span><b>${v}</b><small>${sub||""}</small></div>`;
+    const top=`<div class="hx-top">${k("المستخدمين",n(d.users),"+"+n(d.new_users_7d)+" آخر 7 أيام")}${k("مشتركين Pro",n(d.pro),"$"+n(d.mrr_usd)+" شهرياً")}${k("حسابات إنستقرام",n(d.ig_accounts),n(d.active_automations)+" أتمتة شغّالة من "+n(d.automations))}${k("رسائل اليوم",n(d.today.dms),n(d.today.comments)+" تعليق")}</div>`;
+    const top2=`<div class="hx-top">${k("رسائل آخر 7 أيام",n(d.d7.dms),n(d.d7.comments)+" تعليق")}${k("رسائل آخر 30 يوم",n(d.d30.dms),n(d.d30.comments)+" تعليق")}</div>`;
+    const days=d.daily||[],mx=Math.max(1,...days.map(x=>Math.max(x.comments,x.dms)));
+    const bar=(v,c)=>`<i style="height:${Math.max(3,Math.round(v/mx*100))}px;background:${c}"></i>`;
+    const chart=days.length?`<div class="hx-box"><h4>كل يوم: <span style="color:#a993ff">تعليقات</span> · <span style="color:#ffb02e">رسائل</span></h4><div class="hx-bars">${days.map(x=>`<div title="${esc(x.day)} · ${x.comments} تعليق · ${x.dms} رسالة"><span class="hx-col">${bar(x.comments,"#a993ff")}${bar(x.dms,"#ffb02e")}</span><em>${esc(String(x.day).slice(5))}</em></div>`).join("")}</div></div>`:"";
+    box.style.opacity="1";box.innerHTML=css+`<div class="hx">${top}${top2}${chart}</div>`}
+  catch(e){box.style.opacity="1";box.innerHTML=`<small style="display:block;color:#e0806a">الإحصائيات مش متاحة الحين${e===403||e=="forbidden"?" (الحساب مش حساب المالك)":" — الموقع لسه مش منشور أو مش واصل"}.</small>`}}
+function rpEdit(){const o=rpObj;if(!o){location.hash="#dl";return}const site=o.site_url||"https://replaro.manostudio.stream";
+  app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ الداونلود</a><h2>${esc(o.menu_ar||"Replaro")}</h2><a class="ghost" href="${esc(site)}" target="_blank" rel="noopener">فتح الموقع ↗</a></div>
+  <p class="hint">موقع الرد التلقائي على تعليقات إنستقرام. أي تعديل هنا + نشر = يظهر في قائمة Download خلال دقيقة.</p>
+  <div style="margin:14px 0 18px;padding:16px 18px;border:1px solid #ffb02e55;border-radius:14px;background:linear-gradient(160deg,#1e1608,#0e0b1c)"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px"><b style="color:#ffd27a">📊 إحصائيات ${esc(o.menu_ar||"Replaro")}</b><button type="button" class="ghost" id="rpStatsGo" style="padding:4px 14px">تحديث ↻</button></div><div id="rpStatsBody" style="opacity:.7">جاري التحميل…</div></div>
+  <div class="mnx"><div class="mnitem" style="padding:16px">
+    <label class="sw" style="font-weight:700"><input type="checkbox" id="rpShow" ${o.show!==false?"checked":""}> ظاهر في قائمة Download</label>
+    <div class="two"><label>الاسم في القائمة (عربي)<input id="rpAr" value="${esc(o.menu_ar||"")}"></label><label>الاسم في القائمة (English)<input id="rpEn" dir="ltr" value="${esc(o.menu_en||"")}"></label></div>
+    <label>رابط الموقع<input id="rpUrl" dir="ltr" value="${esc(site)}"></label>
+  </div></div>`;
+  const up=()=>{o.show=$("rpShow").checked;o.menu_ar=$("rpAr").value.trim();o.menu_en=$("rpEn").value.trim();o.site_url=$("rpUrl").value.trim()||"https://replaro.manostudio.stream";touch()};
+  ["rpShow","rpAr","rpEn","rpUrl"].forEach(id=>{$(id).oninput=up;$(id).onchange=up})
+  $("rpStatsGo").onclick=rpStats;rpStats()}
+function dlEdit(k){if(k=="mano")return mnEdit();if(k=="ocaption")return ocEdit();if(k=="horoof")return hfEdit();if(k=="replaro")return rpEdit();const x=dlItems.find(i=>i._k==k);if(!x){location.hash="#dl";return}
   app.innerHTML=`<div class="head"><a class="ghost" href="#dl">→ كل المشاركات</a><h2>${x.title?esc(x.title):"مشاركة جديدة"}</h2><button class="ghost red" id="delP">حذف المشاركة</button></div>
   <div class="form">
    <label>العنوان<input id="f_title" value="${esc(x.title)}" placeholder="مثلاً: حزمة تأثيرات نصوص عربية"></label>
