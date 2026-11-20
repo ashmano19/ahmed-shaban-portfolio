@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /studio/
+Sitemap: https://ahmedshaban-ph.com/sitemap.xml
