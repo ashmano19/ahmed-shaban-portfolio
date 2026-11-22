@@ -92,3 +92,4 @@ footer{padding-bottom:84px}
 
 
 .grid.just figure img,.grid.just figure video{object-fit:contain}
+.lbs{top:18px;inset-inline-end:88px;width:52px;height:52px;border-radius:50%}.lbs.ok{background:#CEA111;border-color:#CEA111;color:#111}.lbs.ok::after{content:"✓ اتنسخ";position:absolute;top:60px;white-space:nowrap;font-size:13px;color:#CEA111}
