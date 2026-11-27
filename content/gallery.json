@@ -314,6 +314,18 @@
       "group": 2
     },
     {
+      "category": "beauty",
+      "title_ar": "عيادات التجميل",
+      "title_en": "Beauty Clinics",
+      "w": 720,
+      "h": 1280,
+      "image": "/images/uploads/s/beauty/v/mwyqkxpz-1.webp",
+      "thumb": "/images/uploads/s/beauty/v/mwyqkxpz-1.webp",
+      "video": "/images/uploads/s/beauty/v/mwyqkxpz-1.mp4",
+      "preview": "/images/uploads/s/beauty/v/mwyqkxpz-1.mp4",
+      "group": 2
+    },
+    {
       "image": "/images/uploads/be-2-dental.png",
       "title_ar": "تصوير الأسنان",
       "title_en": "Dental Imaging",
