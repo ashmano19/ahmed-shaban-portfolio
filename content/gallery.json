@@ -290,6 +290,30 @@
       "group": 2
     },
     {
+      "category": "beauty",
+      "title_ar": "عيادات التجميل",
+      "title_en": "Beauty Clinics",
+      "w": 1080,
+      "h": 1920,
+      "image": "/images/uploads/s/beauty/v/mwyqdv8z-1.webp",
+      "thumb": "/images/uploads/s/beauty/v/mwyqdv8z-1.webp",
+      "video": "/images/uploads/s/beauty/v/mwyqdv8z-1.mp4",
+      "preview": "/images/uploads/s/beauty/v/mwyqdv8z-1.mp4",
+      "group": 2
+    },
+    {
+      "category": "beauty",
+      "title_ar": "عيادات التجميل",
+      "title_en": "Beauty Clinics",
+      "w": 1080,
+      "h": 1920,
+      "image": "/images/uploads/s/beauty/v/mwyqdv8z-3.webp",
+      "thumb": "/images/uploads/s/beauty/v/mwyqdv8z-3.webp",
+      "video": "/images/uploads/s/beauty/v/mwyqdv8z-3.mp4",
+      "preview": "/images/uploads/s/beauty/v/mwyqdv8z-3.mp4",
+      "group": 2
+    },
+    {
       "image": "/images/uploads/be-2-dental.png",
       "title_ar": "تصوير الأسنان",
       "title_en": "Dental Imaging",
